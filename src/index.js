@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom';
 import Scratch from './Scratch';
 import Portal from './esri/portal.json';
 import * as serviceWorker from './serviceWorker';
+import { Consumer, Provider } from './context';
+
+
 import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Scratch portal={Portal.Recovery_portal}/>
+    <Provider>
+      <Consumer>
+        {value => <Scratch value={value} portal={Portal.Recovery_portal} />}
+      </Consumer>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

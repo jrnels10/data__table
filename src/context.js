@@ -31,8 +31,7 @@ const reducer = (state, action) => {
         case 'ADD_VIEW':
             return {
                 ...state,
-                view: action.payload.view,
-                map: action.payload.map
+                view: action.payload.view
             }
         case 'ADD_AMA':
             return {

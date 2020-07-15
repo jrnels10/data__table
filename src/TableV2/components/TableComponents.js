@@ -16,14 +16,14 @@ export const Headers = ({ dataForHeaders, sort }) => {
     </thead>
 }
 
-export const Body = ({ dataForBody, locationData }) => {
+export const Body = ({ dataForBody, findOnMap }) => {
     return <tbody >
         {dataForBody.map((item, idx) => {
-            let tdArray = []
+            let tdArray = [];
             Object.keys(item).forEach(function (key) {
                 return tdArray.push(<td className="custom-cell-width" key={key}>{item[key]}</td>)
             });
-            return <tr key={idx} >
+            return <tr key={idx} onClick={() => findOnMap ? findOnMap(item.TABLE_ID) : null}>
                 {tdArray.map(item => {
                     return item;
                 })}

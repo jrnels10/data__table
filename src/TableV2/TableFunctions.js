@@ -1,3 +1,4 @@
+import { loadModules } from "esri-loader";
 
 export class TableFunctions {
     constructor(data, type) {
@@ -16,13 +17,50 @@ export class TableFunctions {
         console.log(`sorted ${sorted.length} records`);
         return sorted;
     }
+
+    async findOnMap(view, item) {
+
+        await view.goTo(item, {
+            duration: 1000,
+            easing: 'ease-in-out'
+        });
+        const featureItem = await feature(view, item);
+        view.popup.open({ location: view.center, features: [featureItem] });
+
+    }
 }
 
 
+async function findLayerById(view, title) {
+    return await view.map.allLayers.find((layer) => {
+        return layer.id === title;
+    });
+}
 
-
-
-
+async function feature(item) {
+    var template = {
+        title: "{OBJECTID}",
+        content: [
+            {
+                type: "fields",
+                fieldInfos: [
+                    {
+                        fieldName: "OBJECTID",
+                        label: "OBJECTID"
+                    }
+                ]
+            }
+        ]
+    };
+    return loadModules(["esri/Graphic"])
+        .then(async ([Graphic]) => {
+            return new Graphic({
+                attributes: item.attributes,
+                geometry: item.geometry,
+                popupTemplate: template,
+            });
+        });
+}
 
 
 

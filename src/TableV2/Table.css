@@ -4,8 +4,57 @@
   background-color: #253255;
 }
 
+.table__container .table {
+  width: 100%;
+}
+
 .table__container tbody,
 .table__container thead {
+  color: #ffffff;
+}
+
+.table__container thead tr th {
+  padding: 0px;
+  text-align: center;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 949;
+  top: 0;
+  background-color: #dee2e6;
+  border: none;
+  border-top: none;
+  -webkit-box-shadow: 0px 10px 15px -11px rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 10px 15px -11px rgba(0, 0, 0, 0.5);
+}
+
+.table__container thead .custom-cell-width-header {
+  height: 42px;
+  border: 1px solid #253255;
+  border-bottom: 2px solid #253255;
+}
+
+.table__container .custom-cell-width {
+  padding: 5px;
+  min-width: 130px !important;
+}
+
+.table__container .custom-cell-width label {
+  width: 100%;
+  padding-right: 30%;
+  font-size: 0.75em;
+  margin: 0px;
+}
+
+.table__container .custom-cell-width i {
+  width: 25%;
+  padding-left: 10px;
+  margin: 0px;
+  position: absolute;
+  right: 8px;
+  top: 10px;
+}
+
+.table__container .custom-cell-width:hover {
   color: #ffffff;
 }
 /*# sourceMappingURL=Table.css.map */

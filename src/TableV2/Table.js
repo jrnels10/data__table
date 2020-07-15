@@ -12,7 +12,9 @@ export default class Table2 extends Component {
     render() {
         const children = React.Children.map(this.props.children, (child, idx) => {
             return React.cloneElement(child, {
-                data: this.props.data.filter(item => item.tab === child.props.name)
+                data: this.props.data.filter(item => item.tab === child.props.name),
+                value: this.props.value,
+                portal: this.props.portal
             })
         })
         return (
@@ -51,6 +53,13 @@ export class TableTab extends Component {
         this.setState({ tableData: sortedData, sorted: columnName });
     };
 
+    findOnMap = async (id) => {
+        const { tableGeometry, uniqueId } = this.data;
+        const { view } = this.props.value;
+        const itemGeometry = await tableGeometry.find(item => item.TABLE_ID === id);
+        this.tableFunctions.findOnMap(view, itemGeometry);
+    }
+
     render() {
         const { name } = this.props;
         const { tableData } = this.state;
@@ -62,7 +71,7 @@ export class TableTab extends Component {
                 />
                 <Body
                     dataForBody={tableData}
-                    locationData={this.data.tableGeometry}
+                    findOnMap={this.findOnMap}
                 />
             </table>
         )
@@ -71,14 +80,15 @@ export class TableTab extends Component {
 
 
 export class ESRITableObj {
-    constructor(tab, data) {
+    constructor(tab, data, uniqueId) {
         this.tab = tab;
         this.rawData = data;
-        this.tableGeometry = data.geometryType ? data.features : null;
+        this.tableGeometry = data.features.map(item => Object.assign(item, { TABLE_ID: item.attributes[uniqueId] }));
         this.tableFields = data.fields.map((field, idx) => {
             return { title: field.name, dataIndex: field.name, key: idx }
         });
-        this.tableData = data.features.map(gis => gis.attributes);
+        this.uniquieId = uniqueId;
+        this.tableData = data.features.map(gis => Object.assign(gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
     }
 };
 

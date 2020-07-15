@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Table2, { TableTab, ESRITableObj, ADWRTableObj } from './TableV2/Table';
-import { TableFunctions } from './TableV2/TableFunctions';
 import axios from 'axios';
 import { loadModules } from 'esri-loader';
+import ESRImap from './esri/ESRImap';
 
 
 async function query(where, featureLayer, maxResults) {
@@ -37,24 +37,29 @@ export default class Scratch extends Component {
         const sampleData = await query("REGISTRY_ID LIKE ('%50059%')", portal.wells55);
         const sampleGWSIData = await query("SITE_ID LIKE ('%3350%')", 'https://gisweb3.azwater.gov/arcgis/rest/services/Wells/GWSI/MapServer/2');
         const adwr = new ADWRTableObj('ADWR', adwrData.data);
-        const wells55 = new ESRITableObj('Wells55', sampleData);
-        const GWSI = new ESRITableObj('GWSI', sampleGWSIData);
+        const wells55 = new ESRITableObj('Wells55', sampleData, 'OBJECTID');
+        const GWSI = new ESRITableObj('GWSI', sampleGWSIData, 'OBJECTID');
         this.setState({ tableData: [wells55, GWSI, adwr] });
     }
     render() {
         const { value, portal } = this.props;
         return this.state.tableData ? (
-            <div style={{ height: '60vh', width: '100%', position: 'absolute', bottom: '0' }}>
-                <Table2
-                    value={value}
-                    portal={portal}
-                    data={this.state.tableData}
-                >
-                    <TableTab name='Wells55' sort={true} locate={true} />
-                    <TableTab name='GWSI' sort={true} locate={false} />
-                    <TableTab name='ADWR' sort={false} locate={false} />
-                </Table2>
-            </div>
+            <React.Fragment>
+                <div style={{ height: '40vh', width: '100%', position: 'absolute', top: '0' }}>
+                    <ESRImap value={value} portal={portal} />
+                </div>
+                <div style={{ height: '60vh', width: '100%', position: 'absolute', bottom: '0' }}>
+                    <Table2
+                        value={value}
+                        portal={portal}
+                        data={this.state.tableData}
+                    >
+                        <TableTab name='Wells55' sort={true} locate={true} />
+                        <TableTab name='GWSI' sort={true} locate={false} />
+                        <TableTab name='ADWR' sort={true} locate={false} />
+                    </Table2>
+                </div>
+            </React.Fragment>
         ) : null
     }
 }
