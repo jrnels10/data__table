@@ -1,0 +1,12 @@
+@import "./../../../cssVariables.scss";
+
+.table__container {
+    height: 100%;
+    width: 100%;
+    background-color: $darkBlue;
+    
+    tbody,
+    thead {
+        color: $white;
+    }
+}

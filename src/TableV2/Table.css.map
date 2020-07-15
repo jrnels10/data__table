@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,iBAAiB,CAAC;EACd,MAAM,EAAE,IAAI;EACZ,KAAK,EAAE,IAAI;EACX,gBAAgB,ECAT,OAAO;CDMjB;;AATD,AAKI,iBALa,CAKb,KAAK;AALT,iBAAiB,CAMb,KAAK,CAAC;EACF,KAAK,ECDL,OAAO;CDEV",
+    "sources": [
+        "Table.scss",
+        "../../../cssVariables.scss"
+    ],
+    "names": [],
+    "file": "Table.css"
+}

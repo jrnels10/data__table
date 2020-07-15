@@ -1,0 +1,11 @@
+.table__container {
+  height: 100%;
+  width: 100%;
+  background-color: #253255;
+}
+
+.table__container tbody,
+.table__container thead {
+  color: #ffffff;
+}
+/*# sourceMappingURL=Table.css.map */

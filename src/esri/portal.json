@@ -1,0 +1,83 @@
+{
+    "Recovery_portal": {
+        "id": "0c853c3c97554f19bc53ec50e79d3f3f",
+        "appId": "",
+        "logo": "",
+        "navBar": true,
+        "name": "Recovery",
+        "tableOptions": {
+            "table": [
+                {
+                    "id": "WATER_NAME",
+                    "name": "Water Provider",
+                    "searchBy": "NAME",
+                    "layer": "Muni_8083"
+                },
+                {
+                    "id": "CITY_NAME",
+                    "name": "City Boundaries",
+                    "searchBy": "NAME",
+                    "layer": "City_Boundaries_8825"
+                },
+                {
+                    "id": "IRRI_NAME",
+                    "name": "Irrigation District",
+                    "searchBy": "LONG_NAME",
+                    "layer": "IrrigationDistricts_7146"
+                },
+                {
+                    "id": "USF_NAME",
+                    "name": "USF",
+                    "searchBy": "NAME",
+                    "layer": "USF_Recharge_Dissolve_6332"
+                },
+                {
+                    "id": "GSF_NAME",
+                    "name": "GSF",
+                    "searchBy": "NAME",
+                    "layer": "GSF_Recharge_Dissolve_2283"
+                }
+            ],
+            "options": {
+                "WATER_NAME": {
+                    "wellInfoOption": false,
+                    "downloadOption": true,
+                    "hydroGraphOption": false
+                },
+                "CITY_NAME": {
+                    "wellInfoOption": false,
+                    "downloadOption": true,
+                    "hydroGraphOption": false
+                },
+                "IRRI_NAME": {
+                    "wellInfoOption": false,
+                    "downloadOption": true,
+                    "hydroGraphOption": false
+                },
+                "USF_NAME": {
+                    "wellInfoOption": false,
+                    "downloadOption": true,
+                    "hydroGraphOption": false
+                },
+                "GSF_NAME": {
+                    "wellInfoOption": false,
+                    "downloadOption": true,
+                    "hydroGraphOption": false
+                }
+            }
+        },
+        "wells55": "https://gisweb3.azwater.gov/arcgis/rest/services/Wells/WellRegistry/MapServer/2",
+        "searchOptions": [
+            {
+                "id": "Wells55",
+                "type": "Wells55",
+                "url": "https: //gisweb3.azwater.gov/arcgis/rest/services/Wells/WellRegistry/MapServer/2",
+                "searchParam": [
+                    "REGISTRY_ID"
+                ]
+            }
+        ]
+    },
+    "sectionUrl": "https: //gisweb3.azwater.gov/arcgis/rest/services/General/Boundaries/MapServer/1",
+    "cadastralAllUrl": "https: //gisweb3.azwater.gov/arcgis/rest/services/General/Boundaries/MapServer/0"
+}
