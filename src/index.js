@@ -9,13 +9,14 @@ import { Consumer, Provider } from './context';
 import './index.css'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider>
-      <Consumer>
-        {value => <Scratch value={value} portal={Portal.Recovery_portal} />}
-      </Consumer>
-    </Provider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Provider>
+    <Consumer>
+      {value => <Scratch value={value} portal={Portal.Recovery_portal} />}
+    </Consumer>
+  </Provider>
+  // </React.StrictMode>
+  ,
   document.getElementById('root')
 );
 

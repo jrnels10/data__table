@@ -18,7 +18,7 @@ export default class Table2 extends Component {
             })
         })
         return (
-            <div className='table__container'>
+            <div className='data-table'>
                 <div className='table__tabs'>
                     {children.map((tab, idx) => <button key={idx} onClick={() => this.setState({ tableActive: idx })}>{tab.props.name}</button>)}
                 </div>
@@ -54,14 +54,14 @@ export class TableTab extends Component {
     };
 
     findOnMap = async (id) => {
-        const { tableGeometry, uniqueId } = this.data;
+        const { tableGeometry } = this.data;
         const { view } = this.props.value;
         const itemGeometry = await tableGeometry.find(item => item.TABLE_ID === id);
         this.tableFunctions.findOnMap(view, itemGeometry);
     }
 
-    filterData = (term, field) => {
-        const filteredResults = this.tableFunctions.filter(term, field);
+    filterData = (term, field, fieldType, filterParams) => {
+        const filteredResults = this.tableFunctions.filter(term, field, fieldType, filterParams);
         this.setState({ tableData: filteredResults })
     }
 
@@ -69,17 +69,21 @@ export class TableTab extends Component {
         const { name } = this.props;
         const { tableData } = this.state;
         return (
-            <table className="table" id={`table_${name}`}>
-                <Headers
-                    sort={this.sort ? this.sortTable : null}
-                    dataForHeaders={this.data.tableFields}
-                    filterData={this.filterData}
-                />
-                <Body
-                    dataForBody={tableData}
-                    findOnMap={this.findOnMap}
-                />
-            </table>
+            <div className="table__container">
+                <table className="table" id={`table_${name}`}>
+                    <Headers
+                        sort={this.sort ? this.sortTable : null}
+                        dataForHeaders={this.data.tableFields}
+                        filterData={this.filterData}
+                        tableData={tableData}
+
+                    />
+                    <Body
+                        dataForBody={tableData}
+                        findOnMap={this.findOnMap}
+                    />
+                </table>
+            </div>
         )
     }
 }

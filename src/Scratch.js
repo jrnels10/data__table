@@ -33,13 +33,13 @@ export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
         const { portal } = this.props;
-        const adwrData = await getADWRData(null, '2020-05-01T07:00:00.000Z,2020-05-08T07:00:00.000Z');
+        // const adwrData = await getADWRData(null, '2020-05-01T07:00:00.000Z,2020-05-08T07:00:00.000Z');
         const sampleData = await query("REGISTRY_ID LIKE ('%50059%')", portal.wells55);
         const sampleGWSIData = await query("SITE_ID LIKE ('%3350%')", 'https://gisweb3.azwater.gov/arcgis/rest/services/Wells/GWSI/MapServer/2');
-        const adwr = new ADWRTableObj('ADWR', adwrData.data);
+        // const adwr = new ADWRTableObj('ADWR', adwrData.data);
         const wells55 = new ESRITableObj('Wells55', sampleData, 'OBJECTID');
         const GWSI = new ESRITableObj('GWSI', sampleGWSIData, 'OBJECTID');
-        this.setState({ tableData: [wells55, GWSI, adwr] });
+        this.setState({ tableData: [wells55, GWSI] });
     }
     render() {
         const { value, portal } = this.props;
@@ -48,7 +48,7 @@ export default class Scratch extends Component {
                 <div style={{ height: '40vh', width: '100%', position: 'absolute', top: '0' }}>
                     <ESRImap value={value} portal={portal} />
                 </div>
-                <div style={{ height: '60vh', width: '100%', position: 'absolute', bottom: '0' }}>
+                <div style={{ height: '60vh', width: '100vw', position: 'absolute', bottom: '0' }}>
                     <Table2
                         value={value}
                         portal={portal}
@@ -56,7 +56,7 @@ export default class Scratch extends Component {
                     >
                         <TableTab name='Wells55' sort={true} locate={true} />
                         <TableTab name='GWSI' sort={true} locate={false} />
-                        <TableTab name='ADWR' sort={true} locate={false} />
+                        {/* <TableTab name='ADWR' sort={true} locate={false} /> */}
                     </Table2>
                 </div>
             </React.Fragment>

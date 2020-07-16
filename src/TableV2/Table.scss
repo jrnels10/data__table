@@ -1,61 +1,66 @@
 @import "./../cssVariables.scss";
 
-.table__container {
-    height: 100%;
+.data-table {
+  height: 100%;
+  width: 100%;
+  background-color: $darkBlue;
+  .table__container {
     width: 100%;
-    background-color: $darkBlue;
+    height: 100%;
+    overflow: auto;
     .table {
-        width: 100%;
+      width: 100%;
     }
-    tbody,
-    thead {
-        color: $white;
+    tbody {
+      color: $white;
     }
     thead {
-        .custom__header__options {
-            // position: absolute;
-            // top: -25px;
-        }
-        tr th {
-            padding: 0px;
-            text-align: center;
-            position: sticky;
-            z-index: 949;
-            top: 0;
-            background-color: #dee2e6;
-            border: none;
-            border-top: none;
-            box-shadow: 0px 10px 15px -11px rgba(0, 0, 0, 0.5);
-        }
-        .custom-cell-width-header {
-            height: 42px;
-            border: 1px solid #253255;
-            border-bottom: 2px solid #253255;
+      .custom__header__options {
+        // position: absolute;
+        // top: -25px;
+      }
+      tr th {
+        padding: 0px;
+        text-align: center;
+        position: sticky;
+        z-index: 949;
+        top: 0;
+        background-color: #dee2e6;
+        border: none;
+        border-top: none;
+        box-shadow: 0px 10px 15px -11px rgba(0, 0, 0, 0.5);
+      }
+      .custom-cell-width-header {
+        max-height: 75px;
+        border: 1px solid #253255;
+        border-bottom: 2px solid #253255;
 
-            .custom-cell-header-small {
-                font-size: 0.7rem;
-            }
+        .custom-cell-header-small {
+          font-size: 0.7rem;
         }
+      }
     }
     .custom-cell-width {
-        padding: 5px;
-        min-width: 130px !important;
+      padding: 5px;
+      min-width: 130px !important;
 
-        label {
-            width: 100%;
-            font-size: 0.75em;
-            margin: 0px;
-        }
-        i {
-            width: 25%;
-            padding-left: 10px;
-            margin: 0px;
-            position: absolute;
-            right: 8px;
-            top: 10px;
-        }
-        &:hover {
-            color: #ffffff;
-        }
+      label {
+        width: 100%;
+        font-size: 0.75em;
+        margin: 0px;
+        color: $darkBlue;
+      }
+      i {
+        width: 25%;
+        padding-left: 10px;
+        margin: 0px;
+        position: absolute;
+        right: 8px;
+        top: 10px;
+      }
+      &:hover {
+        color: #ffffff;
+      }
     }
+  }
 }

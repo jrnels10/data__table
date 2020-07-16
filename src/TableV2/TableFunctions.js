@@ -27,15 +27,23 @@ export class TableFunctions {
         view.popup.open({ location: view.center, features: [featureItem] });
     };
 
-    filter(term, field) {
+    filter(term, field, fieldType, filterParams) {
         const filteredData = this.data.tableData.filter(item => {
-            if (Number(term)) {
-                return item[field].indexOf(term).toString() > -1;
-            } else {
+            const dataType = fieldType === 'number';
+            if (dataType & filterParams === 'greaterThan') {
+                return item[field] > parseInt(term);
+            }
+            else if (dataType & filterParams === 'lessThan') {
+                return item[field] < parseInt(term);
+            }
+            else if (dataType & filterParams === 'equalTo') {
+                return item[field] == parseInt(term);
+            }
+            else if (!dataType) {
                 return item[field].indexOf(term.toUpperCase()) > -1;
             }
-        })
-        debugger
+
+        });
 
         return filteredData;
     }
