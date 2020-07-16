@@ -12,6 +12,10 @@
         color: $white;
     }
     thead {
+        .custom__header__options {
+            // position: absolute;
+            // top: -25px;
+        }
         tr th {
             padding: 0px;
             text-align: center;
@@ -27,6 +31,10 @@
             height: 42px;
             border: 1px solid #253255;
             border-bottom: 2px solid #253255;
+
+            .custom-cell-header-small {
+                font-size: 0.7rem;
+            }
         }
     }
     .custom-cell-width {
@@ -35,7 +43,6 @@
 
         label {
             width: 100%;
-            padding-right: 30%;
             font-size: 0.75em;
             margin: 0px;
         }

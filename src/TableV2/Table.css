@@ -33,6 +33,10 @@
   border-bottom: 2px solid #253255;
 }
 
+.table__container thead .custom-cell-width-header .custom-cell-header-small {
+  font-size: 0.7rem;
+}
+
 .table__container .custom-cell-width {
   padding: 5px;
   min-width: 130px !important;
@@ -40,7 +44,6 @@
 
 .table__container .custom-cell-width label {
   width: 100%;
-  padding-right: 30%;
   font-size: 0.75em;
   margin: 0px;
 }

@@ -60,6 +60,11 @@ export class TableTab extends Component {
         this.tableFunctions.findOnMap(view, itemGeometry);
     }
 
+    filterData = (term, field) => {
+        const filteredResults = this.tableFunctions.filter(term, field);
+        this.setState({ tableData: filteredResults })
+    }
+
     render() {
         const { name } = this.props;
         const { tableData } = this.state;
@@ -68,6 +73,7 @@ export class TableTab extends Component {
                 <Headers
                     sort={this.sort ? this.sortTable : null}
                     dataForHeaders={this.data.tableFields}
+                    filterData={this.filterData}
                 />
                 <Body
                     dataForBody={tableData}

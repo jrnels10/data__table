@@ -1,12 +1,26 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
-export const Headers = ({ dataForHeaders, sort }) => {
+export const Headers = ({ dataForHeaders, sort, filterData }) => {
+    const [headerOptions, setheaderOptions] = useState(null)
+    const openHeader = (e) => {
+        const index = parseInt(e.target.id.split('-')[1]);
+        setheaderOptions(index);
+    }
     return <thead>
         <tr>
             {dataForHeaders.map((item, idx) => {
-                return <th key={idx} onClick={() => sort ? sort(item.dataIndex) : null}>
+                return <th
+                    key={idx}
+                // onClick={() => sort ? sort(item.dataIndex) : null}
+                >
                     <div className='custom-cell-width-header custom-cell-width'>
-                        <label>
+                        {headerOptions === idx ? <HeaderOptions filterData={filterData} field={item.title} /> : null}
+                        <label
+                            className={`custom-cell-header-${headerOptions === idx ? 'small' : 'normal'}`}
+                            onClick={e => openHeader(e)}
+                            title={`header-${item.title}`}
+                            id={`header-${idx}`}
+                        >
                             {item.title.replace(/_/g, " ")}
                         </label>
                     </div>
@@ -14,6 +28,16 @@ export const Headers = ({ dataForHeaders, sort }) => {
             })}
         </tr>
     </thead>
+}
+
+const HeaderOptions = ({ filterData, field }) => {
+    const filterRef = useRef('');
+    useEffect(() => {
+        filterRef.current.focus();
+    }, []);
+    return <div className='custom__header__options'>
+        <input ref={filterRef} type="text" onChange={e => filterData(e.target.value, field)} />
+    </div>
 }
 
 export const Body = ({ dataForBody, findOnMap }) => {

@@ -19,16 +19,40 @@ export class TableFunctions {
     }
 
     async findOnMap(view, item) {
-
         await view.goTo(item, {
             duration: 1000,
             easing: 'ease-in-out'
         });
         const featureItem = await feature(view, item);
         view.popup.open({ location: view.center, features: [featureItem] });
+    };
 
+    filter(term, field) {
+        const filteredData = this.data.tableData.filter(item => {
+            if (Number(term)) {
+                return item[field].indexOf(term).toString() > -1;
+            } else {
+                return item[field].indexOf(term.toUpperCase()) > -1;
+            }
+        })
+        debugger
+
+        return filteredData;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 async function findLayerById(view, title) {
