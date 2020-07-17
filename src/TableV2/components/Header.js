@@ -1,10 +1,11 @@
 import React, { Component, useEffect, useState, useRef } from 'react';
+import { ArrowDown, ArrowUp } from './Images/IconsSVG';
 
-export const Headers = ({ dataForHeaders, sort, filterData, tableData }) => {
+export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSelect, setColumnSelect }) => {
     const [headerOptions, setheaderOptions] = useState(null)
     const openHeader = (e) => {
         const index = parseInt(e.target.id.split('-')[1]);
-        setheaderOptions(index);
+        setheaderOptions(headerOptions === index ? null : index);
     }
     return <thead>
         <tr>
@@ -15,8 +16,9 @@ export const Headers = ({ dataForHeaders, sort, filterData, tableData }) => {
                         typeof tableData[0][item.title] === "boolean" ? "boolean" : 'string';
                 }
                 return dataForHeaders.length === idx ? null : <th
+                    className={`column__select--${columnSelect === idx}`}
+                    onClick={() => setColumnSelect(idx)}
                     key={idx}
-                // onClick={() => sort ? sort(item.dataIndex) : null}
                 >
                     <div className='custom-cell-width-header custom-cell-width'>
                         {headerOptions === idx ? <HeaderOptions
@@ -32,12 +34,30 @@ export const Headers = ({ dataForHeaders, sort, filterData, tableData }) => {
                         >
                             {item.title.replace(/_/g, " ")}
                         </label>
+                        {sort ? <Sort sort={sort} item={item} /> : null}
                     </div>
                 </th>
             })}
         </tr>
     </thead>
-}
+};
+
+
+
+const Sort = ({ sort, item }) => {
+    const [sorting, setsorting] = useState(false);
+    const sortAction = () => {
+        setsorting(!sorting);
+        debugger
+        return sort(item.dataIndex)
+    }
+    return <div className={`custom-cell-sort custom-cell-sort`} onClick={() => sortAction()}>
+        {sorting ? <ArrowUp /> :
+            <ArrowDown />}
+    </div >
+};
+
+
 
 const HeaderOptions = ({ filterData, field, fieldType }) => {
     const filterRef = useRef('');
@@ -49,7 +69,9 @@ const HeaderOptions = ({ filterData, field, fieldType }) => {
         <HeaderNumbers fieldType={fieldType} setfilterParams={setfilterParams} />
         <input ref={filterRef} type={fieldType === 'number' ? 'number' : "text"} onChange={e => filterData(e.target.value, field, fieldType, filterParams)} />
     </div>
-}
+};
+
+
 
 const HeaderNumbers = ({ fieldType, setfilterParams }) => {
     const [filterNumberBy, setfilterNumberBy] = useState('equalTo');
@@ -65,20 +87,5 @@ const HeaderNumbers = ({ fieldType, setfilterParams }) => {
         <option value={'lessThan'}>lessThan</option>
         <option value={'equalTo'}>equalTo</option>
     </select> : null
-}
+};
 
-export const Body = ({ dataForBody, findOnMap }) => {
-    return <tbody >
-        {dataForBody.length > 0 ? dataForBody.map((item, idx) => {
-            let tdArray = [];
-            Object.keys(item).forEach(function (key) {
-                return key === 'TABLE_ID' ? null : tdArray.push(<td className="custom-cell-width" key={key}>{item[key]}</td>)
-            });
-            return <tr key={idx} onClick={() => findOnMap ? findOnMap(item.TABLE_ID) : null}>
-                {tdArray.map(item => {
-                    return item;
-                })}
-            </tr>
-        }) : null}
-    </tbody>
-}

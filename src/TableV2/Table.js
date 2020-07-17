@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { TableFunctions } from './TableFunctions';
 import './Table.css';
-import { Headers, Body } from './components/TableComponents';
+import { Headers } from './components/Header';
+import { Body } from './components/Body';
 
 export default class Table2 extends Component {
     state = {
@@ -32,6 +33,7 @@ export class TableTab extends Component {
     data = this.props.data[0];
     sort = this.props.sort;
     locate = this.props.locate;
+    editRow = this.props.editRow ? this.props.editRow : false;
     tableFunctions = new TableFunctions(this.data);
 
     state = {
@@ -65,9 +67,13 @@ export class TableTab extends Component {
         this.setState({ tableData: filteredResults })
     }
 
+    columnSelect = (idx) => {
+        this.setState({ columnSelect: idx })
+    }
+
     render() {
-        const { name } = this.props;
-        const { tableData } = this.state;
+        const { name, locate, roundTo } = this.props;
+        const { tableData, columnSelect } = this.state;
         return (
             <div className="table__container">
                 <table className="table" id={`table_${name}`}>
@@ -76,40 +82,17 @@ export class TableTab extends Component {
                         dataForHeaders={this.data.tableFields}
                         filterData={this.filterData}
                         tableData={tableData}
-
+                        columnSelect={columnSelect}
+                        setColumnSelect={this.columnSelect.bind(this)}
                     />
                     <Body
                         dataForBody={tableData}
-                        findOnMap={this.findOnMap}
+                        findOnMap={locate ? this.findOnMap : null}
+                        columnSelect={columnSelect}
+                        editRow={this.editRow}
                     />
                 </table>
             </div>
         )
-    }
-}
-
-
-export class ESRITableObj {
-    constructor(tab, data, uniqueId) {
-        this.tab = tab;
-        this.rawData = data;
-        this.tableGeometry = data.features.map(item => Object.assign(item, { TABLE_ID: item.attributes[uniqueId] }));
-        this.tableFields = data.fields.map((field, idx) => {
-            return { title: field.name, dataIndex: field.name, key: idx }
-        });
-        this.uniquieId = uniqueId;
-        this.tableData = data.features.map(gis => Object.assign(gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
-    }
-};
-
-export class ADWRTableObj {
-    constructor(tab, data) {
-        this.tab = tab;
-        this.rawData = data;
-        this.tableGeometry = null;
-        this.tableFields = Object.keys(data[0]).map((fieldItem, idx) => {
-            return { title: fieldItem, dataIndex: fieldItem, key: idx }
-        });
-        this.tableData = data
     }
 }

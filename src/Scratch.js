@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Table2, { TableTab, ESRITableObj, ADWRTableObj } from './TableV2/Table';
+import Table2, { TableTab } from './TableV2/Table';
+import { ESRITableObj, ADWRTableObj } from './TableV2/TableObj';
 import axios from 'axios';
 import { loadModules } from 'esri-loader';
 import ESRImap from './esri/ESRImap';
@@ -33,13 +34,17 @@ export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
         const { portal } = this.props;
-        // const adwrData = await getADWRData(null, '2020-05-01T07:00:00.000Z,2020-05-08T07:00:00.000Z');
+        const adwrData = await getADWRData(null, '2020-05-01T07:00:00.000Z,2020-05-08T07:00:00.000Z');
         const sampleData = await query("REGISTRY_ID LIKE ('%50059%')", portal.wells55);
         const sampleGWSIData = await query("SITE_ID LIKE ('%3350%')", 'https://gisweb3.azwater.gov/arcgis/rest/services/Wells/GWSI/MapServer/2');
-        // const adwr = new ADWRTableObj('ADWR', adwrData.data);
+        const adwr = new ADWRTableObj('ADWR', adwrData.data);
         const wells55 = new ESRITableObj('Wells55', sampleData, 'OBJECTID');
         const GWSI = new ESRITableObj('GWSI', sampleGWSIData, 'OBJECTID');
-        this.setState({ tableData: [wells55, GWSI] });
+        this.setState({ tableData: [wells55, GWSI, adwr] });
+    }
+
+    editedData = (row) => {
+        debugger
     }
     render() {
         const { value, portal } = this.props;
@@ -54,9 +59,9 @@ export default class Scratch extends Component {
                         portal={portal}
                         data={this.state.tableData}
                     >
-                        <TableTab name='Wells55' sort={true} locate={true} />
-                        <TableTab name='GWSI' sort={true} locate={false} />
-                        {/* <TableTab name='ADWR' sort={true} locate={false} /> */}
+                        <TableTab name='Wells55' sort={true} locate={true} roundTo={2} editRow={this.editedData} />
+                        <TableTab name='GWSI' sort={true} locate={false} roundTo={2} />
+                        <TableTab name='ADWR' sort={true} locate={false} roundTo={2} />
                     </Table2>
                 </div>
             </React.Fragment>
