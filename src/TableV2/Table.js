@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { TableFunctions } from './TableFunctions';
 import './Table.css';
 import { Headers } from './components/Header';
-import { Body } from './components/Body';
+import { Body } from './components/Body/Body';
 
 export default class Table2 extends Component {
     state = {
@@ -11,20 +11,29 @@ export default class Table2 extends Component {
 
 
     render() {
+        let tabCount = [];
+
         const children = React.Children.map(this.props.children, (child, idx) => {
+            const individualData = this.props.data.filter(item => item.tab === child.props.name)
+            tabCount.push(individualData[0].tableData.length);
             return React.cloneElement(child, {
-                data: this.props.data.filter(item => item.tab === child.props.name),
+                data: individualData,
                 value: this.props.value,
                 portal: this.props.portal
             })
-        })
+        });
         return (
             <div className='data-table'>
+                <hr />
                 <div className='table__tabs'>
-                    {children.map((tab, idx) => <button key={idx} onClick={() => this.setState({ tableActive: idx })}>{tab.props.name}</button>)}
+                    {children.map((tab, idx) =>
+                        <div className={`tab tab--${idx === this.state.tableActive ? 'active' : 'default'}`} key={idx} onClick={() => this.setState({ tableActive: idx })}>
+                            <button className={`tab__button tab__button--${idx === this.state.tableActive ? 'active' : 'default'}`}>{tab.props.name}</button>
+                            <div className='count'>{tabCount[idx]}</div>
+                        </div>)}
                 </div>
                 {children[this.state.tableActive]}
-            </div>
+            </div >
         )
     }
 }
