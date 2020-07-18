@@ -1,4 +1,25 @@
 .body__row--active {
   background-color: #ffb01f;
 }
+
+.body__row--active .custom-cell-width:first {
+  padding: 0;
+}
+
+.body__row--active .cell__options {
+  width: 50%;
+  display: inline-block;
+}
+
+.body__row--active .cell__options.cell__options--save {
+  stroke-dasharray: 1920;
+  stroke-dashoffset: 1920;
+  -webkit-animation: dash 10s linear 0.1s forwards;
+          animation: dash 10s linear 0.1s forwards;
+  fill: green;
+}
+
+.body__row--active .cell__options.cell__options--discard {
+  background-color: red;
+}
 /*# sourceMappingURL=Body.css.map */

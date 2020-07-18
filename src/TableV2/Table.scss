@@ -65,8 +65,8 @@
       }
 
       &.tab--active {
-        box-shadow: -10px 0px 10px 0px rgba(0, 0, 0, 0.35),
-          10px 0px 10px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: -10px 0px 30px 0px rgba(0, 0, 0, 0.5),
+          10px 0px 30px 0px rgba(0, 0, 0, 0.5);
         background-color: $lightBlue;
         transform: scale(1.1, 1.1) translate(0px, -1.5px);
         color: $darkBlue;
@@ -100,9 +100,10 @@
       }
       .custom-cell-width {
         padding: 5px;
-        min-width: 130px !important;
+        // min-width: 130px !important;
         position: relative;
         border: 1px solid rgba(0, 0, 0, 0);
+        font-size: 0.85rem;
         &:hover {
           // color: #3d5188;
           border: 1px solid #ffa500;
@@ -162,8 +163,11 @@
       }
     }
     .custom-cell-width {
+      &:first-child {
+        min-width: 50px;
+      }
       padding: 5px;
-      min-width: 130px !important;
+      min-width: 130px;
       position: relative;
       border: 1px solid rgba(0, 0, 0, 0);
       .cell__edit {

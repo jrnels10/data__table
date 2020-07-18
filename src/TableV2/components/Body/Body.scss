@@ -2,4 +2,21 @@
 
 .body__row--active {
   background-color: $lightYellow;
+  .custom-cell-width:first {
+    padding: 0;
+  }
+  .cell__options {
+    width: 50%;
+    display: inline-block;
+
+    &.cell__options--save {
+      stroke-dasharray: 1920;
+      stroke-dashoffset: 1920;
+      animation: dash 10s linear 0.1s forwards;
+      fill: green;
+    }
+    &.cell__options--discard {
+      background-color: red;
+    }
+  }
 }

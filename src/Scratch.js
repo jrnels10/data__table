@@ -55,7 +55,7 @@ export default class Scratch extends Component {
         return this.state.tableData ? (
             <React.Fragment>
                 <div style={{ height: '40vh', width: '100%', position: 'absolute', top: '0' }}>
-                    {/* <ESRImap value={value} portal={portal} /> */}
+                    <ESRImap value={value} portal={portal} />
                 </div>
                 <div style={{ height: '60vh', width: '100vw', position: 'absolute', bottom: '0' }}>
                     <Table2
@@ -64,7 +64,7 @@ export default class Scratch extends Component {
                         data={this.state.tableData}
                     >
                         <TableTab name='Wells55' sort={true} locate={true} roundTo={2} editRow={{ edit: true, editCallBack: this.editedData }} />
-                        <TableTab name='GWSI' sort={true} locate={true} roundTo={2} />
+                        <TableTab name='GWSI' sort={true} locate={true} roundTo={2} editRow={{ edit: true, editCallBack: this.editedData }} />
                         <TableTab name='ADWR' sort={true} locate={false} roundTo={2} />
                     </Table2>
                 </div>

@@ -36,3 +36,4 @@ export class ESRITableObj_Edit extends ESRITableObj {
         this.tableData = data.features.map(gis => Object.assign({ Options: 'Edit' }, gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
     }
 };
+
