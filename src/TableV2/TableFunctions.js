@@ -47,6 +47,7 @@ export class TableFunctions {
 
         return filteredData;
     }
+
 }
 
 

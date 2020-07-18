@@ -1,6 +1,7 @@
 
 export class ESRITableObj {
     constructor(tab, data, uniqueId) {
+        this.options = false;
         this.tab = tab;
         this.rawData = data;
         this.tableGeometry = data.features.map(item => Object.assign(item, { TABLE_ID: item.attributes[uniqueId] }));
@@ -22,4 +23,16 @@ export class ADWRTableObj {
         });
         this.tableData = data
     }
-}
+};
+
+export class ESRITableObj_Edit extends ESRITableObj {
+    editField = { title: 'Options', dataIndex: 'Options', key: 0 }
+    constructor(tab, data, uniqueId) {
+        super(tab, data, uniqueId)
+        this.options = true;
+        this.tableFields = [this.editField, ...data.fields.map((field, idx) => {
+            return { title: field.name, dataIndex: field.name, key: idx }
+        })];
+        this.tableData = data.features.map(gis => Object.assign({ Options: 'Edit' }, gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
+    }
+};

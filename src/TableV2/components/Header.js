@@ -48,7 +48,6 @@ const Sort = ({ sort, item }) => {
     const [sorting, setsorting] = useState(false);
     const sortAction = () => {
         setsorting(!sorting);
-        debugger
         return sort(item.dataIndex)
     }
     return <div className={`custom-cell-sort custom-cell-sort`} onClick={() => sortAction()}>

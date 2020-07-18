@@ -74,7 +74,7 @@ export class TableTab extends Component {
     filterData = (term, field, fieldType, filterParams) => {
         const filteredResults = this.tableFunctions.filter(term, field, fieldType, filterParams);
         this.setState({ tableData: filteredResults })
-    }
+    };
 
     columnSelect = (idx) => {
         this.setState({ columnSelect: idx })
@@ -93,6 +93,7 @@ export class TableTab extends Component {
                         tableData={tableData}
                         columnSelect={columnSelect}
                         setColumnSelect={this.columnSelect.bind(this)}
+                        editRow={this.editRow}
                     />
                     <Body
                         dataForBody={tableData}
