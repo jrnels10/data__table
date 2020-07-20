@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import Table2, { TableTab } from './TableV2/Table';
-import { ESRITableObj, ADWRTableObj, ESRITableObj_Edit } from './TableV2/TableObj';
+import { ESRITableObj, ADWRTableObj, ESRITableObj_Edit, ADWRTableObj_Edit } from './TableV2/TableObj';
 import axios from 'axios';
 import { loadModules } from 'esri-loader';
 import ESRImap from './esri/ESRImap';
 import wellsData from './data/wells55.json'
 import gwsiData from './data/gwsi.json'
 import adwr from './data/adwrData.json'
+import cws from './data/cwsAR.json'
 
 async function query(where, featureLayer, maxResults) {
     return loadModules(["esri/tasks/QueryTask",
@@ -44,7 +45,8 @@ export default class Scratch extends Component {
         const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
         const GWSI = new ESRITableObj('GWSI', gwsiData, 'OBJECTID');
         const ADWR = new ADWRTableObj('ADWR', adwr);
-        this.setState({ tableData: [wells55, GWSI, ADWR] });
+        const CWS = new ADWRTableObj_Edit('CWS', cws.ReportDetails);
+        this.setState({ tableData: [wells55, GWSI, ADWR, CWS] });
     }
 
     editedData = (row) => {
@@ -63,9 +65,10 @@ export default class Scratch extends Component {
                         portal={portal}
                         data={this.state.tableData}
                     >
-                        <TableTab name='Wells55' sort={true} locate={true} roundTo={2} editRow={{ edit: true, editCallBack: this.editedData }} />
-                        <TableTab name='GWSI' sort={true} locate={true} roundTo={2} editRow={{ edit: true, editCallBack: this.editedData }} />
+                        <TableTab name='Wells55' sort={true} locate={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} />
+                        <TableTab name='GWSI' sort={true} locate={true} roundTo={2} />
                         <TableTab name='ADWR' sort={true} locate={false} roundTo={2} />
+                        <TableTab name='CWS' sort={true} locate={false} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} />
                     </Table2>
                 </div>
             </React.Fragment>

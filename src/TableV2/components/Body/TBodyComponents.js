@@ -7,59 +7,71 @@ import { Gear, Delete, Check } from "../Images/IconsSVG";
 export class TableBodyRow extends Component {
     constructor(props) {
         super(props);
-        this.item = props.item;
         this.findOnMap = props.findOnMap;
-        // this.edit = props.editRow.edit;
 
         this.state = {
             option: null,
-            row: null
+            rowSelected: null,
+            saveEdits: false
         }
     }
-    optionsRow = (option, row) => {
-        if (this.state.option === option & this.state.row === row) {
-            this.setState({ option: null, row: null });
+
+    optionsRow = (option, rowIndex) => {
+        if (this.state.option === option & this.state.rowIndex === rowIndex) {
+            this.setState({ option: null, rowIndex: null });
         } else {
-            this.setState({ option, row })
+            this.setState({ option, rowIndex })
         }
     }
 
-    editedRow = (item, value, field) => {
-        let row = item;
-        row[field] = value;
-        this.props.editRow.editCallBack(row);
-    }
 
-    discard = (row) => {
-        this.setState({ discard: row })
-    }
+    selectRow = (rowIndex, item) => {
+        return rowIndex === this.state.rowSelected ?
+            this.setState({ rowSelected: null, rowItem: null }) :
+            this.setState({ rowSelected: rowIndex, rowItem: item });
+    };
+
+    setSaveEdits = () => {
+        this.props.value.dispatch({ type: 'NEW_ROW', newRow: false });
+        this.setState({ rowSelected: null, rowItem: null, saveEdits: true });
+
+    };
+
+    discard = () => {
+        this.props.value.dispatch({ type: 'NEW_ROW', newRow: false });
+        this.setState({ rowSelected: null, rowItem: null })
+    };
+    componentDidUpdate() {
+        if (this.state.saveEdits) {
+            this.setState({ saveEdits: false })
+        }
+        if (this.props.value.newRow & this.state.rowSelected !== 0) {
+            this.setState({ rowSelected: 0 });
+            debugger
+        }
+    };
+
     render() {
-        const { keyItem, item, columnSelect, editRow, findOnMap } = this.props;
-        const { row } = this.state;
-        let fields = [];
-        Object.keys(this.props.item).forEach(function (key, keyIndex) {
-            fields.push(key);
+        const { keyItem, item, columnSelect, value, portal } = this.props;
+        const children = React.Children.map(this.props.children, (child, idx) => {
+            return React.cloneElement(child, {
+                value: value,
+                portal: portal,
+                optionsRow: idx === 0 ? this.optionsRow.bind(this) : null,
+                update: () => this.setState({ update: !this.state.update }),
+                item: item,
+                rowIndex: keyItem,
+                setSaveEdits: idx === 0 ? () => this.setSaveEdits() : null,
+                discardEdits: idx === 0 ? () => this.discard() : null,
+                selectRow: idx === 0 ? this.selectRow.bind(this) : null,
+                rowSelected: this.state.rowSelected === keyItem,
+                columnSelect: columnSelect,
+                saveEdits: this.state.saveEdits
+            })
         });
-        return <tr
-            className={`body__row body__row--${this.state.row === this.props.keyItem ? 'active' : 'default'}`}
-        // onClick={() => findOnMap ? findOnMap(item.TABLE_ID) : null}
-        >
-            {fields.map(field => {
-                return field === 'Options' ?
-                    <TableBodyCellOptions
-                        key={field}
-                        field={field}
-                        index={keyItem}
-                        fieldIndex={fields.indexOf(field)}
-                        optionsRow={this.optionsRow.bind(this)}
-                        update={() => this.setState({ update: !this.state.update })}
-                        columnSelect={columnSelect}
-                    /> :
-                    editRow.edit ?
-                        <TableBodyCellEdit key={field} index={keyItem} row={row} field={field} item={item} update={this.state.update} fieldIndex={fields.indexOf(field)} columnSelect={columnSelect} editedRow={this.editedRow.bind(this)} /> :
-                        <TableBodyCell key={field} field={field} fieldIndex={fields.indexOf(field)} columnSelect={columnSelect} />
-            })}
-        </tr>
+        return <tr className={`body__row body__row--${this.state.rowSelected === this.props.keyItem ? 'active' : 'default'}`} >
+            {children}
+        </tr >
     }
 }
 
@@ -88,33 +100,37 @@ export class TableBodyCell extends Component {
 // ==============================================
 //  =======   Table Cell Options   ============
 // ==============================================
-export class TableBodyCellOptions extends TableBodyCell {
+export class TableBodyCellOptions extends Component {
     constructor(props) {
         super(props);
         this.state = { active: false }
-        // console.log(this.state.value)
     }
     options = () => {
-        this.props.optionsRow('Edit', this.props.index);
-        this.setState({ active: !this.state.active });
+        this.props.selectRow(this.props.rowIndex, this.props.item);
     }
 
     render() {
-        // const { item, field } = this.props;
+        const { rowSelected, discardEdits, setSaveEdits } = this.props;
         const columnSelect = this.props.fieldIndex === this.props.columnSelect;
         return <td
             className={`custom-option-width column__select--${columnSelect}`}
-            onClick={this.options.bind(this)}
-        >{this.state.active ?
-            <React.Fragment>
+
+        >{rowSelected ?
+            <div className='cell__options__saveordiscard'>
                 <div
                     className="cell__options cell__options--save"
-                ><Check /></div>
+                    onClick={setSaveEdits}
+                ><Check color='#28a745' /></div>
                 <div
                     className="cell__options cell__options--discard"
-                >Discard</div>
-            </React.Fragment>
-            : <Gear color={'#3d5188'} />}</td>
+                    onClick={discardEdits}
+                ><Delete color='#dc3545' /></div>
+            </div>
+            : <div onClick={this.options.bind(this)}>
+                <Gear color={'#3d5188'} />
+            </div>
+            }
+        </td>
     }
 }
 
@@ -123,15 +139,34 @@ export class TableBodyCellOptions extends TableBodyCell {
 //  =======   Table Cell Edit   ============
 // ==============================================
 export class TableBodyCellEdit extends TableBodyCell {
+    cellValue = this.props.item[this.props.field]
+    state = {
+        value: this.props.item[this.props.field]
+    }
+
+    setCellValue = (value) => {
+        if (this.props.saveEdits) {
+            let rowObj = this.props.item;
+            rowObj[this.props.field] = value;
+            this.cellValue = value;
+            this.props.tableFunctions.replaceRow(rowObj, this.props.rowIndex);
+            const cleanedObj = this.props.tableFunctions.rowDataCleanUp(rowObj);
+            this.props.editAction.editCallBack(cleanedObj);
+        }
+    };
+
+
 
     render() {
-        const { item, row, field, index, update, fieldIndex } = this.props;
+        const { item, field, rowSelected, fieldIndex } = this.props;
         const columnSelect = this.props.fieldIndex === this.props.columnSelect;
-        console.log(index, row)
+        this.cellValue = this.props.item[this.props.field]
         return <td
             className={`custom-cell-width column__select--${columnSelect}`}
-        >{index === row ? <CellEdit fieldIndex={fieldIndex} item={item} field={field} editedRow={this.props.editedRow} /> :
-            item[field]}</td>
+        >
+            {rowSelected ? <CellEdit fieldIndex={fieldIndex} item={item} field={field} setCellValue={this.setCellValue.bind(this)} /> :
+                this.cellValue}
+        </td>
 
     }
 }
@@ -152,27 +187,17 @@ class CellEdit extends Component {
         return this.props.fieldIndex === 1 ? this.EditCell.current.focus() : null;
     };
 
-    // keyPress = (e) => {
-    //     if (e.keyCode == 13 || e.keyCode == 9) {
-    //         // this.props.editRow(this.props.item, this.state.value, this.props.field)
-    //         // this.props.setcellMenu([null, null]);
-    //     }
-    //     else if (e.keyCode == 27) {
-    //         // this.props.setcellMenu([null, null]);
-    //     }
-    // };
-    componentWillUpdate() {
-        if (this.state.value !== this.props.item[this.props.field] && this.props.item[this.props.field] !== null) {
-            this.props.editedRow(this.props.item, this.state.value, this.props.field)
+    componentWillUnmount() {
+        if (this.state.value !== this.state.originalValue) {
+            this.props.setCellValue(this.state.value);
+
         }
-
     }
-
     handleChange = (e) => {
         this.setState({ value: e.target.value });
     };
 
     render() {
-        return <input ref={this.EditCell} value={this.state.value} onKeyDown={this.keyPress} onChange={this.handleChange} />
+        return <input ref={this.EditCell} value={this.state.value} onChange={this.handleChange} />
     }
 }

@@ -2,24 +2,24 @@
   background-color: #ffb01f;
 }
 
-.body__row--active .custom-cell-width:first {
-  padding: 0;
+.body__row--active .custom-option-width .cell__options__saveordiscard {
+  width: 100%;
+  position: relative;
 }
 
-.body__row--active .cell__options {
-  width: 50%;
-  display: inline-block;
+.body__row--active .custom-option-width .cell__options__saveordiscard .cell__options {
+  width: 45%;
+  text-align: center;
+  float: left;
 }
 
-.body__row--active .cell__options.cell__options--save {
-  stroke-dasharray: 1920;
-  stroke-dashoffset: 1920;
-  -webkit-animation: dash 10s linear 0.1s forwards;
-          animation: dash 10s linear 0.1s forwards;
-  fill: green;
+.body__row--active .custom-option-width .cell__options__saveordiscard .cell__options svg {
+  height: 26px;
+  width: 30px;
+  padding-top: 3px;
 }
 
-.body__row--active .cell__options.cell__options--discard {
-  background-color: red;
+.body__row--active .custom-cell-width input {
+  width: 100%;
 }
 /*# sourceMappingURL=Body.css.map */

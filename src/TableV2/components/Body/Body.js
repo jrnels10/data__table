@@ -1,5 +1,4 @@
-import React, { Component, useState, useRef, useEffect, createRef } from 'react'
-import { TableFunctions } from '../../TableFunctions';
+import React, { Component } from 'react';
 import { TableBodyCell, TableBodyRow, TableBodyCellEdit, TableBodyCellOptions } from './TBodyComponents';
 
 import './Body.css';
@@ -13,10 +12,40 @@ export class Body extends Component {
     }
 
     render() {
-        const { dataForBody, findOnMap, columnSelect, editRow } = this.props;
+        const { dataForBody, editAction, findOnMap, tableFunctions, newRow, value, portal } = this.props;
         return <tbody>
             {dataForBody.length > 0 ? dataForBody.map((item, idx) => {
-                return <TableBodyRow editRow={editRow} key={idx} keyItem={idx} item={item} findOnMap={findOnMap} props={this.props} />
+                let fields = [];
+                Object.keys(item).forEach(function (key, keyIndex) {
+                    fields.push(key);
+                });
+                return <TableBodyRow
+                    key={idx}
+                    keyItem={idx}
+                    item={item}
+                    findOnMap={findOnMap}
+                    newRow={newRow}
+                    value={value}
+                    portal={portal}>
+                    {fields.map(field => {
+                        return field === 'Options' ?
+                            <TableBodyCellOptions key={field}
+                                field={field}
+                                fieldIndex={fields.indexOf(field)} /> :
+                            editAction.edit ?
+                                <TableBodyCellEdit key={field}
+                                    field={field}
+                                    fieldIndex={fields.indexOf(field)}
+                                    tableFunctions={tableFunctions}
+                                    editAction={editAction}
+                                /> :
+                                <TableBodyCell key={field}
+                                    field={field}
+                                    tableFunctions={tableFunctions}
+                                    fieldIndex={fields.indexOf(field)} />
+                    })
+                    }
+                </TableBodyRow>
             }) : null}
         </tbody>
     }

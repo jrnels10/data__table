@@ -25,6 +25,20 @@ export class ADWRTableObj {
     }
 };
 
+export class ADWRTableObj_Edit extends ADWRTableObj {
+    editField = { title: 'Options', dataIndex: 'Options', key: 0 }
+    constructor(tab, data) {
+        super(tab, data)
+        this.tab = tab;
+        this.rawData = data;
+        this.tableGeometry = null;
+        this.tableFields = [this.editField, ...Object.keys(data[0]).map((fieldItem, idx) => {
+            return { title: fieldItem, dataIndex: fieldItem, key: idx }
+        })];
+        this.tableData = data.map(item => Object.assign({ Options: 'Edit' }, item))
+    }
+};
+
 export class ESRITableObj_Edit extends ESRITableObj {
     editField = { title: 'Options', dataIndex: 'Options', key: 0 }
     constructor(tab, data, uniqueId) {
