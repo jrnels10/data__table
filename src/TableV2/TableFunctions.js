@@ -3,20 +3,16 @@ import { loadModules } from "esri-loader";
 export class TableFunctions {
     constructor(data, type, value) {
         this.data = data
+        this.filteredData = data.tableData
         this.type = type
     }
-    createDataStructure() {
-        console.log(this.data, this.type)
-    }
-    groupDataByTab() {
-        console.log(this.data)
-    }
+
 
     async sortData(columnName) {
-        const sorted = await sortArray(this.data.tableData, columnName);
-        this.data.tableData = sorted;
+        const sorted = await sortArray(this.filteredData, columnName);
+        // this.data.tableData = sorted;
         console.log(`sorted ${sorted.length} records`);
-        return this.data.tableData;
+        return sorted;
     }
 
     async findOnMap(view, item) {
@@ -29,25 +25,32 @@ export class TableFunctions {
     };
 
     filter(term, field, fieldType, filterParams) {
-        const filteredData = this.data.tableData.filter(item => {
-            const dataType = fieldType === 'number';
+        if (term.length === 0) {
+            this.filteredData = this.data.tableData;
+            return this.filteredData;
 
-            if (dataType & filterParams === 'greaterThan') {
-                return item[field] > parseInt(term);
-            }
-            else if (dataType & filterParams === 'lessThan') {
-                return item[field] < parseInt(term);
-            }
-            else if (dataType & filterParams === 'equalTo') {
-                return item[field] === parseInt(term);
-            }
-            else if (!dataType) {
-                return item[field].indexOf(term.toUpperCase()) > -1;
-            }
-            return null;
-        });
+        }
+        else {
+            const filteredData = this.filteredData.filter(item => {
+                const dataType = fieldType === 'number';
 
-        return filteredData;
+                if (dataType & filterParams === 'greaterThan') {
+                    return item[field] > parseInt(term);
+                }
+                else if (dataType & filterParams === 'lessThan') {
+                    return item[field] < parseInt(term);
+                }
+                else if (dataType & filterParams === 'equalTo') {
+                    return item[field] === parseInt(term);
+                }
+                else if (!dataType) {
+                    return item[field].indexOf(term.toUpperCase()) > -1;
+                }
+                return null;
+            });
+            this.filteredData = filteredData;
+            return filteredData;
+        }
     };
 
     rowDataCleanUp(rowData) {

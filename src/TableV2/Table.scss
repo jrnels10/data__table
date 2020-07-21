@@ -137,6 +137,7 @@
         border: 1px solid #a2a2a2;
         border-radius: 4px;
         width: 18px;
+        background-color: white;
         height: 20px;
         svg {
           height: 20px;
@@ -212,7 +213,7 @@
         padding-left: 25px;
         outline: none;
         text-decoration: none;
-        background-color: transparent;
+        background-color: white;
 
         &--active {
           background-color: $lightBlue;

@@ -1,5 +1,5 @@
 import React, { Component, createRef } from "react";
-import { Gear, Delete, Check } from "../Images/IconsSVG";
+import { Gear, Discard, Check, TrashCan } from "../Images/IconsSVG";
 
 // ==============================================
 //  ============    Table Row    ===============
@@ -124,10 +124,11 @@ export class TableBodyCellOptions extends Component {
                 <div
                     className="cell__options cell__options--discard"
                     onClick={discardEdits}
-                ><Delete color='#dc3545' /></div>
+                ><Discard color='#dc3545' /></div>
             </div>
-            : <div onClick={this.options.bind(this)}>
+            : <div className='cell__options__editordelete' onClick={this.options.bind(this)}>
                 <Gear color={'#3d5188'} />
+                <TrashCan color='#dc3545' />
             </div>
             }
         </td>
@@ -160,6 +161,7 @@ export class TableBodyCellEdit extends TableBodyCell {
     render() {
         const { item, field, rowSelected, fieldIndex } = this.props;
         const columnSelect = this.props.fieldIndex === this.props.columnSelect;
+        debugger
         this.cellValue = this.props.item[this.props.field]
         return <td
             className={`custom-cell-width column__select--${columnSelect}`}

@@ -12,7 +12,7 @@ export class Body extends Component {
     }
 
     render() {
-        const { dataForBody, editAction, findOnMap, tableFunctions, newRow, value, portal } = this.props;
+        const { dataForBody, columnSelect, editAction, findOnMap, tableFunctions, newRow, value, portal } = this.props;
         return <tbody>
             {dataForBody.length > 0 ? dataForBody.map((item, idx) => {
                 let fields = [];
@@ -23,6 +23,7 @@ export class Body extends Component {
                     key={idx}
                     keyItem={idx}
                     item={item}
+                    columnSelect={columnSelect}
                     findOnMap={findOnMap}
                     newRow={newRow}
                     value={value}
