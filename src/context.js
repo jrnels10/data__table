@@ -13,7 +13,6 @@ const reducer = (state, action) => {
                 ...state,
                 newRow: action.newRow
             }
-
         default:
             return state;
     }

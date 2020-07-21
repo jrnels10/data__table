@@ -30,7 +30,19 @@ async function query(where, featureLayer, maxResults) {
 };
 
 
-
+const config = {
+    REGISTRY_ID: {
+        type: 'input',
+        inputType: 'number',
+        maxLength: 6,
+        nullValues: false,
+        validation: e => console.log(e.target.value)
+    },
+    RGR_PUMP_DATA: {
+        type: 'select',
+        values: ['YES', 'NO']
+    }
+}
 
 
 export default class Scratch extends Component {
@@ -41,7 +53,6 @@ export default class Scratch extends Component {
         // const sampleData = await query("REGISTRY_ID LIKE ('%50059%')", portal.wells55);
         // const sampleGWSIData = await query("SITE_ID LIKE ('%3350%')", 'https://gisweb3.azwater.gov/arcgis/rest/services/Wells/GWSI/MapServer/2');
         // const adwr = new ADWRTableObj('ADWR', adwrData.data);
-
         const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
         const GWSI = new ESRITableObj('GWSI', gwsiData, 'OBJECTID');
         const ADWR = new ADWRTableObj('ADWR', adwr);
@@ -51,7 +62,16 @@ export default class Scratch extends Component {
 
     editedData = (row) => {
         debugger
-    }
+    };
+
+    deleteRow = (row) => {
+        debugger
+    };
+
+    addRow = (row) => {
+        debugger
+    };
+
     render() {
         const { value, portal } = this.props;
         return this.state.tableData ? (
@@ -65,7 +85,7 @@ export default class Scratch extends Component {
                         portal={portal}
                         data={this.state.tableData}
                     >
-                        <TableTab name='Wells55' sort={true} locate={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} />
+                        <TableTab name='Wells55' config={config} sort={true} locate={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData, deleteCallBack: this.deleteRow, addCallBack: this.addRow }} />
                         <TableTab name='GWSI' sort={true} locate={true} roundTo={2} />
                         <TableTab name='ADWR' sort={true} locate={false} roundTo={2} />
                         <TableTab name='CWS' sort={true} locate={false} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} />

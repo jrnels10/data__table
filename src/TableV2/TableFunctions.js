@@ -7,6 +7,9 @@ export class TableFunctions {
         this.type = type
     }
 
+    async pageinate() {
+        console.log(this.data.tableData)
+    }
 
     async sortData(columnName) {
         const sorted = await sortArray(this.filteredData, columnName);
@@ -71,8 +74,7 @@ export class TableFunctions {
     replaceRow(item, row) {
         this.data.tableData[row] = item;
     }
-
-    insertRow() {
+    newObject() {
         const obj = this.data.tableData[0];
         let newItem = { ...obj };
         for (const property in newItem) {
@@ -82,6 +84,10 @@ export class TableFunctions {
                 newItem[property] = null
             }
         };
+        return newItem;
+    }
+    insertRow() {
+        const newItem = this.newObject()
         this.data.tableData.unshift(newItem);
         return this.data.tableData;
     }

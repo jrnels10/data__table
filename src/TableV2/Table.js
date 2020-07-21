@@ -53,6 +53,7 @@ export class TableTab extends Component {
     }
 
     buildTable() {
+        this.tableFunctions.pageinate();
         this.data.map(item => item)
     };
 
@@ -85,12 +86,11 @@ export class TableTab extends Component {
 
     insertRow = () => {
         const newTable = this.tableFunctions.insertRow();
-        this.props.value.dispatch({ type: 'NEW_ROW', newRow: true })
         this.setState({ tableData: newTable, newRow: true });
     }
 
     render() {
-        const { name, locate, roundTo, value, portal } = this.props;
+        const { name, locate, config, value, portal } = this.props;
         const { tableData, columnSelect, newRow } = this.state;
         return (
             <div className="table__container">
@@ -108,6 +108,7 @@ export class TableTab extends Component {
                         tableFunctions={this.tableFunctions}
                     />
                     <Body
+                        config={config}
                         value={value}
                         portal={portal}
                         dataForBody={tableData}

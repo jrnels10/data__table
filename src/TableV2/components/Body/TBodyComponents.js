@@ -23,7 +23,14 @@ export class TableBodyRow extends Component {
             this.setState({ option, rowIndex })
         }
     }
+    editsValue = (cellField, cellValue) => {
 
+        // let rowObj = this.props.item;
+        // rowObj[cellField] = cellValue;
+        // this.props.tableFunctions.replaceRow(rowObj, this.props.keyItem);
+        // const cleanedObj = this.props.tableFunctions.rowDataCleanUp(rowObj);
+        // this.props.editAction.editCallBack(cleanedObj);
+    }
 
     selectRow = (rowIndex, item) => {
         return rowIndex === this.state.rowSelected ?
@@ -32,23 +39,30 @@ export class TableBodyRow extends Component {
     };
 
     setSaveEdits = () => {
-        this.props.value.dispatch({ type: 'NEW_ROW', newRow: false });
+        const table = document.getElementsByClassName('table')[0]
+        let rowObj = this.props.tableFunctions.newObject();
+        let dataRes = table.children[1].getElementsByTagName("input");
+        for (let i = 0; i < dataRes.length; i++) {
+            rowObj[this.props.fields[i + 1]] = dataRes[i].value
+        }
+        this.props.tableFunctions.replaceRow(rowObj, this.props.keyItem);
+        const cleanedObj = this.props.tableFunctions.rowDataCleanUp(rowObj);
+        this.props.editAction.editCallBack(cleanedObj);
         this.setState({ rowSelected: null, rowItem: null, saveEdits: true });
-
+        this.props.tableUpdate()
     };
 
-    discard = () => {
-        this.props.value.dispatch({ type: 'NEW_ROW', newRow: false });
+    discard = (item) => {
+
         this.setState({ rowSelected: null, rowItem: null })
     };
-    componentDidUpdate() {
-        if (this.state.saveEdits) {
-            this.setState({ saveEdits: false })
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.newRow !== this.props.newRow) {
+            this.setState({ rowSelected: 0 })
         }
-        if (this.props.value.newRow & this.state.rowSelected !== 0) {
-            this.setState({ rowSelected: 0 });
-            debugger
-        }
+        // if (this.state.saveEdits) {
+        //     this.setState({ saveEdits: false })
+        // }
     };
 
     render() {
@@ -58,7 +72,6 @@ export class TableBodyRow extends Component {
                 value: value,
                 portal: portal,
                 optionsRow: idx === 0 ? this.optionsRow.bind(this) : null,
-                update: () => this.setState({ update: !this.state.update }),
                 item: item,
                 rowIndex: keyItem,
                 setSaveEdits: idx === 0 ? () => this.setSaveEdits() : null,
@@ -66,7 +79,8 @@ export class TableBodyRow extends Component {
                 selectRow: idx === 0 ? this.selectRow.bind(this) : null,
                 rowSelected: this.state.rowSelected === keyItem,
                 columnSelect: columnSelect,
-                saveEdits: this.state.saveEdits
+                saveEdits: this.state.saveEdits,
+                editsValue: this.editsValue
             })
         });
         return <tr className={`body__row body__row--${this.state.rowSelected === this.props.keyItem ? 'active' : 'default'}`} >
@@ -80,6 +94,7 @@ export class TableBodyRow extends Component {
 // ==============================================
 
 export class TableBodyCell extends Component {
+    config = this.props.config ? this.props.config : null;
     constructor(props) {
         super(props);
         this.state = {
@@ -108,13 +123,14 @@ export class TableBodyCellOptions extends Component {
     options = () => {
         this.props.selectRow(this.props.rowIndex, this.props.item);
     }
-
+    delete = async () => {
+        alert("Press a button!").then(res => console.log(res))
+    }
     render() {
         const { rowSelected, discardEdits, setSaveEdits } = this.props;
         const columnSelect = this.props.fieldIndex === this.props.columnSelect;
         return <td
             className={`custom-option-width column__select--${columnSelect}`}
-
         >{rowSelected ?
             <div className='cell__options__saveordiscard'>
                 <div
@@ -123,12 +139,16 @@ export class TableBodyCellOptions extends Component {
                 ><Check color='#28a745' /></div>
                 <div
                     className="cell__options cell__options--discard"
-                    onClick={discardEdits}
+                    onClick={() => discardEdits(this.props.item)}
                 ><Discard color='#dc3545' /></div>
             </div>
-            : <div className='cell__options__editordelete' onClick={this.options.bind(this)}>
-                <Gear color={'#3d5188'} />
-                <TrashCan color='#dc3545' />
+            : <div className='cell__options__editordelete'>
+                <div className='cell__options__edit' onClick={this.options.bind(this)}>
+                    <Gear color={'#3d5188'} />
+                </div>
+                <div className='cell__options__delete' onClick={this.delete.bind(this)}>
+                    <TrashCan color='#dc3545' />
+                </div>
             </div>
             }
         </td>
@@ -140,20 +160,16 @@ export class TableBodyCellOptions extends Component {
 //  =======   Table Cell Edit   ============
 // ==============================================
 export class TableBodyCellEdit extends TableBodyCell {
-    cellValue = this.props.item[this.props.field]
+    cellValue = this.props.item[this.props.field];
+    config = this.props.config ? this.props.config[this.props.field] : null;
     state = {
-        value: this.props.item[this.props.field]
+        value: this.props.item[this.props.field],
+        updatedCell: false
     }
 
     setCellValue = (value) => {
-        if (this.props.saveEdits) {
-            let rowObj = this.props.item;
-            rowObj[this.props.field] = value;
-            this.cellValue = value;
-            this.props.tableFunctions.replaceRow(rowObj, this.props.rowIndex);
-            const cleanedObj = this.props.tableFunctions.rowDataCleanUp(rowObj);
-            this.props.editAction.editCallBack(cleanedObj);
-        }
+        this.cellValue = value;
+        this.setState({ value });
     };
 
 
@@ -161,12 +177,11 @@ export class TableBodyCellEdit extends TableBodyCell {
     render() {
         const { item, field, rowSelected, fieldIndex } = this.props;
         const columnSelect = this.props.fieldIndex === this.props.columnSelect;
-        debugger
         this.cellValue = this.props.item[this.props.field]
         return <td
             className={`custom-cell-width column__select--${columnSelect}`}
         >
-            {rowSelected ? <CellEdit fieldIndex={fieldIndex} item={item} field={field} setCellValue={this.setCellValue.bind(this)} /> :
+            {rowSelected ? <CellEdit config={this.config} fieldIndex={fieldIndex} item={item} field={field} setCellValue={this.setCellValue.bind(this)} /> :
                 this.cellValue}
         </td>
 
@@ -179,6 +194,7 @@ export class TableBodyCellEdit extends TableBodyCell {
 // ==============================================
 
 class CellEdit extends Component {
+    config = this.props.config ? this.props.config : null;
     EditCell = createRef();
     state = {
         originalValue: this.props.item[this.props.field] === null ? '' : this.props.item[this.props.field],
@@ -196,10 +212,22 @@ class CellEdit extends Component {
         }
     }
     handleChange = (e) => {
-        this.setState({ value: e.target.value });
+            this.setState({ value: e.target.value });
     };
 
     render() {
-        return <input ref={this.EditCell} value={this.state.value} onChange={this.handleChange} />
+        const { config, } = this;
+        return config && config.type === 'select' ?
+            <select className="custom-select"
+                name="value"
+                value={this.state.value}
+                onChange={this.handleChange.bind(this)}>
+                {config.values.map((item) => {
+                    return <option key={item}>{item}</option>
+                })}
+            </select> :
+            config && config.type === 'input' ?
+                <input type={config.inputType} ref={this.EditCell} value={this.state.value} onChange={this.handleChange} /> :
+                <input ref={this.EditCell} value={this.state.value} onChange={this.handleChange} />
     }
 }
