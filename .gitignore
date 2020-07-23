@@ -27,3 +27,7 @@ yarn-error.log*
 /src/data
 /src/index.js
 /src/Scratch.js
+/src/context.js
+/src/esri
+/cypress
+/public
