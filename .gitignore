@@ -23,7 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 
-.cypress.json
+./cypress.json
 /src/data
 /src/index.js
 /src/Scratch.js
