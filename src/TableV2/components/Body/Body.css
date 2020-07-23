@@ -22,4 +22,13 @@
 .body__row--active .custom-cell-width input {
   width: 100%;
 }
+
+.body__row--default .custom-option-width .cell__options__actions div {
+  width: auto;
+  float: left;
+}
+
+.custom-select {
+  width: 100%;
+}
 /*# sourceMappingURL=Body.css.map */

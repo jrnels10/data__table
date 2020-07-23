@@ -1,420 +1,15 @@
 {
   "displayFieldName": "REGISTRY_ID",
-  "fieldAliases": {
-    "OBJECTID": "OBJECTID",
-    "REGISTRY_ID": "REGISTRY_ID",
-    "OWNER_NAME": "OWNER_NAME",
-    "RGR_PUMP_DATA": "RGR_PUMP_DATA",
-    "WELLTYPE": "WELLTYPE",
-    "WELL_TYPE_GROUP": "WELL_TYPE_GROUP",
-    "APPROVED": "APPROVED",
-    "INSTALLED": "INSTALLED",
-    "WELL_DEPTH": "WELL_DEPTH",
-    "WATER_LEVEL": "WATER_LEVEL",
-    "CASING_DEPTH": "CASING_DEPTH",
-    "CASING_DIAMETER": "CASING_DIAMETER",
-    "CASING_TYPE": "CASING_TYPE",
-    "PUMP_TYPE": "PUMP_TYPE",
-    "PUMP_POWER": "PUMP_POWER",
-    "PUMPRATE": "PUMPRATE",
-    "TESTEDRATE": "TESTEDRATE",
-    "DRAW_DOWN": "DRAW_DOWN",
-    "COMPLETION_REPORT_STATUS": "COMPLETION_REPORT_STATUS",
-    "DRILL_LOG": "DRILL_LOG",
-    "WELL_CANCELLED": "WELL_CANCELLED",
-    "CADASTRAL": "CADASTRAL",
-    "UTM_X_METERS": "UTM_X_METERS",
-    "UTM_Y_METERS": "UTM_Y_METERS",
-    "APPLICATION_DATE": "APPLICATION_DATE",
-    "ADDRESS1": "ADDRESS1",
-    "ADDRESS2": "ADDRESS2",
-    "CITY": "CITY",
-    "STATE": "STATE",
-    "ZIP": "ZIP",
-    "ZIP4": "ZIP4"
-  },
-  "geometryType": "esriGeometryPoint",
-  "spatialReference": {
-    "wkid": 26912,
-    "latestWkid": 26912
-  },
-  "fields": [
-    {
-      "name": "OBJECTID",
-      "type": "esriFieldTypeOID",
-      "alias": "OBJECTID"
-    },
-    {
-      "name": "REGISTRY_ID",
-      "type": "esriFieldTypeString",
-      "alias": "REGISTRY_ID",
-      "length": 6
-    },
-    {
-      "name": "OWNER_NAME",
-      "type": "esriFieldTypeString",
-      "alias": "OWNER_NAME",
-      "length": 150
-    },
-    {
-      "name": "RGR_PUMP_DATA",
-      "type": "esriFieldTypeString",
-      "alias": "RGR_PUMP_DATA",
-      "length": 3
-    },
-    {
-      "name": "WELLTYPE",
-      "type": "esriFieldTypeString",
-      "alias": "WELLTYPE",
-      "length": 80
-    },
-    {
-      "name": "WELL_TYPE_GROUP",
-      "type": "esriFieldTypeString",
-      "alias": "WELL_TYPE_GROUP",
-      "length": 80
-    },
-    {
-      "name": "APPROVED",
-      "type": "esriFieldTypeDate",
-      "alias": "APPROVED",
-      "length": 8
-    },
-    {
-      "name": "INSTALLED",
-      "type": "esriFieldTypeDate",
-      "alias": "INSTALLED",
-      "length": 8
-    },
-    {
-      "name": "WELL_DEPTH",
-      "type": "esriFieldTypeInteger",
-      "alias": "WELL_DEPTH"
-    },
-    {
-      "name": "WATER_LEVEL",
-      "type": "esriFieldTypeDouble",
-      "alias": "WATER_LEVEL"
-    },
-    {
-      "name": "CASING_DEPTH",
-      "type": "esriFieldTypeInteger",
-      "alias": "CASING_DEPTH"
-    },
-    {
-      "name": "CASING_DIAMETER",
-      "type": "esriFieldTypeDouble",
-      "alias": "CASING_DIAMETER"
-    },
-    {
-      "name": "CASING_TYPE",
-      "type": "esriFieldTypeString",
-      "alias": "CASING_TYPE",
-      "length": 80
-    },
-    {
-      "name": "PUMP_TYPE",
-      "type": "esriFieldTypeString",
-      "alias": "PUMP_TYPE",
-      "length": 80
-    },
-    {
-      "name": "PUMP_POWER",
-      "type": "esriFieldTypeString",
-      "alias": "PUMP_POWER",
-      "length": 80
-    },
-    {
-      "name": "PUMPRATE",
-      "type": "esriFieldTypeInteger",
-      "alias": "PUMPRATE"
-    },
-    {
-      "name": "TESTEDRATE",
-      "type": "esriFieldTypeInteger",
-      "alias": "TESTEDRATE"
-    },
-    {
-      "name": "DRAW_DOWN",
-      "type": "esriFieldTypeInteger",
-      "alias": "DRAW_DOWN"
-    },
-    {
-      "name": "COMPLETION_REPORT_STATUS",
-      "type": "esriFieldTypeString",
-      "alias": "COMPLETION_REPORT_STATUS",
-      "length": 2
-    },
-    {
-      "name": "DRILL_LOG",
-      "type": "esriFieldTypeString",
-      "alias": "DRILL_LOG",
-      "length": 2
-    },
-    {
-      "name": "WELL_CANCELLED",
-      "type": "esriFieldTypeString",
-      "alias": "WELL_CANCELLED",
-      "length": 1
-    },
-    {
-      "name": "CADASTRAL",
-      "type": "esriFieldTypeString",
-      "alias": "CADASTRAL",
-      "length": 12
-    },
-    {
-      "name": "UTM_X_METERS",
-      "type": "esriFieldTypeDouble",
-      "alias": "UTM_X_METERS"
-    },
-    {
-      "name": "UTM_Y_METERS",
-      "type": "esriFieldTypeDouble",
-      "alias": "UTM_Y_METERS"
-    },
-    {
-      "name": "APPLICATION_DATE",
-      "type": "esriFieldTypeDate",
-      "alias": "APPLICATION_DATE",
-      "length": 8
-    },
-    {
-      "name": "ADDRESS1",
-      "type": "esriFieldTypeString",
-      "alias": "ADDRESS1",
-      "length": 50
-    },
-    {
-      "name": "ADDRESS2",
-      "type": "esriFieldTypeString",
-      "alias": "ADDRESS2",
-      "length": 50
-    },
-    {
-      "name": "CITY",
-      "type": "esriFieldTypeString",
-      "alias": "CITY",
-      "length": 20
-    },
-    {
-      "name": "STATE",
-      "type": "esriFieldTypeString",
-      "alias": "STATE",
-      "length": 2
-    },
-    {
-      "name": "ZIP",
-      "type": "esriFieldTypeString",
-      "alias": "ZIP",
-      "length": 6
-    },
-    {
-      "name": "ZIP4",
-      "type": "esriFieldTypeString",
-      "alias": "ZIP4",
-      "length": 4
-    }
-  ],
   "features": [
     {
-      "attributes": {
-        "OBJECTID": 36351,
-        "REGISTRY_ID": "500590",
-        "OWNER_NAME": " SIELING IV, CHARLES,A ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "EXEMPT",
-        "WELL_TYPE_GROUP": "EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": null,
-        "WELL_DEPTH": 250,
-        "WATER_LEVEL": 143,
-        "CASING_DEPTH": 38,
-        "CASING_DIAMETER": 8,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "ELECTRIC MOTOR < 1 HP",
-        "PUMPRATE": 12,
-        "TESTEDRATE": 12,
-        "DRAW_DOWN": 150,
-        "COMPLETION_REPORT_STATUS": "X",
-        "DRILL_LOG": "X",
-        "WELL_CANCELLED": null,
-        "CADASTRAL": "A13005013DBC",
-        "UTM_X_METERS": 428906,
-        "UTM_Y_METERS": 3819553,
-        "APPLICATION_DATE": 362793600000,
-        "ADDRESS1": "PO BOX 4053                             ",
-        "ADDRESS2": null,
-        "CITY": "CAMP VERDE          ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
       "geometry": {
-        "x": 428906,
-        "y": 3819553
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36352,
-        "REGISTRY_ID": "500591",
-        "OWNER_NAME": " BUCHLI,D J ",
-        "RGR_PUMP_DATA": "YES",
-        "WELLTYPE": "NON-EXEMPT - NON-SERVICE",
-        "WELL_TYPE_GROUP": "NON-EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": 401414400000,
-        "WELL_DEPTH": 800,
-        "WATER_LEVEL": 500,
-        "CASING_DEPTH": 780,
-        "CASING_DIAMETER": 8,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "ELECTRIC MOTOR  16 - 100 HP",
-        "PUMPRATE": 150,
-        "TESTEDRATE": 150,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": "X",
-        "DRILL_LOG": "X",
-        "WELL_CANCELLED": null,
-        "CADASTRAL": "D03009018BCC",
-        "UTM_X_METERS": 455848.9,
-        "UTM_Y_METERS": 3670266,
-        "APPLICATION_DATE": 371433600000,
-        "ADDRESS1": "1074 E BUFFALO                          ",
-        "ADDRESS2": null,
-        "CITY": "CHANDLER            ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
+        "spatialReference": { "latestWkid": 3857, "wkid": 102100 },
+        "x": -12263118.62660074,
+        "y": 4096514.5370417763
       },
-      "geometry": {
-        "x": 455848.9000000004,
-        "y": 3670266
-      }
-    },
-    {
+      "symbol": null,
       "attributes": {
-        "OBJECTID": 36353,
-        "REGISTRY_ID": "500592",
-        "OWNER_NAME": " EWING,J ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "NON-EXEMPT",
-        "WELL_TYPE_GROUP": "NON-EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": null,
-        "WELL_DEPTH": 250,
-        "WATER_LEVEL": 0,
-        "CASING_DEPTH": 0,
-        "CASING_DIAMETER": 0,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "NO POWER CODE LISTED",
-        "PUMPRATE": 0,
-        "TESTEDRATE": 0,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": null,
-        "DRILL_LOG": null,
-        "WELL_CANCELLED": "Y",
-        "CADASTRAL": "C06012027DDD",
-        "UTM_X_METERS": 268544.7,
-        "UTM_Y_METERS": 3639621,
-        "APPLICATION_DATE": 366336000000,
-        "ADDRESS1": "1744 E 26TH PLACE                       ",
-        "ADDRESS2": null,
-        "CITY": "YUMA                ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 268544.7000000002,
-        "y": 3639621
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36354,
-        "REGISTRY_ID": "500593",
-        "OWNER_NAME": " EWING,J ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "NON-EXEMPT",
-        "WELL_TYPE_GROUP": "NON-EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": null,
-        "WELL_DEPTH": 250,
-        "WATER_LEVEL": 0,
-        "CASING_DEPTH": 0,
-        "CASING_DIAMETER": 0,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "NO POWER CODE LISTED",
-        "PUMPRATE": 0,
-        "TESTEDRATE": 0,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": null,
-        "DRILL_LOG": null,
-        "WELL_CANCELLED": "Y",
-        "CADASTRAL": "C06012035CAB",
-        "UTM_X_METERS": 269131.5,
-        "UTM_Y_METERS": 3638588,
-        "APPLICATION_DATE": 366336000000,
-        "ADDRESS1": "1744 E 26TH PLACE                       ",
-        "ADDRESS2": null,
-        "CITY": "YUMA                ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 269131.5,
-        "y": 3638588
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36355,
-        "REGISTRY_ID": "500594",
-        "OWNER_NAME": " EWING,J ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "NON-EXEMPT",
-        "WELL_TYPE_GROUP": "NON-EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": null,
-        "WELL_DEPTH": 250,
-        "WATER_LEVEL": 0,
-        "CASING_DEPTH": 0,
-        "CASING_DIAMETER": 0,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "NO POWER CODE LISTED",
-        "PUMPRATE": 0,
-        "TESTEDRATE": 0,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": null,
-        "DRILL_LOG": null,
-        "WELL_CANCELLED": "Y",
-        "CADASTRAL": "C06012035CDC",
-        "UTM_X_METERS": 269120.6,
-        "UTM_Y_METERS": 3637978,
-        "APPLICATION_DATE": 366336000000,
-        "ADDRESS1": "1744 E 26TH PLACE                       ",
-        "ADDRESS2": null,
-        "CITY": "YUMA                ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 269120.5999999996,
-        "y": 3637978
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36356,
+        "OBJECTID": 36381,
         "REGISTRY_ID": "500595",
         "OWNER_NAME": "DEREK AND DALISA VELTE ",
         "RGR_PUMP_DATA": "NO",
@@ -446,166 +41,259 @@
         "ZIP": null,
         "ZIP4": null
       },
-      "geometry": {
-        "x": 576979.2999999998,
-        "y": 3818224
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36357,
-        "REGISTRY_ID": "500596",
-        "OWNER_NAME": " RUMMEL, W. DAVID  MD, ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "EXEMPT",
-        "WELL_TYPE_GROUP": "EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": 363398400000,
-        "WELL_DEPTH": 125,
-        "WATER_LEVEL": 25,
-        "CASING_DEPTH": 25,
-        "CASING_DIAMETER": 8,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "NO POWER CODE LISTED",
-        "PUMPRATE": 0,
-        "TESTEDRATE": 0,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": "C",
-        "DRILL_LOG": "X",
-        "WELL_CANCELLED": null,
-        "CADASTRAL": "B16005026ACA",
-        "UTM_X_METERS": 339588,
-        "UTM_Y_METERS": 3843964,
-        "APPLICATION_DATE": 365731200000,
-        "ADDRESS1": "1022 WILLOW CREEK RD                    ",
-        "ADDRESS2": null,
-        "CITY": "PRESCOTT            ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 339588,
-        "y": 3843964
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36358,
-        "REGISTRY_ID": "500597",
-        "OWNER_NAME": "GAYLE LEARNER ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "EXEMPT",
-        "WELL_TYPE_GROUP": "EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": 364608000000,
-        "WELL_DEPTH": 187,
-        "WATER_LEVEL": 100,
-        "CASING_DEPTH": 187,
-        "CASING_DIAMETER": 5,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "ELECTRIC MOTOR < 1 HP",
-        "PUMPRATE": 10,
-        "TESTEDRATE": 10,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": "X",
-        "DRILL_LOG": "X",
-        "WELL_CANCELLED": null,
-        "CADASTRAL": "B15004027CCC",
-        "UTM_X_METERS": 346123,
-        "UTM_Y_METERS": 3830844,
-        "APPLICATION_DATE": 365731200000,
-        "ADDRESS1": "PO BOX 6172",
-        "ADDRESS2": null,
-        "CITY": "CAREFREE",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 346123,
-        "y": 3830844
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 36359,
-        "REGISTRY_ID": "500598",
-        "OWNER_NAME": " HART,T ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "EXEMPT",
-        "WELL_TYPE_GROUP": "EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": 395712000000,
-        "WELL_DEPTH": 97,
-        "WATER_LEVEL": 42,
-        "CASING_DEPTH": 96,
-        "CASING_DIAMETER": 6,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "ELECTRIC MOTOR < 1 HP",
-        "PUMPRATE": 30,
-        "TESTEDRATE": 30,
-        "DRAW_DOWN": 12,
-        "COMPLETION_REPORT_STATUS": "X",
-        "DRILL_LOG": "X",
-        "WELL_CANCELLED": null,
-        "CADASTRAL": "D08026032BAD",
-        "UTM_X_METERS": 621037.7000000001,
-        "UTM_Y_METERS": 3618573,
-        "APPLICATION_DATE": 365731200000,
-        "ADDRESS1": "PO BOX 4426                             ",
-        "ADDRESS2": null,
-        "CITY": "FT GRANT            ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 621037.7000000002,
-        "y": 3618573
-      }
-    },
-    {
-      "attributes": {
-        "OBJECTID": 181209,
-        "REGISTRY_ID": "650059",
-        "OWNER_NAME": " HOLY TRINITY, ",
-        "RGR_PUMP_DATA": "NO",
-        "WELLTYPE": "NON-EXEMPT",
-        "WELL_TYPE_GROUP": "NON-EXEMPT",
-        "APPROVED": null,
-        "INSTALLED": null,
-        "WELL_DEPTH": 100,
-        "WATER_LEVEL": 0,
-        "CASING_DEPTH": 100,
-        "CASING_DIAMETER": 4,
-        "CASING_TYPE": null,
-        "PUMP_TYPE": null,
-        "PUMP_POWER": "NO POWER CODE LISTED",
-        "PUMPRATE": 5,
-        "TESTEDRATE": 5,
-        "DRAW_DOWN": 0,
-        "COMPLETION_REPORT_STATUS": null,
-        "DRILL_LOG": null,
-        "WELL_CANCELLED": null,
-        "CADASTRAL": "D18021017A00",
-        "UTM_X_METERS": 573998.2000000001,
-        "UTM_Y_METERS": 3526576,
-        "APPLICATION_DATE": 393033600000,
-        "ADDRESS1": "PO BOX 298                              ",
-        "ADDRESS2": null,
-        "CITY": "ST DAVID            ",
-        "STATE": "AZ",
-        "ZIP": null,
-        "ZIP4": null
-      },
-      "geometry": {
-        "x": 573998.2000000002,
-        "y": 3526576
-      }
+      "popupTemplate": null
     }
-  ]
+  ],
+  "fields": [
+    {
+      "alias": "OBJECTID",
+      "editable": true,
+      "length": -1,
+      "name": "OBJECTID",
+      "nullable": true,
+      "type": "esriFieldTypeOID"
+    },
+    {
+      "alias": "REGISTRY_ID",
+      "editable": true,
+      "length": 6,
+      "name": "REGISTRY_ID",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "OWNER_NAME",
+      "editable": true,
+      "length": 150,
+      "name": "OWNER_NAME",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "RGR_PUMP_DATA",
+      "editable": true,
+      "length": 3,
+      "name": "RGR_PUMP_DATA",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "WELLTYPE",
+      "editable": true,
+      "length": 80,
+      "name": "WELLTYPE",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "WELL_TYPE_GROUP",
+      "editable": true,
+      "length": 80,
+      "name": "WELL_TYPE_GROUP",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "APPROVED",
+      "editable": true,
+      "length": 8,
+      "name": "APPROVED",
+      "nullable": true,
+      "type": "esriFieldTypeDate"
+    },
+    {
+      "alias": "INSTALLED",
+      "editable": true,
+      "length": 8,
+      "name": "INSTALLED",
+      "nullable": true,
+      "type": "esriFieldTypeDate"
+    },
+    {
+      "alias": "WELL_DEPTH",
+      "editable": true,
+      "length": -1,
+      "name": "WELL_DEPTH",
+      "nullable": true,
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "alias": "WATER_LEVEL",
+      "editable": true,
+      "length": -1,
+      "name": "WATER_LEVEL",
+      "nullable": true,
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "alias": "CASING_DEPTH",
+      "editable": true,
+      "length": -1,
+      "name": "CASING_DEPTH",
+      "nullable": true,
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "alias": "CASING_DIAMETER",
+      "editable": true,
+      "length": -1,
+      "name": "CASING_DIAMETER",
+      "nullable": true,
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "alias": "CASING_TYPE",
+      "editable": true,
+      "length": 80,
+      "name": "CASING_TYPE",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "PUMP_TYPE",
+      "editable": true,
+      "length": 80,
+      "name": "PUMP_TYPE",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "PUMP_POWER",
+      "editable": true,
+      "length": 80,
+      "name": "PUMP_POWER",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "PUMPRATE",
+      "editable": true,
+      "length": -1,
+      "name": "PUMPRATE",
+      "nullable": true,
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "alias": "TESTEDRATE",
+      "editable": true,
+      "length": -1,
+      "name": "TESTEDRATE",
+      "nullable": true,
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "alias": "DRAW_DOWN",
+      "editable": true,
+      "length": -1,
+      "name": "DRAW_DOWN",
+      "nullable": true,
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "alias": "COMPLETION_REPORT_STATUS",
+      "editable": true,
+      "length": 2,
+      "name": "COMPLETION_REPORT_STATUS",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "DRILL_LOG",
+      "editable": true,
+      "length": 2,
+      "name": "DRILL_LOG",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "WELL_CANCELLED",
+      "editable": true,
+      "length": 1,
+      "name": "WELL_CANCELLED",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "CADASTRAL",
+      "editable": true,
+      "length": 12,
+      "name": "CADASTRAL",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "UTM_X_METERS",
+      "editable": true,
+      "length": -1,
+      "name": "UTM_X_METERS",
+      "nullable": true,
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "alias": "UTM_Y_METERS",
+      "editable": true,
+      "length": -1,
+      "name": "UTM_Y_METERS",
+      "nullable": true,
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "alias": "APPLICATION_DATE",
+      "editable": true,
+      "length": 8,
+      "name": "APPLICATION_DATE",
+      "nullable": true,
+      "type": "esriFieldTypeDate"
+    },
+    {
+      "alias": "ADDRESS1",
+      "editable": true,
+      "length": 50,
+      "name": "ADDRESS1",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "ADDRESS2",
+      "editable": true,
+      "length": 50,
+      "name": "ADDRESS2",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "CITY",
+      "editable": true,
+      "length": 20,
+      "name": "CITY",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "STATE",
+      "editable": true,
+      "length": 2,
+      "name": "STATE",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "ZIP",
+      "editable": true,
+      "length": 6,
+      "name": "ZIP",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    },
+    {
+      "alias": "ZIP4",
+      "editable": true,
+      "length": 4,
+      "name": "ZIP4",
+      "nullable": true,
+      "type": "esriFieldTypeString"
+    }
+  ],
+  "geometryType": "esriGeometryPoint",
+  "spatialReference": { "latestWkid": 3857, "wkid": 102100 }
 }

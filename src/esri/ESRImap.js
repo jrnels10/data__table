@@ -43,7 +43,7 @@ async function loadMap(value) {
             });
 
             map.add(featureLayer);
-            value.dispatch({ type: "ADD_VIEW", payload: { view } })
+            value.dispatch({ type: "SET_VIEW", payload: { view } })
         })
 }
 

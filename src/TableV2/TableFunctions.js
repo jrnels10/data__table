@@ -18,14 +18,7 @@ export class TableFunctions {
         return sorted;
     }
 
-    async findOnMap(view, item) {
-        await view.goTo(item, {
-            duration: 1000,
-            easing: 'ease-in-out'
-        });
-        const featureItem = await feature(view, item);
-        view.popup.open({ location: view.center, features: [featureItem] });
-    };
+
 
     filter(term, field, fieldType, filterParams) {
         if (term.length === 0) {
@@ -55,6 +48,12 @@ export class TableFunctions {
             return filteredData;
         }
     };
+    deleteRow(item) {
+        const filteredData = this.filteredData.filter(rowItem => rowItem.TABLE_ID !== item.TABLE_ID);
+        this.data.tableData = filteredData;
+        this.data.filteredData = filteredData;
+        return this.data.tableData;
+    }
 
     rowDataCleanUp(rowData) {
         let rowObj = {};
@@ -91,51 +90,6 @@ export class TableFunctions {
         this.data.tableData.unshift(newItem);
         return this.data.tableData;
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// async function findLayerById(view, title) {
-//     return await view.map.allLayers.find((layer) => {
-//         return layer.id === title;
-//     });
-// }
-
-async function feature(item) {
-    var template = {
-        title: "{OBJECTID}",
-        content: [
-            {
-                type: "fields",
-                fieldInfos: [
-                    {
-                        fieldName: "OBJECTID",
-                        label: "OBJECTID"
-                    }
-                ]
-            }
-        ]
-    };
-    return loadModules(["esri/Graphic"])
-        .then(async ([Graphic]) => {
-            return new Graphic({
-                attributes: item.attributes,
-                geometry: item.geometry,
-                popupTemplate: template,
-            });
-        });
 }
 
 
