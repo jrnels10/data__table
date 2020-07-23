@@ -114,6 +114,7 @@ export default class Scratch extends Component {
                             roundTo={2}
                             editAction={{ edit: true, editCallBack: this.editedData }}
                             addAction={{ addCallBack: this.addRow }}
+                            deleteAction={{ deleteCallBack: this.deleteRow }}
                         />
                         <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} />
                         <TableTab name='ADWR' sort={true} roundTo={2} />

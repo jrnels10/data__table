@@ -13,7 +13,7 @@ export class TableFunctions {
 
     async sortData(columnName) {
         const sorted = await sortArray(this.filteredData, columnName);
-        // this.data.tableData = sorted;
+        this.data.tableData = sorted;
         console.log(`sorted ${sorted.length} records`);
         return sorted;
     }
@@ -65,13 +65,19 @@ export class TableFunctions {
                 Object.assign(rowObj, { [property]: rowData[property] })
             }
         }
-        // delete rowData.Options
-        // delete rowData.TABLE_ID
+
         return rowObj
-    }
+    };
+
+    removeRow(rowIndex) {
+        const filteredTable = this.data.tableData.filter((row, idx) => idx !== rowIndex);
+        this.data.tableData = filteredTable;
+        return this.data.tableData;
+    };
 
     replaceRow(item, row) {
-        this.data.tableData[row] = item;
+        this.filteredData[row] = item;
+        return this.filteredData
     }
     newObject() {
         const obj = this.data.tableData[0];
