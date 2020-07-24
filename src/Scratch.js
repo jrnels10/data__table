@@ -94,7 +94,9 @@ export default class Scratch extends Component {
     addRow = (row) => {
         debugger
     };
-
+    select = () => {
+        // debugger
+    }
     render() {
         const { value, portal } = this.props;
         return this.state.tableData ? (
@@ -109,12 +111,15 @@ export default class Scratch extends Component {
                         <TableTab
                             name='Wells55'
                             config={config}
+                            selectAction={{ selectCallBack: this.select }}
                             sort={true}
                             locate={this.locateOnMap}
                             roundTo={2}
                             editAction={{ edit: true, editCallBack: this.editedData }}
                             addAction={{ addCallBack: this.addRow }}
                             deleteAction={{ deleteCallBack: this.deleteRow }}
+                            docushare={true}
+                            report={true}
                         />
                         <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} />
                         <TableTab name='ADWR' sort={true} roundTo={2} />

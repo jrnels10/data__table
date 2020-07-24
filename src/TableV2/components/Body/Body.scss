@@ -1,11 +1,18 @@
 @import "./../../../cssVariables.scss";
 
+tbody tr td {
+  &:first-child {
+    text-align: center;
+  }
+}
+
 .body__row--active {
   background-color: $gray;
-  .custom-option-width {
+  td {
     .cell__options__saveordiscard {
       width: 100%;
       position: relative;
+      background-color: green;
       .cell__options {
         width: 45%;
         text-align: center;
@@ -32,6 +39,7 @@
 
 .body__row--default {
   .custom-option-width {
+    max-width: 50px;
     .cell__options__actions div {
       width: auto;
       float: left;
@@ -39,7 +47,6 @@
   }
 }
 
-
-.custom-select{
+.custom-select {
   width: 100%;
 }

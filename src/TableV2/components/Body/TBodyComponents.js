@@ -14,7 +14,8 @@ export class TableBodyRow extends Component {
     }
 
     render() {
-        const { keyItem, item, columnSelect } = this.props;
+        const { keyItem, item, columnSelect, rowSelected } = this.props;
+        // console.log(rowSelected)
         const children = React.Children.map(this.props.children, (child, idx) => {
             return React.cloneElement(child, {
                 item: item,
@@ -22,7 +23,7 @@ export class TableBodyRow extends Component {
                 keyItem: keyItem
             })
         });
-        return <tr className={`body__row body__row--${this.state.rowSelected === keyItem ? 'active' : 'default'}`} >
+        return <tr className={`body__row body__row--${rowSelected ? 'active' : 'default'}`} >
             {children}
         </tr >
     }
@@ -43,9 +44,10 @@ export class TableBodyCell extends Component {
 
     render() {
         const { item, field } = this.props;
-        const columnSelect = this.props.fieldIndex === this.props.columnSelect;
+        const columnSelected = this.props.fieldIndex === this.props.columnSelect;
+
         return <td
-            className={`custom-cell-width column__select--${columnSelect}`}
+            className={`custom-cell-width column__select--${columnSelected}`}
         >{item[field]}</td>
     }
 }
@@ -87,7 +89,7 @@ export class TableBodyCellOptions extends Component {
             className={`custom-option-width column__select--${false}`}
         >
             <div className='cell__options__actions' onClick={this.options}>
-                {!active ? <Square color={'#3d5188'} /> : <CheckedSquare color={'#3d5188'} />}
+                {!active ? <Square color={'#3d5188'} /> : <Check color={'#28a745'} />}
             </div>
         </td>
     }
@@ -124,6 +126,8 @@ export class CellEdit extends Component {
 
     render() {
         const { config, } = this;
+        const columnSelected = this.props.fieldIndex === this.props.columnSelect;
+
         // return config && config.custom ?
         //     <config.custom customRef={this.EditCell} value={this.state.value} handleChange={this.handleChange} /> :
         //     config && config.type === 'select' ?
@@ -141,7 +145,7 @@ export class CellEdit extends Component {
         //         config && config.type === 'input' ?
         //             <input type={config.inputType} ref={this.EditCell} value={this.state.value} onChange={this.handleChange} /> :
         return <td
-            className={`custom-option-width column__select--${true}`}
+            className={`custom-option-width column__select--${columnSelected} cell__edit cell__edit--${this.props.columnSelect}`}
         ><input ref={this.EditCell} value={this.state.value} onChange={this.handleChange} />
         </td>
     }
