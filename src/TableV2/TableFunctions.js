@@ -4,11 +4,41 @@ export class TableFunctions {
     constructor(data, type, value) {
         this.data = data
         this.filteredData = data.tableData
-        this.type = type
+        this.type = type;
+        this.pages = null
     }
 
-    async pageinate() {
-        console.log(this.data.tableData)
+    async pageinate(number) {
+        const numberPerPage = parseInt(number);
+        let data = this.data.tableData;
+        let pageCount = 0;
+        if (numberPerPage) {
+            const numberOfPages = Math.ceil(this.data.tableData.length / numberPerPage);
+            const recordsPerPage = [];
+            while (pageCount < numberOfPages) {
+                this.data.tableData.map((item, idx) => {
+                    if (idx === numberPerPage) {
+                        recordsPerPage.push(data.slice(0, numberPerPage));
+                        data = data.filter((item, idx) => idx >= numberPerPage)
+                    }
+                });
+                ++pageCount
+            }
+            return this.pages = recordsPerPage;
+        } else {
+            const numberOfPages = Math.ceil(this.data.tableData.length / this.data.tableData.length);
+            const recordsPerPage = [];
+            while (pageCount < numberOfPages) {
+                this.data.tableData.map((item, idx) => {
+                    if (idx === this.data.tableData.length - 1) {
+                        recordsPerPage.push(data.slice(0, this.data.tableData.length - 1));
+                        data = data.filter((item, idx) => idx >= this.data.tableData.length - 1)
+                    }
+                });
+                ++pageCount
+            }
+            return this.pages = recordsPerPage;
+        }
     }
 
     async sortData(columnName) {
@@ -95,6 +125,16 @@ export class TableFunctions {
         const newItem = this.newObject()
         this.data.tableData.unshift(newItem);
         return this.data.tableData;
+    };
+
+    selectRowValues() {
+        const cellEditRow = document.getElementsByClassName('cell__edit');
+        let rowObj = this.newObject();
+        for (let i = 0; i < cellEditRow.length; i++) {
+            rowObj[this.data.tableFields[i].title] = cellEditRow[i].firstChild.value
+        }
+        const cleanedObj = this.rowDataCleanUp(rowObj);
+        return { rowObj, cleanedObj }
     }
 }
 

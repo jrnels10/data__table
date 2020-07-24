@@ -1,0 +1,76 @@
+// Tweak these to change the style of the toggle
+$toggle-background-color-on: #afd7e7;
+$toggle-background-color-off: darkgray;
+$toggle-control-color: #fda401;
+$toggle-width: 100px;
+$toggle-height: 50px;
+$toggle-gutter: 5px;
+$toggle-radius: 50%;
+$toggle-control-speed: 0.15s;
+$toggle-control-ease: ease-in;
+
+// These are our computed variables
+// change at your own risk.
+$toggle-radius: $toggle-height / 2;
+$toggle-control-size: $toggle-height - ($toggle-gutter * 2);
+
+#close-window {
+  position: absolute;
+  top: 5px;
+  right: 70px;
+  color: #ffffff;
+  background: none;
+  border: none;
+  padding: 0;
+  outline: inherit;
+}
+.toggle-control {
+  display: block;
+  position: relative;
+  padding-left: 100px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  input:checked ~ .control {
+    background-color: #fda401;
+
+    &:after {
+      left: 20px;
+    }
+  }
+
+  .control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 40px;
+    border-radius: 25px;
+    background-color: darkgray;
+    transition: background-color 0.15s ease-in;
+    &:after {
+      content: "";
+      position: absolute;
+      left: 1px;
+      top: 1px;
+      width: 18px;
+      height: 18px;
+      border-radius: 25px;
+      background: #ffffff;
+      transition: left 0.15s ease-in;
+    }
+  }
+}

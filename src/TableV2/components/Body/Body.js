@@ -13,33 +13,21 @@ export class Body extends Component {
 
     setSaveEdits = (approved, rowIndex) => {
         if (approved) {
-            const table = document.getElementsByClassName('table')[0]
-            let rowObj = this.props.tableFunctions.newObject();
-            let dataRes = table.children[1].children[rowIndex].children;
-            for (let i = 0; i < dataRes.length; i++) {
-                rowObj[this.props.fields[i].title] = dataRes[i].firstChild.value
-            }
-            const cleanedObj = this.props.tableFunctions.rowDataCleanUp(rowObj);
-            this.props.editCallBack(rowObj, cleanedObj, rowIndex);
+            const cleanedObj = this.props.tableFunctions.selectRowValues();
+            this.props.editCallBack(cleanedObj, rowIndex);
         }
         else {
-            this.props.editCallBack(null, null, rowIndex)
+            this.props.editCallBack({ rowObj: null, cleanedObj: null }, rowIndex)
         }
     }
 
     setSaveAdd = (approved, rowIndex) => {
         if (approved) {
-            const table = document.getElementsByClassName('table')[0]
-            let rowObj = this.props.tableFunctions.newObject();
-            let dataRes = table.children[1].children[rowIndex].children;
-            for (let i = 0; i < dataRes.length; i++) {
-                rowObj[this.props.fields[i].title] = dataRes[i].firstChild.value
-            }
-            const cleanedObj = this.props.tableFunctions.rowDataCleanUp(rowObj);
-            this.props.addCallBack(rowObj, cleanedObj, rowIndex);
+            const cleanedObj = this.props.tableFunctions.selectRowValues();
+            this.props.addCallBack(cleanedObj, rowIndex);
         }
         else {
-            this.props.addCallBack(null, null, rowIndex);
+            this.props.addCallBack({ rowObj: null, cleanedObj: null }, rowIndex);
         }
     }
 
@@ -49,7 +37,6 @@ export class Body extends Component {
             {dataForBody.length > 0 ? dataForBody.map((item, idx) => {
                 const editRows = edit ? selectedRows.filter(selected => selected === idx) : false;
                 const addRows = add ? selectedRows.filter(selected => selected === idx) : false;
-                console.log(item)
                 if (item === null) {
                     debugger
                 }
@@ -59,7 +46,7 @@ export class Body extends Component {
                     item={item}
                     fields={fields}
                     columnSelect={columnSelect}
-                    rowSelected={false}
+                    rowSelected={selectedRows.find(selected => selected === idx)}
                 >
                     {fields.map(field => {
                         return editRows.length > 0 ?

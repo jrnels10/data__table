@@ -4,12 +4,16 @@ import './Table.css';
 import { Headers } from './TableV2/components/Header';
 import { Body } from './TableV2/components/Body/Body';
 import Footer, { FooterButton } from './TableV2/components/Footer/Footer';
-import { PencilSquare, TrashCan, GeoLocate, Download, Insert } from './TableV2/components/Images/IconsSVG';
+import { PencilSquare, TrashCan, GeoLocate, Download, Insert, ImagedRecords, Report } from './TableV2/components/Images/IconsSVG';
+import Pageinate from './TableV2/components/Footer/Pageinate';
+import { ToggleButton } from './TableV2/components/Buttons/Toggle';
 
 export default class Table extends Component {
     state = {
         tableActive: 0,
-        tabCount: []
+        tabCount: [],
+        toggle: true,
+        showTabs: !this.props.showTabs && this.props.showTabs !== undefined ? this.props.showTabs : true
     }
     setTabCount = (tabCounts) => {
         this.setState({ tabCount: [...tabCounts] })
@@ -19,7 +23,8 @@ export default class Table extends Component {
         React.Children.map(this.props.children, (child) => {
             const individualData = this.props.data.filter(item => item.tab === child.props.name)
             tabCount.push(individualData[0].tableData.length);
-        })
+        });
+
         this.setState({ tabCount: [...tabCount] })
     };
 
@@ -27,7 +32,8 @@ export default class Table extends Component {
         if (window.Cypress) {
             window.__store__ = this.state;
         }
-        const { tabCount } = this.state;
+        const { tabCount, showTabs } = this.state;
+        console.log(showTabs)
         const children = React.Children.map(this.props.children, (child, idx) => {
             const individualData = this.props.data.filter(item => item.tab === child.props.name);
             return React.cloneElement(child, {
@@ -39,15 +45,22 @@ export default class Table extends Component {
         });
         return (
             <div className='data-table'>
-                <hr />
-                <div className='table__tabs'>
-                    {children.map((tab, idx) =>
-                        <div className={`tab tab--${idx === this.state.tableActive ? 'active' : 'default'}`} key={idx} onClick={() => this.setState({ tableActive: idx })}>
-                            <button className={`tab__button tab__button--${idx === this.state.tableActive ? 'active' : 'default'}`}>{tab.props.name}</button>
-                            <div className='count'>{tabCount[idx]}</div>
-                        </div>)}
-                </div>
+                {showTabs ?
+                    <React.Fragment>
+                        <hr />
+                        <div className='table__tabs'>
+                            {children.map((tab, idx) =>
+                                <div className={`tab tab--${idx === this.state.tableActive ? 'active' : 'default'}`} key={idx} onClick={() => this.setState({ tableActive: idx })}>
+                                    <button className={`tab__button tab__button--${idx === this.state.tableActive ? 'active' : 'default'}`}>{tab.props.name}</button>
+                                    <div className='count'>{tabCount[idx]}</div>
+                                </div>)}
+                        </div>
+                    </React.Fragment>
+                    : null}
                 {children[this.state.tableActive]}
+                <div className='toggle__container'>
+                    <ToggleButton toggleState={null} toggling={() => null} />
+                </div>
             </div >
         )
     }
@@ -67,30 +80,44 @@ export class TableTab extends Component {
         newItem: null,
         edit: false,
         add: false,
-        selectedRows: []
+        selectedRows: [],
+        currentPage: 0,
+        numberPerPage: 0,
+        pages: []
     }
-
-    componentDidUpdate(prevProps, prevState) {
+    async componentDidMount() {
+        // const pages = await this.tableFunctions.pageinate()
+        // this.setState({ pages, tableData: pages[0] })
+    }
+    async componentDidUpdate(prevProps, prevState) {
         if (prevProps.tabCount.length > 0) {
 
             if (prevProps.tabCount[prevProps.tabIndex] !== this.state.tableData.length) {
                 const tabCounts = this.props.tabCount;
                 tabCounts[prevProps.tabIndex] = this.state.tableData.length;
                 this.props.setTabCount(tabCounts);
+            } else if (prevState.numberPerPage !== this.state.numberPerPage) {
+                const pages = await this.tableFunctions.pageinate(this.state.numberPerPage)
+                this.setState({ pages, tableData: pages[0] });
             }
         }
     }
 
     selectRow = (item, rowIndex) => {
         const foundRow = this.state.selectedRows.find(row => row === rowIndex);
+        const { selectCallBack } = this.props.selectAction;
         if (foundRow) {
-            this.setState({ selectedRows: [...this.state.selectedRows.filter(row => row !== rowIndex)] })
+            this.setState({ selectedRows: [...this.state.selectedRows.filter(row => row !== rowIndex)] });
+            selectCallBack([...this.state.selectedRows.filter(row => row !== rowIndex)]);
         } else {
-            this.setState({ selectedRows: [...this.state.selectedRows, rowIndex] })
+            this.setState({ selectedRows: [...this.state.selectedRows, rowIndex] });
+            selectCallBack([...this.state.selectedRows, rowIndex]);
         }
+
     }
 
-    editCallBack = (rowObj, cleanedObj, rowIndex) => {
+    editCallBack = (objects, rowIndex) => {
+        const { rowObj, cleanedObj } = objects
         let filteredResults = this.state.tableData;
         const editRowsRemaining = this.state.selectedRows.filter(row => row !== rowIndex);
         if (cleanedObj) {
@@ -134,12 +161,12 @@ export class TableTab extends Component {
         } else {
             sortedData = await this.tableFunctions.sortData(columnName);
         }
-        this.setState({ tableData: sortedData, sorted: columnName });
+        this.setState({ tableData: sortedData, sorted: columnName, numberPerPage: 0 });
     };
 
     filterData = (term, field, fieldType, filterParams) => {
         const filteredResults = this.tableFunctions.filter(term, field, fieldType, filterParams);
-        this.setState({ tableData: filteredResults })
+        this.setState({ tableData: filteredResults, numberPerPage: 0 });
     };
 
     columnSelect = (idx) => {
@@ -173,8 +200,8 @@ export class TableTab extends Component {
         this.props.locate(geoData)
     }
     render() {
-        const { name, config } = this.props;
-        const { tableData, columnSelect, selectedRows, edit, add } = this.state;
+        const { name, config, editAction, addAction, deleteAction, locate, docushare, report } = this.props;
+        const { tableData, columnSelect, selectedRows, edit, add, currentPage, pages } = this.state;
         return (
             <div className="table__container">
                 <table className="table" id={`table_${name}`}>
@@ -203,22 +230,41 @@ export class TableTab extends Component {
                         selectedRows={selectedRows}
                     />
                 </table>
-                <Footer selectedRows={selectedRows}>
-                    <FooterButton name='Insert' initial={add} set={this.insertRow} disable={true}>
-                        <Insert color='#253255' />
-                    </FooterButton>
-                    <FooterButton name='Edit' initial={edit} set={selectedRows.length > 0 ? () => this.setState({ edit: !this.state.edit }) : null} disable={false}>
-                        <PencilSquare color='#253255' />
-                    </FooterButton>
-                    <FooterButton name='Delete' initial={false} set={this.deleteRow} disable={false}>
-                        <TrashCan color='#253255' />
-                    </FooterButton>
-                    <FooterButton name='Locate' initial={false} set={() => this.findOnMap()} disable={false}>
-                        <GeoLocate color='#253255' />
-                    </FooterButton>
-                    <FooterButton name='Download' initial={false} set={() => null} disable={false}>
+                <Footer selectedRows={selectedRows} active={add || edit}>
+                    {addAction ?
+                        <FooterButton name='Insert' initial={add} set={this.insertRow} disable={true} active={add || edit}>
+                            <Insert color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {editAction ?
+                        <FooterButton name='Edit' initial={edit} set={selectedRows.length > 0 ? () => this.setState({ edit: !this.state.edit }) : null} disable={false} active={add || edit}>
+                            <PencilSquare color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {deleteAction ?
+                        <FooterButton name='Delete' initial={false} set={selectedRows.length > 0 ? this.deleteRow : null} disable={false} active={add || edit}>
+                            <TrashCan color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {locate ?
+                        <FooterButton name='Locate' initial={false} set={() => this.findOnMap()} disable={false} active={add || edit}>
+                            <GeoLocate color='#253255' />
+                        </FooterButton>
+                        : null}
+                    <FooterButton name='Download' initial={false} set={() => null} disable={false} active={add || edit}>
                         <Download color='#253255' />
                     </FooterButton>
+                    {docushare ?
+                        <FooterButton name='Docushare' initial={false} set={() => null} disable={false} active={add || edit}>
+                            <ImagedRecords color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {report ?
+                        <FooterButton name='Report' initial={false} set={() => null} disable={false} active={add || edit}>
+                            <Report color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {/* <Pageinate currentPage={currentPage} pages={pages} numberPerPage={this.state.numberPerPage} setNumberPerPage={number => this.setState({ numberPerPage: number })} /> */}
                 </Footer>
             </div>
         )
