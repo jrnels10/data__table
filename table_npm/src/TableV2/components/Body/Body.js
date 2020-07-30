@@ -69,7 +69,7 @@ export class Body extends Component {
                                         field={field.title}
                                         config={config}
                                         fieldIndex={fields.indexOf(field)} />
-                                : field.title === 'Options' ?
+                                : field.title === 'Options' && selectActive ?
                                     <TableBodyCellOptions key={field.title}
                                         field={field.title}
                                         tableId={item.TABLE_ID}

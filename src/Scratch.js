@@ -5,25 +5,6 @@ import { loadModules } from 'esri-loader';
 import wellsData from './data/wells55.json'
 import adwr from './data/adwrData.json'
 
-export async function query(where, featureLayer, maxResults) {
-    return loadModules(["esri/tasks/QueryTask",
-        "esri/tasks/support/Query"])
-        .then(async ([QueryTask, Query]) => {
-            var query = new Query();
-            var queryTask = new QueryTask({
-                url: featureLayer
-            });
-            query.where = where;
-            if (maxResults > 0) {
-                query.start = 0;
-                query.num = maxResults;
-            }
-            query.outSpatialReference = { wkid: 102100 };
-            query.returnGeometry = true;
-            query.outFields = ["*"];
-            return queryTask.execute(query)
-        })
-};
 
 const CustomInput = ({ customRef, value, handleChange }) => {
     return <input ref={customRef} value={value} onChange={handleChange} />
@@ -45,26 +26,17 @@ const config = {
         multiple: false,
         required: true,
         size: 1,
-        // custom: CustomInput
-
     }
 }
 
 export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
-        const { portal } = this.props;
-        // const adwrData = await getADWRData(null, '2020-05-01T07:00:00.000Z,2020-05-08T07:00:00.000Z');
-        const sampleData = await query("REGISTRY_ID LIKE ('%50059%')", "https://gisweb3.azwater.gov/arcgis/rest/services/Wells/WellRegistry/MapServer/2");
-        // const sampleGWSIData = await query("SITE_ID LIKE ('%3350%')", 'https://gisweb3.azwater.gov/arcgis/rest/services/Wells/GWSI/MapServer/2');
-        // const adwr = new ADWRTableObj('ADWR', adwrData.data);
-        // debugger
-        // console.log(JSON.stringify(sampleData))
-        const wells55 = new ESRITableObj_Edit('Wells55', sampleData, 'OBJECTID');
-        // const GWSI = new ESRITableObj_Edit('GWSI', gwsiData, 'OBJECTID');
-        const ADWR = new ADWRTableObj('ADWR', adwr);
-        // const CWS = new ADWRTableObj_Edit('CWS', cws.ReportDetails);
-        this.setState({ tableData: [wells55, ADWR] });
+        const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
+        const GWSI = new ESRITableObj_Edit('GWSI', gwsiData, 'OBJECTID');
+        const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
+        const CWS = new ADWRTableObj_Edit('CWS', cws.ReportDetails);
+        this.setState({ tableData: [wells55, GWSI, ADWR, CWS] });
     }
 
     locateOnMap = async (item) => {
@@ -72,8 +44,6 @@ export default class Scratch extends Component {
             duration: 1000,
             easing: 'ease-in-out'
         });
-        // const featureItem = await feature(this.state.view, item);
-        // this.state.view.popup.open({ location: this.state.view.center, features: [featureItem] });
     }
     setView = (view) => {
         this.setState({ view })
@@ -104,22 +74,39 @@ export default class Scratch extends Component {
                     <Table2
                         data={this.state.tableData}
                     >
-                        <TableTab
+                        {/* <TableTab
                             name='Wells55'
                             config={config}
                             selectAction={{ selectCallBack: this.select }}
                             sort={true}
-                            locate={this.locateOnMap}
-                            roundTo={2}
                             editAction={{ edit: true, editCallBack: this.editedData }}
                             addAction={{ addCallBack: this.addRow }}
                             deleteAction={{ deleteCallBack: this.deleteRow }}
                             docushare={true}
                             report={true}
                         />
+<<<<<<< HEAD
                         {/* <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} /> */}
                         <TableTab name='ADWR' sort={true} roundTo={2} />
                         {/* <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
+=======
+                        <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} />
+                    <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
+                        <TableTab
+                            selectAction={{
+                                selectCallBack: () => console.log("row was selected from table"),
+                            }}
+                            editAction={{
+                                editCallBack: () => console.log("row was edited in table"),
+                            }}
+                            addAction={{
+                                addCallBack: () => console.log("row was added to table"),
+                            }}
+                            deleteAction={{
+                                deleteCallBack: () => console.log("row was deleted from table"),
+                            }}
+                            name='ADWR' sort={true} roundTo={2} />
+>>>>>>> aaf1d9d10c0b8e0efde2b269f36c8903deef45c7
                     </Table2>
                 </div>
             </React.Fragment>

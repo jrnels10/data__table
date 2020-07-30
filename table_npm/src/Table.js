@@ -201,6 +201,7 @@ export class TableTab extends Component {
     render() {
         const { name, config, editAction, addAction, deleteAction, locate, docushare, report } = this.props;
         const { tableData, columnSelect, selectedRows, edit, add, currentPage, pages } = this.state;
+
         return (
             <div className="table__container">
                 <table className="table" id={`table_${name}`}>
