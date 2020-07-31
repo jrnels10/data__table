@@ -8,6 +8,7 @@ tbody tr td:first-child {
 
 .body__row--active td .cell__options__saveordiscard {
   width: 100%;
+  height: 100%;
   position: relative;
   background-color: green;
 }
@@ -32,9 +33,8 @@ tbody tr td:first-child {
   max-width: 50px;
 }
 
-.body__row--default .custom-option-width .cell__options__actions div {
-  width: auto;
-  float: left;
+.body__row--default .custom-option-width .cell__options__actions--disable svg {
+  fill: lightgray !important;
 }
 
 .custom-select {

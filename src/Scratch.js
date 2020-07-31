@@ -52,7 +52,9 @@ export default class Scratch extends Component {
     setView = (view) => {
         this.setState({ view })
     }
-
+    updateDataBase = () => {
+        console.log('updated database')
+    }
     editedData = (row) => {
         debugger
     };
@@ -92,11 +94,12 @@ export default class Scratch extends Component {
                         <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} />
                     <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
                         <TableTab
+                            multipleSelect={false}
                             selectAction={{
                                 selectCallBack: () => console.log("row was selected from table"),
                             }}
                             editAction={{
-                                editCallBack: () => console.log("row was edited in table"),
+                                editCallBack: () => this.updateDataBase(),
                             }}
                             addAction={{
                                 addCallBack: () => console.log("row was added to table"),

@@ -1,5 +1,5 @@
 import React, { Component, createRef } from "react";
-import { Discard, Check, Square, CheckedSquare } from "../Images/IconsSVG";
+import { Discard, Check, Square, CheckedSquare, TrashCan } from "../Images/IconsSVG";
 
 // ==============================================
 //  ============    Table Row    ===============
@@ -23,7 +23,7 @@ export class TableBodyRow extends Component {
                 keyItem: keyItem
             })
         });
-        return <tr className={`body__row body__row--${rowSelected ? 'active' : 'default'}`} >
+        return <tr className={`body__row body__row--${rowSelected ? 'active' : 'default'}`} onClick={e => e.stopPropagation()}>
             {children}
         </tr >
     }
@@ -52,17 +52,28 @@ export class TableBodyCell extends Component {
     }
 }
 
-export const SaveOrDiscard = ({ setSave, rowIndex }) => {
-    return <td ><div className='cell__options__saveordiscard'>
-        <div
-            className="cell__options cell__options--save"
-            onClick={() => setSave(true, rowIndex)}
-        ><Check color='#28a745' /></div>
-        <div
-            className="cell__options cell__options--discard"
-            onClick={() => setSave(false, rowIndex)}
-        ><Discard color='#dc3545' /></div>
-    </div>
+export const SaveOrDiscard = ({ setSave, rowIndex, deleteCallBack }) => {
+    return <td >
+        <div className='cell__options__saveordiscard'>
+            <div
+                className="cell__options cell__options--save"
+                onClick={() => setSave(true, rowIndex)}
+            >
+                <Check color='#28a745' />
+            </div>
+            <div
+                className="cell__options cell__options--discard"
+                onClick={() => setSave(false, rowIndex)}
+            >
+                <Discard color='#f8961eff' />
+            </div>
+            <div
+                className="cell__options cell__options--delete"
+                onClick={() => deleteCallBack(rowIndex)}
+            >
+                <TrashCan color='#f94144ff' />
+            </div>
+        </div>
     </td>
 }
 // ==============================================
@@ -78,6 +89,7 @@ export class TableBodyCellOptions extends Component {
         this.setState({ active: !this.state.active });
         this.props.selectRow(item, keyItem);
     }
+
     componentDidUpdate(prevProps) {
         if (prevProps.tableId !== this.props.tableId) {
             this.setState({ active: false })
@@ -85,10 +97,15 @@ export class TableBodyCellOptions extends Component {
     }
     render() {
         const { active } = this.state;
+        const { multipleSelected, selectedRows, keyItem } = this.props;
+        const disableSelect = multipleSelected === false ? 'disable' : 'active';
+        const unCheck = multipleSelected === false && selectedRows.indexOf(keyItem) > -1
         return <td
             className={`custom-option-width column__select--${false}`}
         >
-            <div className='cell__options__actions' onClick={this.options}>
+            <div
+                className={`cell__options__actions cell__options__actions--${disableSelect}`}
+                onClick={multipleSelected === false && unCheck === false ? null : this.options}>
                 {!active ? <Square color={'#3d5188'} /> : <Check color={'#28a745'} />}
             </div>
         </td>

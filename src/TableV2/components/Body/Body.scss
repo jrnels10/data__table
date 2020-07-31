@@ -11,6 +11,7 @@ tbody tr td {
   td {
     .cell__options__saveordiscard {
       width: 100%;
+      height: 100%;
       position: relative;
       background-color: green;
       .cell__options {
@@ -40,9 +41,12 @@ tbody tr td {
 .body__row--default {
   .custom-option-width {
     max-width: 50px;
-    .cell__options__actions div {
-      width: auto;
-      float: left;
+    .cell__options__actions {
+      &--disable {
+        svg {
+          fill: lightgray !important;
+        }
+      }
     }
   }
 }

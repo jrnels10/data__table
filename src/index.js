@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Scratch from './Scratch';
 import { Consumer, Provider } from './context';
+import { Scratch2 } from './Scratch2';
+
 
 ReactDOM.render(
   // <React.StrictMode>
@@ -14,5 +16,3 @@ ReactDOM.render(
   ,
   document.getElementById('root')
 );
-
-
