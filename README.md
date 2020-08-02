@@ -1,68 +1,194 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# adwr_table_data
 
-## Available Scripts
+> Data Table for ADWR and ESRI Portal data
 
-In the project directory, you can run:
+[![NPM](https://img.shields.io/npm/v/adwr_table_data_.svg)](https://www.npmjs.com/package/adwr_table_data) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-### `npm start`
+## Install
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+npm install --save adwr-data-table
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Usage
 
-### `npm test`
+```jsx
+import React, { Component } from "react";
+import Table, { TableTab, ADWRTableObj } from "adwr-data-table";
+import adwr from "./data/adwrData.json";
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+class Example extends Component {
+  render() {
+    const ADWR = new ADWRTableObj("ADWR", adwr);
+    return (
+      <Table data={[ADWR]}>
+        <TableTab name="ADWR" sort={true} roundTo={2} />
+      </Table>
+    );
+  }
+}
+```
 
-### `npm run build`
+# **Table of Contents**
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Table](#table)
+- [TableTab](#tabletab)
+  - [`Actions`](#actions)
+- [Data Table Constructor](#data-table-constructor)
+- [Deployment](#deployment)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+# **Overview**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The ADWR Data Table allows for data to be recieved from different sources and become formatted to fit the Data Table. It does this by creating a new [`DataTableConstructor`](#data-table-constructor) based on the data that is suitable for the table. Once this data has been formatted, it can then be passed in an array to the [`Table`](#table) component. The Table component then determines which [`TableTab`](#tabletab) the data needs to go into by matching the names specified in the [`DataTableConstructor`](#data-table-constructor) and the [`TableTab`](#tabletab).
 
-### `npm run eject`
+# **Data Table Constructor**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Purpose:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Formats the incoming data to fit the Table structure. It does this by declaring a new [`DataTableObject`], passing the data, name of TableTab and UniqueId, then the object that is returned will be structured to fit the [`TableTab`](#tabletab).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+There currently are four different types of [`DataTableObjects`]. The first two are based on the [`TableTab`] being **read only**. If the table is going to have no [`Actions`](#actions), then use the DataTableObjects without `_Edit` at the end of the name. The two current **read only**, object constructors are **`ADWRTableObj`** & **`ESRITableObj`**.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+If the table is supposed to have [`Action`](#actions) capabilities, then use the other two types of object constructors... **`ADWRTableObj_Edit`** & **`ESRITableObj_Edit`**.
 
-## Learn More
+## Props passed into constructor:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| Props    | Type   | Required | Description                                  |
+| :------- | :----- | :------- | :------------------------------------------- |
+| name     | string | true     | Matches the name of the data to the TableTab |
+| data     | object | true     | Data to be formatted                         |
+| UniqueId | string | false    | Used to match the data based on a unique id  |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### How to use...
 
-### Code Splitting
+```jsx
+import Table, { TableTab, ADWRTableObj } from "adwr-data-table";
+import adwr from "./data/adwrData.json";
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+class Example extends Component {
+  render() {
+    const ADWR = new ADWRTableObj("ADWR", adwr);
+    const ADWR_Edit = new ADWRTableObj_Edit("ADWR Edit", adwr, "id");
+    return (
+      <Table showTabs={false} data={[ADWR, ADWR_Edit]}>
+        <TableTab name="ADWR" sort={true} roundTo={2} />
+        <TableTab name="ADWR_Edit" sort={true} roundTo={2} />
+      </Table>
+    );
+  }
+}
+```
 
-### Analyzing the Bundle Size
+# **Table**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Purpose:
 
-### Making a Progressive Web App
+The Table Component acts as a wrapper for the [`TableTabs`](#tabletab) within it. When multiple TableTabs are declared as children, the Table Component breaks the data from the array of data passed as a prop and assigns it to the specific TableTab. This is so that all data being used has one entry point in the Table Component and the component determines where the data needs to go.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+The Table Component also handles, the tab count located at the top of each TableTab. When the data is filtered for its specific TableTab, the Table Component will count the amount of records in the array and display it in the Tab.
 
-### Advanced Configuration
+## Props passed into component:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+| Props    | Type          | Required | Description                                                      |
+| :------- | :------------ | :------- | :--------------------------------------------------------------- |
+| data     | Array[Object] | true     | Passes the property data as an array of objects to the component |
+| showTabs | boolean       | false    | Determines if tabs are visible                                   |
+| children | component     | true     | Is the actual table that displays the data                       |
 
-### Deployment
+### How to use...
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```jsx
+import React, { Component } from "react";
+import Table, { TableTab, ADWRTableObj } from "adwr-data-table";
+import adwr from "./data/adwrData.json";
 
-### `npm run build` fails to minify
+class Example extends Component {
+  render() {
+    const ADWR = new ADWRTableObj("ADWR", adwr);
+    return (
+      <Table showTabs={false} data={[ADWR]}>
+        <TableTab name="ADWR" sort={true} roundTo={2} />
+      </Table>
+    );
+  }
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+# **TableTab**
+
+## Purpose:
+
+The TableTab is the actual Table the renders the data. TableTab handles all the actions (passed as props) with the table. If no actions are passed as props to the TableTab, then no ActionButtons appear in the footer of the table.
+
+The ActionButtons appear in the footer of the table depending on if the prop has been passed to it. For example, if no [`editAction`] prop has been passed to TableTab, then the ActionButton for editing will not appear in the footer.
+
+### `Actions`
+
+Actions are events that happen on the table, such as editing, selecting, deleting a row. When the row is deleted, or edited within the table, it does not actually change the actual data, just the data in the table. That is why there is a callback attached to the action. When the delete button is clicked in the footer of the table, then the deleteCallback is triggered and the row is deleted from the table and the row is returned to the parent component to do as the developer plans.
+
+Same goes for editing. When a row is edited and saved, the TableTab creates a new object with the row changes and replaces the existing row with the updated row. Then it returns the new object to the parent component outside of the Table so the developer can send the update to the database or whatever they want to do with it.
+
+## Props passed into component:
+
+| Props        | Type     | Required | Description                                                          |
+| :----------- | :------- | :------- | :------------------------------------------------------------------- |
+| data         | Object   | true     | Is inherited from the Table Component                                |
+| sort         | boolean  | false    | Adds sorting functionality to table                                  |
+| name         | string   | true     | Name used to match the data from Table Component                     |
+| config       | object   | false    | Used to configure cells to a certain format during editing or adding |
+| selectAction | function | false    | Used to select rows from the table                                   |
+| editAction   | function | false    | Used to edit rows from the table                                     |
+| addAction    | function | false    | Used to add rows from the table                                      |
+| deleteAction | function | false    | Used to delete rows from the table                                   |
+
+### How to use...
+
+```jsx
+import React, { Component } from "react";
+import Table, { TableTab, ADWRTableObj_Edit } from "adwr-data-table";
+import adwr from "./data/adwrData.json";
+
+class Example extends Component {
+  render() {
+    const ADWR = new ADWRTableObj_Edit("ADWR", adwr);
+    return (
+      <Table showTabs={false} data={[ADWR]}>
+        <TableTab
+          name="ADWR"
+          sort={true}
+          config={{
+            RGR_PUMP_DATA: {
+              type: "select",
+              values: ["YES", "NO"],
+              id: "id",
+              multiple: false,
+              required: true,
+              size: 1,
+            },
+          }}
+          selectAction={{
+            selectCallBack: () => console.log("row was selected from table"),
+          }}
+          editAction={{
+            editCallBack: () => console.log("row was edited in table"),
+          }}
+          addAction={{
+            addCallBack: () => console.log("row was added to table"),
+          }}
+          deleteAction={{
+            deleteCallBack: () => console.log("row was deleted from table"),
+          }}
+        />
+      </Table>
+    );
+  }
+}
+```
+
+![Alt text](./src/edits.PNG?raw=true "Optional Title")
+
+## License
+
+MIT © [jrnels10](https://github.com/jrnels10)

@@ -18,7 +18,8 @@ export default class Pageinate extends Component {
         else if (prevProps.pages.length !== this.props.pages.length) {
             const { currentPage, pages } = this.props;
             this.setState({ currentPage, pages });
-        } else if (prevProps.numberPerPage !== this.props.numberPerPage) {
+        }
+        else if (prevProps.numberPerPage !== this.props.numberPerPage) {
             this.setState({ filterNumberBy: this.props.numberPerPage })
         }
     }

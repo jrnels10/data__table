@@ -220,7 +220,7 @@ export class TableTab extends Component {
                         columnSelect={columnSelect}
                         setColumnSelect={this.columnSelect.bind(this)}
                         editAction={this.editAction}
-                        tableFunctions={this.tableFunctions}
+                        tableFunctions={this.TableFunctions2}
                     />
 
                     <Body
@@ -231,7 +231,7 @@ export class TableTab extends Component {
                         deleteCallBack={this.deleteRow.bind(this)}
                         columnSelect={columnSelect}
                         rowAction={add && addAction ? this.addCallBack.bind(this) : editAction ? this.editCallBack.bind(this) : null}
-                        tableFunctions={this.tableFunctions}
+                        tableFunctions={this.TableFunctions2}
                         selectRow={this.selectRow}
                         selectedRows={selectedRows}
                     />

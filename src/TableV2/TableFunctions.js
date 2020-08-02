@@ -384,6 +384,28 @@ export class TableFunctions2 {
         this.countRecords()
         debugger
         return this.pageinatedData;
-    }
+    };
 
+    selectRowValues() {
+        const cellEditRow = document.getElementsByClassName('cell__edit');
+        let rowObj = this.newObject();
+        for (let i = 0; i < cellEditRow.length; i++) {
+            rowObj[this.data.tableFields[i + 1].title] = cellEditRow[i].firstChild.value
+        }
+        const cleanedObj = this.rowDataCleanUp(rowObj);
+        return { rowObj, cleanedObj }
+    };
+
+    rowDataCleanUp(rowData) {
+        let rowObj = {};
+        for (const property in rowData) {
+            if (property === "Options") {
+
+            } else if (property === "TABLE_ID") {
+            } else {
+                Object.assign(rowObj, { [property]: rowData[property] })
+            }
+        }
+        return rowObj
+    };
 }

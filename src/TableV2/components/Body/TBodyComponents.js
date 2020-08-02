@@ -97,16 +97,19 @@ export class TableBodyCellOptions extends Component {
     }
     render() {
         const { active } = this.state;
-        const { multipleSelected, selectedRows, keyItem } = this.props;
+        const { multipleSelected, selectedRows, keyItem, config, item } = this.props;
         const disableSelect = multipleSelected === false ? 'disable' : 'active';
-        const unCheck = multipleSelected === false && selectedRows.indexOf(keyItem) > -1
+        const unCheck = multipleSelected === false && selectedRows.indexOf(keyItem) > -1;
+        const CustomOptComp = config['Options'] ? config['Options'] : null;
         return <td
             className={`custom-option-width column__select--${false}`}
         >
             <div
                 className={`cell__options__actions cell__options__actions--${disableSelect}`}
                 onClick={multipleSelected === false && unCheck === false ? null : this.options}>
-                {!active ? <Square color={'#3d5188'} /> : <Check color={'#28a745'} />}
+                {CustomOptComp ?
+                    <CustomOptComp selectRow={item} /> :
+                    !active ? <Square color={'#3d5188'} /> : <Check color={'#28a745'} />}
             </div>
         </td>
     }
@@ -144,26 +147,12 @@ export class CellEdit extends Component {
     render() {
         const { config, } = this;
         const columnSelected = this.props.fieldIndex === this.props.columnSelect;
+        const CustomComp = config[this.props.field] ? config[this.props.field] : null;
 
-        // return config && config.custom ?
-        //     <config.custom customRef={this.EditCell} value={this.state.value} handleChange={this.handleChange} /> :
-        //     config && config.type === 'select' ?
-        //         <select className="custom-select"
-        //             name="value"
-        //             value={this.state.value}
-        //             multiple={config.multiple ? config.multiple : false}
-        //             required={config.required ? config.required : false}
-        //             size={config.size ? config.size : null}
-        //             onChange={this.handleChange.bind(this)}>
-        //             {config.values.map((item) => {
-        //                 return <option key={item}>{item}</option>
-        //             })}
-        //         </select> :
-        //         config && config.type === 'input' ?
-        //             <input type={config.inputType} ref={this.EditCell} value={this.state.value} onChange={this.handleChange} /> :
         return <td
             className={`custom-option-width column__select--${columnSelected} cell__edit cell__edit--${this.props.columnSelect}`}
-        ><input ref={this.EditCell} value={this.state.value} onChange={this.handleChange} />
+        >
+            {CustomComp ? <CustomComp customRef={this.EditCell} value={this.state.value} handleChange={this.handleChange} /> : <input ref={this.EditCell} value={this.state.value} onChange={this.handleChange} />}
         </td>
     }
 }

@@ -12,25 +12,26 @@ import cws from './data/cwsAR.json'
 
 const CustomInput = ({ customRef, value, handleChange }) => {
     return <input ref={customRef} value={value} onChange={handleChange} />
-}
 
+}
+const CustomSelect = ({ customRef, value, handleChange }) => {
+    return <select className="custom-select"
+        ref={customRef}
+        name="value"
+        value={value}
+        onChange={handleChange}>
+        <option value='one'>one</option>
+        <option value='two'>two</option>
+        <option value='three'>three</option>
+    </select>
+}
+const CustomOption = ({ selectRow }) => {
+    return <button onClick={() => console.log(selectRow)}>Manage</button>
+}
 const config = {
-    REGISTRY_ID: {
-        type: 'input',
-        inputType: 'number',
-        maxLength: 6,
-        nullValues: false,
-        validation: e => console.log(e.target.value),
-        custom: CustomInput
-    },
-    RGR_PUMP_DATA: {
-        type: 'select',
-        values: ['YES', 'NO'],
-        id: 'id',
-        multiple: false,
-        required: true,
-        size: 1,
-    }
+    Options: CustomOption,
+    WELL_TYPE: CustomInput,
+    RGR_PUMP_DATA: CustomSelect
 }
 
 export default class Scratch extends Component {
@@ -52,9 +53,7 @@ export default class Scratch extends Component {
     setView = (view) => {
         this.setState({ view })
     }
-    updateDataBase = () => {
-        console.log('updated database')
-    }
+
     editedData = (row) => {
         debugger
     };
@@ -80,27 +79,16 @@ export default class Scratch extends Component {
                     <Table2
                         data={this.state.tableData}
                     >
-                        {/* <TableTab
-                            name='Wells55'
-                            config={config}
-                            selectAction={{ selectCallBack: this.select }}
-                            sort={true}
-                            editAction={{ edit: true, editCallBack: this.editedData }}
-                            addAction={{ addCallBack: this.addRow }}
-                            deleteAction={{ deleteCallBack: this.deleteRow }}
-                            docushare={true}
-                            report={true}
-                        />
-                    <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
                         <TableTab
                             name='GWSI'
+                            config={config}
                             sort={true}
                             multipleSelect={false}
                             addAction={{
                                 addCallBack: () => console.log("row was added to table"),
                             }}
                             editAction={{
-                                editCallBack: () => this.updateDataBase(),
+                                editCallBack: () => console.log("row was added to table"),
                             }}
                             deleteAction={{ deleteCallBack: this.deleteRow }}
                             roundTo={2} />

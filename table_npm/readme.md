@@ -35,6 +35,8 @@ class Example extends Component {
 - [Overview](#overview)
 - [Table](#table)
 - [TableTab](#tabletab)
+  - [`config`](#config)
+  - [`Custom Cell`](#custom-cell)
   - [`Actions`](#actions)
 - [Data Table Constructor](#data-table-constructor)
 - [Deployment](#deployment)
@@ -123,6 +125,104 @@ class Example extends Component {
 The TableTab is the actual Table the renders the data. TableTab handles all the actions (passed as props) with the table. If no actions are passed as props to the TableTab, then no ActionButtons appear in the footer of the table.
 
 The ActionButtons appear in the footer of the table depending on if the prop has been passed to it. For example, if no [`editAction`] prop has been passed to TableTab, then the ActionButton for editing will not appear in the footer.
+
+## Props passed into component:
+
+| Props        | Type     | Required | Description                                                          |
+| :----------- | :------- | :------- | :------------------------------------------------------------------- |
+| data         | Object   | true     | Is inherited from the Table Component                                |
+| sort         | boolean  | false    | Adds sorting functionality to table                                  |
+| name         | string   | true     | Name used to match the data from Table Component                     |
+| config       | object   | false    | Used to configure cells to a certain format during editing or adding |
+| selectAction | function | false    | Used to select rows from the table                                   |
+| editAction   | function | false    | Used to edit rows from the table                                     |
+| addAction    | function | false    | Used to add rows from the table                                      |
+| deleteAction | function | false    | Used to delete rows from the table                                   |
+
+### How to use...
+
+```jsx
+import React, { Component } from "react";
+import Table, { TableTab, ADWRTableObj_Edit } from "adwr-data-table";
+import adwr from "./data/adwrData.json";
+
+class Example extends Component {
+  render() {
+    const ADWR = new ADWRTableObj_Edit("ADWR", adwr);
+    return (
+      <Table showTabs={false} data={[ADWR]}>
+        <TableTab
+          name="ADWR"
+          sort={true}
+          config={{
+            RGR_PUMP_DATA: {
+              type: "select",
+              values: ["YES", "NO"],
+              id: "id",
+              multiple: false,
+              required: true,
+              size: 1,
+            },
+          }}
+          selectAction={{
+            selectCallBack: () => console.log("row was selected from table"),
+          }}
+          editAction={{
+            editCallBack: () => console.log("row was edited in table"),
+          }}
+          addAction={{
+            addCallBack: () => console.log("row was added to table"),
+          }}
+          deleteAction={{
+            deleteCallBack: () => console.log("row was deleted from table"),
+          }}
+        />
+      </Table>
+    );
+  }
+}
+```
+
+### `config`
+
+The config prop allows for the developer to pass a [`Custom Cell`](#custom-cell) to the table. Within the config prop, the array is structured with the key being the column name and the value being the custom component.
+
+There are two different cells that can be customized. The first being the 'Options' cell. This is the cell that selects the specific row. So if the developer wanted to have a different cell than the default 'select' icon, they can create a new CustomOption component and pass it in the config prop. The Custom Option component returns the selected row via the 'selectRow' prop.
+
+The other cell that can be customized is the edit cell. When the row is in edit mode or a new row is added to the table, the cells that will be displayed will be the custom edit cell. For example, if a row is selected for editing, then the cells in that row will be converted into the [`Custom Cells`](#custom-cell) specified in the config by the matching key name.
+
+```jsx
+const CustomInput = ({ customRef, value, handleChange }) => {
+  return <input ref={customRef} value={value} onChange={handleChange} />;
+};
+const CustomSelect = ({ customRef, value, handleChange }) => {
+  return (
+    <select
+      className="custom-select"
+      ref={customRef}
+      name="value"
+      value={value}
+      onChange={handleChange}
+    >
+      <option value="one">one</option>
+      <option value="two">two</option>
+      <option value="three">three</option>
+    </select>
+  );
+};
+const CustomOption = ({ selectRow }) => {
+  return <button onClick={() => console.log(selectRow)}>Manage</button>;
+};
+const config = {
+  Options: CustomOption,
+  WELL_TYPE: CustomInput,
+  RGR_PUMP_DATA: CustomSelect,
+};
+```
+
+### `Custom Cell`
+
+Cells `<td>` for the table can be customized by passing a custom component to the [`config`](#config) prop under the key... 'custom'. The custom component will be wrapped in a `<td>` cell. This prop allows for the developer to use their own custom cell instead of the built in cell that comes with the table. Then the developer can apply their own actions and restrictions on the cell.
 
 ### `Actions`
 
