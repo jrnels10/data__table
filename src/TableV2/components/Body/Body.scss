@@ -13,9 +13,8 @@ tbody tr td {
       width: 100%;
       height: 100%;
       position: relative;
-      background-color: green;
       .cell__options {
-        width: 45%;
+        width: 33%;
         text-align: center;
         float: left;
 
@@ -30,10 +29,10 @@ tbody tr td {
       }
     }
   }
-
-  .custom-cell-width {
+  .custom-option-width {
     input {
-      width: 100%;
+      width: 90%;
+      margin: 0 5%;
     }
   }
 }

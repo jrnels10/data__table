@@ -75,7 +75,6 @@ export class TableTab extends Component {
   state = {
     tableData: this.tableFunctions.data.tableData,
     newRow: false,
-    tableUpdate: true,
     newItem: null,
     edit: false,
     add: false,
@@ -84,13 +83,9 @@ export class TableTab extends Component {
     numberPerPage: 0,
     pages: []
   }
-  async componentDidMount() {
-    // const pages = await this.tableFunctions.pageinate()
-    // this.setState({ pages, tableData: pages[0] })
-  }
+
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.tabCount.length > 0) {
-
       if (prevProps.tabCount[prevProps.tabIndex] !== this.state.tableData.length) {
         const tabCounts = this.props.tabCount;
         tabCounts[prevProps.tabIndex] = this.state.tableData.length;
@@ -104,46 +99,49 @@ export class TableTab extends Component {
 
   selectRow = (item, rowIndex) => {
     const foundRow = this.state.selectedRows.find(row => row === rowIndex);
-    const { selectCallBack } = this.props.selectAction;
-    if (foundRow) {
-      this.setState({ selectedRows: [...this.state.selectedRows.filter(row => row !== rowIndex)] });
-      selectCallBack([...this.state.selectedRows.filter(row => row !== rowIndex)]);
-    } else {
+    const { selectAction } = this.props;
+    if (foundRow) { // deletes row from selected rows
+      this.setState({ selectedRows: [...this.state.selectedRows.filter(row => row !== rowIndex)] })
+      return selectAction ? selectAction.selectCallBack([...this.state.selectedRows.filter(row => row !== rowIndex)]) : null;
+    } else { // adds row to selected rows
       this.setState({ selectedRows: [...this.state.selectedRows, rowIndex] });
-      selectCallBack([...this.state.selectedRows, rowIndex]);
+      return selectAction ? selectAction.selectCallBack([...this.state.selectedRows, rowIndex]) : null;
     }
-
   }
 
   editCallBack = (objects, rowIndex) => {
     const { rowObj, cleanedObj } = objects
-    let filteredResults = this.state.tableData;
-    const editRowsRemaining = this.state.selectedRows.filter(row => row !== rowIndex);
+    let updatedTableData = this.state.tableData;;
     if (cleanedObj) {
-      filteredResults = this.tableFunctions.replaceRow(rowObj, rowIndex);
+      updatedTableData = this.tableFunctions.replaceRow(rowObj, rowIndex);
       this.props.editAction.editCallBack(cleanedObj);
     }
     this.setState({
-      selectedRows: [...editRowsRemaining],
-      edit: editRowsRemaining.length > 0,
-      tableData: filteredResults,
-      sorted: null
+      selectedRows: [],
+      edit: false,
+      tableData: updatedTableData,
+      newRow: false,
+      newItem: null,
+      add: false,
     });
   }
 
-  addCallBack = (rowObj, cleanedObj, rowIndex) => {
-    let filteredResults;
+  addCallBack = (objects, rowIndex) => {
+    const { rowObj, cleanedObj } = objects
+    let updatedTableData = this.state.tableData;;
     if (cleanedObj) {
-      filteredResults = this.tableFunctions.replaceRow(rowObj, rowIndex);
+      updatedTableData = this.tableFunctions.replaceRow(rowObj, rowIndex);
       this.props.addAction.addCallBack(cleanedObj);
     } else {
-      filteredResults = this.tableFunctions.removeRow(0);
+      updatedTableData = this.tableFunctions.removeRow(0);
     }
     this.setState({
       selectedRows: [],
+      edit: false,
+      tableData: updatedTableData,
+      newRow: false,
+      newItem: null,
       add: false,
-      tableData: filteredResults,
-      sorted: null
     });
   }
 
@@ -176,16 +174,21 @@ export class TableTab extends Component {
     const rowsDeleted = this.state.tableData.filter((item, idx) => this.state.selectedRows.indexOf(idx) > -1);
     const rowsRemaing = this.state.tableData.filter((item, idx) => this.state.selectedRows.indexOf(idx) === -1);
     this.props.deleteAction.deleteCallBack(rowsDeleted);
-    this.setState({ selectedRows: [], tableData: rowsRemaing })
+    this.setState({
+      selectedRows: [],
+      tableData: rowsRemaing,
+      newRow: false,
+      newItem: null,
+      edit: false,
+      add: false,
+      selectedRows: []
+    })
   }
 
   insertRow = () => {
     const newTableRow = this.tableFunctions.insertRow();
     let newItem = this.tableFunctions.newObject();
-    this.setState({ selectedRows: [0], add: true, tableData: newTableRow, newItem, tableUpdate: false });
-  }
-  tableUpdate = () => {
-    this.setState({ tableUpdate: true })
+    this.setState({ selectedRows: [0], add: true, tableData: newTableRow, newItem });
   }
 
   findOnMap() {
@@ -199,9 +202,8 @@ export class TableTab extends Component {
     this.props.locate(geoData)
   }
   render() {
-    const { name, config, editAction, addAction, deleteAction, locate, docushare, report } = this.props;
+    const { name, config, editAction, addAction, deleteAction, locate, docushare, report, multipleSelect } = this.props;
     const { tableData, columnSelect, selectedRows, edit, add, currentPage, pages } = this.state;
-
     return (
       <div className="table__container">
         <table className="table" id={`table_${name}`}>
@@ -219,12 +221,11 @@ export class TableTab extends Component {
           <Body
             config={config}
             dataForBody={tableData}
+            multipleSelect={multipleSelect}
             fields={this.data.tableFields}
-            editCallBack={this.editCallBack.bind(this)}
-            addCallBack={this.addCallBack.bind(this)}
+            deleteCallBack={this.deleteRow.bind(this)}
             columnSelect={columnSelect}
-            edit={edit}
-            add={add}
+            rowAction={add && addAction ? this.addCallBack.bind(this) : editAction ? this.editCallBack.bind(this) : null}
             tableFunctions={this.tableFunctions}
             selectRow={this.selectRow}
             selectedRows={selectedRows}
@@ -236,40 +237,42 @@ export class TableTab extends Component {
               <Insert color='#253255' />
             </FooterButton>
             : null}
-          {editAction ?
-            <FooterButton name='Edit' initial={edit} set={selectedRows.length > 0 ? () => this.setState({ edit: !this.state.edit }) : null} disable={false} active={add || edit}>
-              <PencilSquare color='#253255' />
-            </FooterButton>
-            : null}
-          {deleteAction ?
-            <FooterButton name='Delete' initial={false} set={selectedRows.length > 0 ? this.deleteRow : null} disable={false} active={add || edit}>
-              <TrashCan color='#253255' />
-            </FooterButton>
-            : null}
-          {locate ?
-            <FooterButton name='Locate' initial={false} set={() => this.findOnMap()} disable={false} active={add || edit}>
-              <GeoLocate color='#253255' />
-            </FooterButton>
-            : null}
-          <FooterButton name='Download' initial={false} set={() => null} disable={false} active={add || edit}>
-            <Download color='#253255' />
-          </FooterButton>
-          {docushare ?
-            <FooterButton name='Docushare' initial={false} set={() => null} disable={false} active={add || edit}>
-              <ImagedRecords color='#253255' />
-            </FooterButton>
-            : null}
-          {report ?
-            <FooterButton name='Report' initial={false} set={() => null} disable={false} active={add || edit}>
-              <Report color='#253255' />
-            </FooterButton>
-            : null}
+          {/* {editAction ?
+                        <FooterButton name='Edit' initial={edit} set={selectedRows.length > 0 ? () => this.setState({ edit: !this.state.edit }) : null} disable={false} active={add || edit}>
+                            <PencilSquare color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {deleteAction ?
+                        <FooterButton name='Delete' initial={false} set={selectedRows.length > 0 ? this.deleteRow : null} disable={false} active={add || edit}>
+                            <TrashCan color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {locate ?
+                        <FooterButton name='Locate' initial={false} set={() => this.findOnMap()} disable={false} active={add || edit}>
+                            <GeoLocate color='#253255' />
+                        </FooterButton>
+                        : null}
+                    <FooterButton name='Download' initial={false} set={() => null} disable={false} active={add || edit}>
+                        <Download color='#253255' />
+                    </FooterButton>
+                    {docushare ?
+                        <FooterButton name='Docushare' initial={false} set={() => null} disable={false} active={add || edit}>
+                            <ImagedRecords color='#253255' />
+                        </FooterButton>
+                        : null}
+                    {report ?
+                        <FooterButton name='Report' initial={false} set={() => null} disable={false} active={add || edit}>
+                            <Report color='#253255' />
+                        </FooterButton>
+                        : null} */}
           {/* <Pageinate currentPage={currentPage} pages={pages} numberPerPage={this.state.numberPerPage} setNumberPerPage={number => this.setState({ numberPerPage: number })} /> */}
         </Footer>
       </div>
     )
   }
 }
+
+
 
 
 

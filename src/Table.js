@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TableFunctions } from './TableV2/TableFunctions';
+import { TableFunctions2 } from './TableV2/TableFunctions';
 import './Table.css';
 import { Headers } from './TableV2/components/Header';
 import { Body } from './TableV2/components/Body/Body';
@@ -70,10 +70,11 @@ export class TableTab extends Component {
     sort = this.props.sort;
     locate = this.props.locate;
     editAction = this.props.editAction ? this.props.editAction : false;
-    tableFunctions = new TableFunctions(this.data);
+    // tableFunctions = new TableFunctions(this.data);
+    TableFunctions2 = new TableFunctions2(this.data)
 
     state = {
-        tableData: this.tableFunctions.data.tableData,
+        tableData: this.TableFunctions2.pageinatedData,
         newRow: false,
         newItem: null,
         edit: false,
@@ -86,12 +87,12 @@ export class TableTab extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (prevProps.tabCount.length > 0) {
-            if (prevProps.tabCount[prevProps.tabIndex] !== this.state.tableData.length) {
+            if (prevProps.tabCount[prevProps.tabIndex] !== this.TableFunctions2.recordCount) {
                 const tabCounts = this.props.tabCount;
-                tabCounts[prevProps.tabIndex] = this.state.tableData.length;
+                tabCounts[prevProps.tabIndex] = this.TableFunctions2.recordCount;
                 this.props.setTabCount(tabCounts);
             } else if (prevState.numberPerPage !== this.state.numberPerPage) {
-                const pages = await this.tableFunctions.pageinate(this.state.numberPerPage)
+                const pages = await this.TableFunctions2.pageinate(this.state.numberPerPage)
                 this.setState({ pages, tableData: pages[0] });
             }
         }
@@ -113,7 +114,7 @@ export class TableTab extends Component {
         const { rowObj, cleanedObj } = objects
         let updatedTableData = this.state.tableData;;
         if (cleanedObj) {
-            updatedTableData = this.tableFunctions.replaceRow(rowObj, rowIndex);
+            updatedTableData = this.TableFunctions2.replaceRow(rowObj, rowIndex);
             this.props.editAction.editCallBack(cleanedObj);
         }
         this.setState({
@@ -130,10 +131,10 @@ export class TableTab extends Component {
         const { rowObj, cleanedObj } = objects
         let updatedTableData = this.state.tableData;;
         if (cleanedObj) {
-            updatedTableData = this.tableFunctions.replaceRow(rowObj, rowIndex);
+            updatedTableData = this.TableFunctions2.replaceRow(rowObj, rowIndex);
             this.props.addAction.addCallBack(cleanedObj);
         } else {
-            updatedTableData = this.tableFunctions.removeRow(0);
+            updatedTableData = this.TableFunctions2.removeRow(0);
         }
         this.setState({
             selectedRows: [],
@@ -154,15 +155,16 @@ export class TableTab extends Component {
         let sortedData;
         const { sorted, tableData } = this.state;
         if (columnName === sorted) {
-            sortedData = tableData.reverse()
+            const reversed = tableData.map(page => page.reverse());
+            sortedData = reversed.reverse();
         } else {
-            sortedData = await this.tableFunctions.sortData(columnName);
+            sortedData = await this.TableFunctions2.sortData(columnName);
         }
         this.setState({ tableData: sortedData, sorted: columnName, numberPerPage: 0 });
     };
 
     filterData = (term, field, fieldType, filterParams) => {
-        const filteredResults = this.tableFunctions.filter(term, field, fieldType, filterParams);
+        const filteredResults = this.TableFunctions2.filter(term, field, fieldType, filterParams);
         this.setState({ tableData: filteredResults, numberPerPage: 0 });
     };
 
@@ -171,12 +173,12 @@ export class TableTab extends Component {
     }
 
     deleteRow = () => {
-        const rowsDeleted = this.state.tableData.filter((item, idx) => this.state.selectedRows.indexOf(idx) > -1);
-        const rowsRemaing = this.state.tableData.filter((item, idx) => this.state.selectedRows.indexOf(idx) === -1);
-        this.props.deleteAction.deleteCallBack(rowsDeleted);
+        const { selectedRows } = this.state;
+        const updatedTable = this.TableFunctions2.removeRow(selectedRows[0])
+        this.props.deleteAction.deleteCallBack(selectedRows[0]);
         this.setState({
             selectedRows: [],
-            tableData: rowsRemaing,
+            tableData: updatedTable,
             newRow: false,
             newItem: null,
             edit: false,
@@ -186,9 +188,8 @@ export class TableTab extends Component {
     }
 
     insertRow = () => {
-        const newTableRow = this.tableFunctions.insertRow();
-        let newItem = this.tableFunctions.newObject();
-        this.setState({ selectedRows: [0], add: true, tableData: newTableRow, newItem });
+        const newTableRow = this.TableFunctions2.insertRow();
+        this.setState({ selectedRows: [0], add: true, tableData: newTableRow });
     }
 
     findOnMap() {
@@ -203,7 +204,11 @@ export class TableTab extends Component {
     }
     render() {
         const { name, config, editAction, addAction, deleteAction, locate, docushare, report, multipleSelect } = this.props;
-        const { tableData, columnSelect, selectedRows, edit, add, currentPage, pages } = this.state;
+        const { tableData, columnSelect, selectedRows, edit, add, currentPage } = this.state;
+        if (window.Cypress) {
+            window.__tableTab__ = this.state;
+        }
+        console.log('table:', tableData)
         return (
             <div className="table__container">
                 <table className="table" id={`table_${name}`}>
@@ -220,7 +225,7 @@ export class TableTab extends Component {
 
                     <Body
                         config={config}
-                        dataForBody={tableData}
+                        dataForBody={tableData[currentPage]}
                         multipleSelect={multipleSelect}
                         fields={this.data.tableFields}
                         deleteCallBack={this.deleteRow.bind(this)}
@@ -265,9 +270,66 @@ export class TableTab extends Component {
                             <Report color='#253255' />
                         </FooterButton>
                         : null} */}
-                    {/* <Pageinate currentPage={currentPage} pages={pages} numberPerPage={this.state.numberPerPage} setNumberPerPage={number => this.setState({ numberPerPage: number })} /> */}
+                    <Pageinate currentPage={currentPage} changePage={pageNum => this.setState({ currentPage: pageNum })} pages={tableData} numberPerPage={this.state.numberPerPage} setNumberPerPage={number => this.setState({ numberPerPage: number })} />
                 </Footer>
             </div>
         )
     }
 }
+
+
+
+
+
+export class ESRITableObj {
+    constructor(tab, data, uniqueId) {
+        this.options = false;
+        this.tab = tab;
+        this.rawData = data;
+        this.tableGeometry = data.features.map(item => Object.assign(item, { TABLE_ID: item.attributes[uniqueId] }));
+        this.tableFields = data.fields.map((field, idx) => {
+            return { title: field.name, dataIndex: field.name, key: idx }
+        });
+        this.uniquieId = uniqueId;
+        this.tableData = data.features.map(gis => Object.assign(gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
+    }
+};
+
+export class ADWRTableObj {
+    constructor(tab, data) {
+        this.tab = tab;
+        this.rawData = data;
+        this.tableGeometry = null;
+        this.tableFields = Object.keys(data[0]).map((fieldItem, idx) => {
+            return { title: fieldItem, dataIndex: fieldItem, key: idx }
+        });
+        this.tableData = data
+    }
+};
+
+export class ADWRTableObj_Edit extends ADWRTableObj {
+    editField = { title: 'Options', dataIndex: 'Options', key: 0 }
+    constructor(tab, data) {
+        super(tab, data)
+        this.tab = tab;
+        this.rawData = data;
+        this.tableGeometry = null;
+        this.tableFields = [this.editField, ...Object.keys(data[0]).map((fieldItem, idx) => {
+            return { title: fieldItem, dataIndex: fieldItem, key: idx }
+        })];
+        this.tableData = data.map(item => Object.assign({ Options: 'Edit' }, item))
+    }
+};
+
+export class ESRITableObj_Edit extends ESRITableObj {
+    editField = { title: 'Options', dataIndex: 'Options', key: 0 }
+    constructor(tab, data, uniqueId) {
+        super(tab, data, uniqueId)
+        this.options = true;
+        this.tableFields = [this.editField, ...data.fields.map((field, idx) => {
+            return { title: field.name, dataIndex: field.name, key: idx }
+        })];
+        this.tableData = data.features.map(gis => Object.assign({ Options: 'Edit' }, gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
+    }
+};
+

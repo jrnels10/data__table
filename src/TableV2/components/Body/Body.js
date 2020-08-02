@@ -12,7 +12,6 @@ export class Body extends Component {
             rowAction(cleanedObj, rowIndex);
         }
         else {
-            debugger
             rowAction({ rowObj: null, cleanedObj: null }, rowIndex);
         }
     }
@@ -31,7 +30,6 @@ export class Body extends Component {
                     columnSelect={columnSelect}
                     rowSelected={selectedRows.find(selected => selected === idx)}
                 >
-                    {/* Options cell */}
                     {
                         actionRow.length ?
                             <SaveOrDiscard
@@ -49,7 +47,6 @@ export class Body extends Component {
                             />
                     }
 
-                    {/* Table cells */}
                     {tableFields.map(field => {
                         return actionRow.length ?
                             <CellEdit key={field.title}

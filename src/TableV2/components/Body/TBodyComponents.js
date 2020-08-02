@@ -1,5 +1,5 @@
 import React, { Component, createRef } from "react";
-import { Discard, Check, Square, CheckedSquare, TrashCan } from "../Images/IconsSVG";
+import { Discard, Check, Square, CheckedSquare, TrashCan, Disk } from "../Images/IconsSVG";
 
 // ==============================================
 //  ============    Table Row    ===============
@@ -59,7 +59,7 @@ export const SaveOrDiscard = ({ setSave, rowIndex, deleteCallBack }) => {
                 className="cell__options cell__options--save"
                 onClick={() => setSave(true, rowIndex)}
             >
-                <Check color='#28a745' />
+                <Disk color='#28a745' />
             </div>
             <div
                 className="cell__options cell__options--discard"

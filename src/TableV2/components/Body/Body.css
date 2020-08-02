@@ -10,11 +10,10 @@ tbody tr td:first-child {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: green;
 }
 
 .body__row--active td .cell__options__saveordiscard .cell__options {
-  width: 45%;
+  width: 33%;
   text-align: center;
   float: left;
 }
@@ -25,8 +24,9 @@ tbody tr td:first-child {
   padding-top: 3px;
 }
 
-.body__row--active .custom-cell-width input {
-  width: 100%;
+.body__row--active .custom-option-width input {
+  width: 90%;
+  margin: 0 5%;
 }
 
 .body__row--default .custom-option-width {

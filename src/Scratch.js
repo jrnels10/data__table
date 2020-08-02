@@ -91,8 +91,19 @@ export default class Scratch extends Component {
                             docushare={true}
                             report={true}
                         />
-                        <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} />
                     <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
+                        <TableTab
+                            name='GWSI'
+                            sort={true}
+                            multipleSelect={false}
+                            addAction={{
+                                addCallBack: () => console.log("row was added to table"),
+                            }}
+                            editAction={{
+                                editCallBack: () => this.updateDataBase(),
+                            }}
+                            deleteAction={{ deleteCallBack: this.deleteRow }}
+                            roundTo={2} />
                         <TableTab
                             multipleSelect={false}
                             selectAction={{

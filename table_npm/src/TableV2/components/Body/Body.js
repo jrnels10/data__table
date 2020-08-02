@@ -4,42 +4,25 @@ import { TableBodyCell, TableBodyRow, TableBodyCellEdit, TableBodyCellOptions, N
 import './Body.css';
 
 export class Body extends Component {
-    state = {
-        cellMenu: [null, null],
-        rows: [],
-        update: false,
-        discard: false,
-    }
 
-    setSaveEdits = (approved, rowIndex) => {
+    setSave = (approved, rowIndex) => {
+        const { rowAction } = this.props;
         if (approved) {
             const cleanedObj = this.props.tableFunctions.selectRowValues();
-            this.props.editCallBack(cleanedObj, rowIndex);
+            rowAction(cleanedObj, rowIndex);
         }
         else {
-            this.props.editCallBack({ rowObj: null, cleanedObj: null }, rowIndex)
-        }
-    }
-
-    setSaveAdd = (approved, rowIndex) => {
-        if (approved) {
-            const cleanedObj = this.props.tableFunctions.selectRowValues();
-            this.props.addCallBack(cleanedObj, rowIndex);
-        }
-        else {
-            this.props.addCallBack({ rowObj: null, cleanedObj: null }, rowIndex);
+            debugger
+            rowAction({ rowObj: null, cleanedObj: null }, rowIndex);
         }
     }
 
     render() {
-        const { dataForBody, columnSelect, selectRow, fields, edit, selectedRows, tableFunctions, add, tableUpdate, config, selectActive } = this.props;
+        const { dataForBody, columnSelect, selectRow, fields, selectedRows, tableFunctions, rowAction, config, deleteCallBack, multipleSelect } = this.props;
         return <tbody>
             {dataForBody.length > 0 ? dataForBody.map((item, idx) => {
-                const editRows = edit ? selectedRows.filter(selected => selected === idx) : false;
-                const addRows = add ? selectedRows.filter(selected => selected === idx) : false;
-                if (item === null) {
-                    debugger
-                }
+                const actionRow = rowAction ? selectedRows.filter(selected => selected === idx) : false;
+                const tableFields = fields.filter(field => field.title !== 'Options');
                 return <TableBodyRow
                     key={idx}
                     keyItem={idx}
@@ -48,39 +31,36 @@ export class Body extends Component {
                     columnSelect={columnSelect}
                     rowSelected={selectedRows.find(selected => selected === idx)}
                 >
-                    {fields.map(field => {
-                        return editRows.length > 0 ?
-                            field.title === 'Options' ?
-                                <SaveOrDiscard
-                                    key={field.title}
-                                    rowIndex={idx}
-                                    setSave={this.setSaveEdits.bind(this)} /> :
-                                <CellEdit key={field.title}
-                                    field={field.title}
-                                    config={config}
-                                    fieldIndex={fields.indexOf(field)} />
-                            : addRows.length > 0 ?
-                                field.title === 'Options' ?
-                                    <SaveOrDiscard
-                                        key={field.title}
-                                        rowIndex={idx}
-                                        setSave={this.setSaveAdd.bind(this)} /> :
-                                    <CellEdit key={field.title}
-                                        field={field.title}
-                                        config={config}
-                                        fieldIndex={fields.indexOf(field)} />
-                                : field.title === 'Options' && selectActive ?
-                                    <TableBodyCellOptions key={field.title}
-                                        field={field.title}
-                                        tableId={item.TABLE_ID}
-                                        fieldIndex={fields.indexOf(field)}
-                                        selectRow={selectRow}
-                                    /> :
-                                    <TableBodyCell key={field.title}
-                                        field={field.title}
-                                        tableFunctions={tableFunctions}
-                                        config={config}
-                                        fieldIndex={fields.indexOf(field)} />
+                    {/* Options cell */}
+                    {
+                        actionRow.length ?
+                            <SaveOrDiscard
+                                key={fields[0].title}
+                                rowIndex={idx}
+                                deleteCallBack={deleteCallBack}
+                                setSave={this.setSave.bind(this)} /> :
+                            <TableBodyCellOptions key={fields[0].title}
+                                field={fields[0].title}
+                                tableId={item.TABLE_ID}
+                                multipleSelected={multipleSelect === false && selectedRows.length === 0}
+                                fieldIndex={fields.indexOf(fields[0])}
+                                selectRow={selectRow}
+                                selectedRows={selectedRows}
+                            />
+                    }
+
+                    {/* Table cells */}
+                    {tableFields.map(field => {
+                        return actionRow.length ?
+                            <CellEdit key={field.title}
+                                field={field.title}
+                                config={config}
+                                fieldIndex={fields.indexOf(field)} /> :
+                            <TableBodyCell key={field.title}
+                                field={field.title}
+                                tableFunctions={tableFunctions}
+                                config={config}
+                                fieldIndex={fields.indexOf(field)} />
                     })}
                 </TableBodyRow>
             }) : null
