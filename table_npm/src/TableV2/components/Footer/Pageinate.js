@@ -11,10 +11,15 @@ export default class Pageinate extends Component {
         }
     }
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.pages.length !== this.props.pages.length) {
+        if (prevProps.currentPage !== this.props.currentPage) {
             const { currentPage, pages } = this.props;
-            this.setState({ currentPage, pages })
-        } else if (prevProps.numberPerPage !== this.props.numberPerPage) {
+            this.setState({ currentPage, pages });
+        }
+        else if (prevProps.pages.length !== this.props.pages.length) {
+            const { currentPage, pages } = this.props;
+            this.setState({ currentPage, pages });
+        }
+        else if (prevProps.numberPerPage !== this.props.numberPerPage) {
             this.setState({ filterNumberBy: this.props.numberPerPage })
         }
     }
@@ -25,7 +30,8 @@ export default class Pageinate extends Component {
 
     render() {
         const { currentPage, pages, filterNumberBy } = this.state;
-        console.log(currentPage, pages)
+
+        let current = this.props.currentPage;
         return pages ? (
             <div className='pageinate__container'>
                 <div className='container'>
@@ -35,13 +41,12 @@ export default class Pageinate extends Component {
                         value={filterNumberBy}
                         onChange={e => this.setfilterNumberBy(e.target.value)}
                     >
-                        <option value="0">All</option>
+                        <option value="50">50</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
-                        <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
-                    <button className={`page__arrow page__arrow__left`}>
+                    <button className={`page__arrow page__arrow__left`} onClick={current === 0 ? null : () => this.props.changePage(--current)}>
                         <ArrowLeftSquare color='#253255' />
                     </button>
                     <div className='page__container'>
@@ -49,7 +54,7 @@ export default class Pageinate extends Component {
                             <div className={`page page--${idx === currentPage ? 'active' : 'default'}`} key={idx}>{idx + 1}</div>
                         ))}
                     </div>
-                    <button className={`page__arrow page__arrow__right`}>
+                    <button className={`page__arrow page__arrow__right`} onClick={current === pages.length - 1 ? null : () => this.props.changePage(++current)}>
                         <ArrowRightSquare color='#253255' />
                     </button>
                 </div>

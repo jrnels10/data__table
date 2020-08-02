@@ -8,14 +8,14 @@ export class Body extends Component {
     setSave = (approved, rowIndex) => {
         const { rowAction } = this.props;
         if (approved) {
+            debugger
             const cleanedObj = this.props.tableFunctions.selectRowValues();
             rowAction(cleanedObj, rowIndex);
         }
         else {
-            debugger
             rowAction({ rowObj: null, cleanedObj: null }, rowIndex);
         }
-    }
+    };
 
     render() {
         const { dataForBody, columnSelect, selectRow, fields, selectedRows, tableFunctions, rowAction, config, deleteCallBack, multipleSelect } = this.props;
@@ -31,7 +31,6 @@ export class Body extends Component {
                     columnSelect={columnSelect}
                     rowSelected={selectedRows.find(selected => selected === idx)}
                 >
-                    {/* Options cell */}
                     {
                         actionRow.length ?
                             <SaveOrDiscard
@@ -40,16 +39,16 @@ export class Body extends Component {
                                 deleteCallBack={deleteCallBack}
                                 setSave={this.setSave.bind(this)} /> :
                             <TableBodyCellOptions key={fields[0].title}
+                                config={config}
                                 field={fields[0].title}
                                 tableId={item.TABLE_ID}
-                                multipleSelected={multipleSelect === false && selectedRows.length === 0}
+                                multipleSelected={!multipleSelect && selectedRows.length === 0}
                                 fieldIndex={fields.indexOf(fields[0])}
                                 selectRow={selectRow}
                                 selectedRows={selectedRows}
                             />
                     }
 
-                    {/* Table cells */}
                     {tableFields.map(field => {
                         return actionRow.length ?
                             <CellEdit key={field.title}

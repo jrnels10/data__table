@@ -1,142 +1,141 @@
-import { loadModules } from "esri-loader";
+// import { loadModules } from "esri-loader";
 
-export class TableFunctions {
-    constructor(data, type, value) {
-        this.data = data
-        this.filteredData = data.tableData
-        this.type = type;
-        this.pages = null
-    }
+// export class TableFunctions {
+//     constructor(data, type, value) {
+//         this.data = data
+//         this.filteredData = data.tableData
+//         this.type = type;
+//         this.pages = null
+//     }
 
-    async pageinate(number) {
-        const numberPerPage = parseInt(number);
-        let data = this.data.tableData;
-        let pageCount = 0;
-        if (numberPerPage) {
-            const numberOfPages = Math.ceil(this.data.tableData.length / numberPerPage);
-            const recordsPerPage = [];
-            while (pageCount < numberOfPages) {
-                this.data.tableData.map((item, idx) => {
-                    if (idx === numberPerPage) {
-                        recordsPerPage.push(data.slice(0, numberPerPage));
-                        data = data.filter((item, idx) => idx >= numberPerPage)
-                    }
-                });
-                ++pageCount
-            }
-            return this.pages = recordsPerPage;
-        } else {
-            const numberOfPages = Math.ceil(this.data.tableData.length / this.data.tableData.length);
-            const recordsPerPage = [];
-            while (pageCount < numberOfPages) {
-                this.data.tableData.map((item, idx) => {
-                    if (idx === this.data.tableData.length - 1) {
-                        recordsPerPage.push(data.slice(0, this.data.tableData.length - 1));
-                        data = data.filter((item, idx) => idx >= this.data.tableData.length - 1)
-                    }
-                });
-                ++pageCount
-            }
-            return this.pages = recordsPerPage;
-        }
-    }
+//     async pageinate(number) {
+//         const numberPerPage = parseInt(number);
+//         let data = this.data.tableData;
+//         let pageCount = 0;
+//         if (numberPerPage) {
+//             const numberOfPages = Math.ceil(this.data.tableData.length / numberPerPage);
+//             const recordsPerPage = [];
+//             while (pageCount < numberOfPages) {
+//                 this.data.tableData.map((item, idx) => {
+//                     if (idx === numberPerPage) {
+//                         recordsPerPage.push(data.slice(0, numberPerPage));
+//                         data = data.filter((item, idx) => idx >= numberPerPage)
+//                     }
+//                 });
+//                 ++pageCount
+//             }
+//             return this.pages = recordsPerPage;
+//         } else {
+//             const numberOfPages = Math.ceil(this.data.tableData.length / this.data.tableData.length);
+//             const recordsPerPage = [];
+//             while (pageCount < numberOfPages) {
+//                 this.data.tableData.map((item, idx) => {
+//                     if (idx === this.data.tableData.length - 1) {
+//                         recordsPerPage.push(data.slice(0, this.data.tableData.length - 1));
+//                         data = data.filter((item, idx) => idx >= this.data.tableData.length - 1)
+//                     }
+//                 });
+//                 ++pageCount
+//             }
+//             return this.pages = recordsPerPage;
+//         }
+//     }
 
-    async sortData(columnName) {
-        const sorted = await sortArray(this.filteredData, columnName);
-        this.data.tableData = sorted;
-        console.log(`sorted ${sorted.length} records`);
-        return sorted;
-    }
+//     async sortData(columnName) {
+//         const sorted = await sortArray(this.filteredData, columnName);
+//         this.data.tableData = sorted;
+//         console.log(`sorted ${sorted.length} records`);
+//         return sorted;
+//     }
 
 
 
-    filter(term, field, fieldType, filterParams) {
-        if (term.length === 0) {
-            this.filteredData = this.data.tableData;
-            return this.filteredData;
+//     filter(term, field, fieldType, filterParams) {
+//         if (term.length === 0) {
+//             this.filteredData = this.data.tableData;
+//             return this.filteredData;
+//         }
+//         else {
+//             const filteredData = this.filteredData.filter(item => {
+//                 const dataType = fieldType === 'number';
 
-        }
-        else {
-            const filteredData = this.filteredData.filter(item => {
-                const dataType = fieldType === 'number';
+//                 if (dataType & filterParams === 'greaterThan') {
+//                     return item[field] > parseInt(term);
+//                 }
+//                 else if (dataType & filterParams === 'lessThan') {
+//                     return item[field] < parseInt(term);
+//                 }
+//                 else if (dataType & filterParams === 'equalTo') {
+//                     return item[field] === parseInt(term);
+//                 }
+//                 else if (!dataType) {
+//                     return item[field].indexOf(term.toUpperCase()) > -1;
+//                 }
+//                 return null;
+//             });
+//             this.filteredData = filteredData;
+//             return filteredData;
+//         }
+//     };
+//     deleteRow(item) {
+//         const filteredData = this.filteredData.filter(rowItem => rowItem.TABLE_ID !== item.TABLE_ID);
+//         this.data.tableData = filteredData;
+//         this.data.filteredData = filteredData;
+//         return this.data.tableData;
+//     }
 
-                if (dataType & filterParams === 'greaterThan') {
-                    return item[field] > parseInt(term);
-                }
-                else if (dataType & filterParams === 'lessThan') {
-                    return item[field] < parseInt(term);
-                }
-                else if (dataType & filterParams === 'equalTo') {
-                    return item[field] === parseInt(term);
-                }
-                else if (!dataType) {
-                    return item[field].indexOf(term.toUpperCase()) > -1;
-                }
-                return null;
-            });
-            this.filteredData = filteredData;
-            return filteredData;
-        }
-    };
-    deleteRow(item) {
-        const filteredData = this.filteredData.filter(rowItem => rowItem.TABLE_ID !== item.TABLE_ID);
-        this.data.tableData = filteredData;
-        this.data.filteredData = filteredData;
-        return this.data.tableData;
-    }
+//     rowDataCleanUp(rowData) {
+//         let rowObj = {};
+//         for (const property in rowData) {
+//             if (property === "Options") {
 
-    rowDataCleanUp(rowData) {
-        let rowObj = {};
-        for (const property in rowData) {
-            if (property === "Options") {
+//             } else if (property === "TABLE_ID") {
+//             } else {
+//                 Object.assign(rowObj, { [property]: rowData[property] })
+//             }
+//         }
 
-            } else if (property === "TABLE_ID") {
-            } else {
-                Object.assign(rowObj, { [property]: rowData[property] })
-            }
-        }
+//         return rowObj
+//     };
 
-        return rowObj
-    };
+//     removeRow(rowIndex) {
+//         const filteredTable = this.data.tableData.filter((row, idx) => idx !== rowIndex);
+//         this.data.tableData = filteredTable;
+//         return this.data.tableData;
+//     };
 
-    removeRow(rowIndex) {
-        const filteredTable = this.data.tableData.filter((row, idx) => idx !== rowIndex);
-        this.data.tableData = filteredTable;
-        return this.data.tableData;
-    };
+//     replaceRow(item, row) {
+//         this.filteredData[row] = item;
+//         return this.filteredData
+//     }
+//     newObject() {
+//         const obj = this.data.tableData[0];
+//         let newItem = { ...obj };
+//         for (const property in newItem) {
+//             if (property === "Options") {
+//                 newItem[property] = "Options"
+//             } else {
+//                 newItem[property] = null
+//             }
+//         };
+//         return newItem;
+//     }
+//     insertRow() {
+//         const newItem = this.newObject()
+//         this.data.tableData.unshift(newItem);
+//         return this.data.tableData;
+//     };
 
-    replaceRow(item, row) {
-        this.filteredData[row] = item;
-        return this.filteredData
-    }
-    newObject() {
-        const obj = this.data.tableData[0];
-        let newItem = { ...obj };
-        for (const property in newItem) {
-            if (property === "Options") {
-                newItem[property] = "Options"
-            } else {
-                newItem[property] = null
-            }
-        };
-        return newItem;
-    }
-    insertRow() {
-        const newItem = this.newObject()
-        this.data.tableData.unshift(newItem);
-        return this.data.tableData;
-    };
-
-    selectRowValues() {
-        const cellEditRow = document.getElementsByClassName('cell__edit');
-        let rowObj = this.newObject();
-        for (let i = 0; i < cellEditRow.length; i++) {
-            rowObj[this.data.tableFields[i + 1].title] = cellEditRow[i].firstChild.value
-        }
-        const cleanedObj = this.rowDataCleanUp(rowObj);
-        return { rowObj, cleanedObj }
-    }
-}
+//     selectRowValues() {
+//         const cellEditRow = document.getElementsByClassName('cell__edit');
+//         let rowObj = this.newObject();
+//         for (let i = 0; i < cellEditRow.length; i++) {
+//             rowObj[this.data.tableFields[i + 1].title] = cellEditRow[i].firstChild.value
+//         }
+//         const cleanedObj = this.rowDataCleanUp(rowObj);
+//         return { rowObj, cleanedObj }
+//     }
+// }
 
 
 
@@ -249,4 +248,164 @@ export async function sortArray(data, name) {
         //console.log(sortedData.length)
         return sortedData;
     }
+}
+
+
+
+export class TableFunctions2 {
+    constructor(data) {
+        this.data = data;
+        this.unfiltered = data;
+        this.pageCount = 50
+        this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        this.recordCount = this.countRecords();
+    }
+    countRecords() {
+        let count = 0;
+        this.pageinatedData.map(page => {
+            return count = count + page.length
+        });
+        return this.recordCount = count;
+    }
+
+    pageinate(number, data) {
+        const numberPerPage = parseInt(number);
+        let pageCount = 0;
+        if (numberPerPage) {
+            const numberOfPages = Math.ceil(data.length / numberPerPage);
+            const recordsPerPage = [];
+            while (pageCount < numberOfPages) {
+                data.map((item, idx) => {
+                    if (idx === numberPerPage) {
+                        recordsPerPage.push(data.slice(0, numberPerPage));
+                        data = data.filter((item, idx) => idx >= numberPerPage)
+                    }
+
+                });
+                ++pageCount
+            }
+            if (data.length < numberPerPage) {
+                recordsPerPage.push(data)
+            }
+            if (numberOfPages === 0) {
+                recordsPerPage.push([])
+            }
+            return this.pages = recordsPerPage;
+        } else {
+            const numberOfPages = Math.ceil(data.length / data.length);
+            const recordsPerPage = [];
+            while (pageCount < numberOfPages) {
+                data.map((item, idx) => {
+                    if (idx === data.length - 1) {
+                        recordsPerPage.push(data.slice(0, data.length - 1));
+                        data = data.filter((item, idx) => idx >= data.length - 1)
+                    }
+                });
+                ++pageCount
+            }
+            return this.pages = recordsPerPage;
+        }
+    };
+
+
+
+    filter(term, field, fieldType, filterParams) {
+        if (term.length > 0) {
+            const filteredData = this.data.tableData.filter(item => {
+                const dataType = fieldType === 'number';
+                if (dataType & filterParams === 'greaterThan') {
+                    return item[field] > parseInt(term);
+                }
+                else if (dataType & filterParams === 'lessThan') {
+                    return item[field] < parseInt(term);
+                }
+                else if (dataType & filterParams === 'equalTo') {
+                    return item[field] === parseInt(term);
+                }
+                else if (!dataType) {
+                    return item[field].indexOf(term.toUpperCase()) > -1;
+                }
+                return null;
+            });
+            this.pageinatedData = this.pageinate(this.pageCount, filteredData);
+            this.countRecords()
+            return this.pageinatedData;
+        }
+        else {
+            this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+            this.countRecords()
+            return this.pageinatedData;
+        }
+    };
+
+    newObject() {
+        const obj = this.pageinatedData[0][0];
+        let newItem = { ...obj };
+        for (const property in newItem) {
+            if (property === "Options") {
+                newItem[property] = "Options"
+            } else {
+                newItem[property] = null
+            }
+        };
+        return newItem;
+    };
+
+    async sortData(columnName) {
+        const sorted = await sortArray(this.data.tableData, columnName);
+        this.data.tableData = sorted;
+        console.log(`sorted ${sorted.length} records`);
+        this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        this.countRecords()
+        return this.pageinatedData;
+    };
+
+    insertRow() {
+        const newItem = this.newObject()
+        this.data.tableData.unshift(newItem);
+        this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        debugger
+        this.countRecords()
+        return this.pageinatedData;
+    };
+
+    removeRow(rowIndex) {
+        const filteredTable = this.data.tableData.filter((row, idx) => idx !== rowIndex);
+        this.data.tableData = filteredTable;
+        this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        this.countRecords()
+        debugger
+        return this.pageinatedData;
+    };
+
+    replaceRow(item, row) {
+        this.data.tableData[row] = item;
+        this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        this.countRecords()
+        debugger
+        return this.pageinatedData;
+    };
+
+    selectRowValues() {
+        const cellEditRow = document.getElementsByClassName('cell__edit');
+        let rowObj = this.newObject();
+        for (let i = 0; i < cellEditRow.length; i++) {
+            rowObj[this.data.tableFields[i + 1].title] = cellEditRow[i].firstChild.value
+        }
+        const cleanedObj = this.rowDataCleanUp(rowObj);
+        return { rowObj, cleanedObj }
+    };
+
+    rowDataCleanUp(rowData) {
+        let rowObj = {};
+        for (const property in rowData) {
+            if (property === "Options") {
+
+            } else if (property === "TABLE_ID") {
+            } else {
+                Object.assign(rowObj, { [property]: rowData[property] })
+            }
+        }
+        return rowObj
+    };
 }

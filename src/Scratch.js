@@ -12,7 +12,6 @@ import cws from './data/cwsAR.json'
 
 const CustomInput = ({ customRef, value, handleChange }) => {
     return <input ref={customRef} value={value} onChange={handleChange} />
-
 }
 const CustomSelect = ({ customRef, value, handleChange }) => {
     return <select className="custom-select"
@@ -112,29 +111,4 @@ export default class Scratch extends Component {
             </React.Fragment>
         ) : null
     }
-}
-
-async function feature(item) {
-    var template = {
-        title: "{OBJECTID}",
-        content: [
-            {
-                type: "fields",
-                fieldInfos: [
-                    {
-                        fieldName: "OBJECTID",
-                        label: "OBJECTID"
-                    }
-                ]
-            }
-        ]
-    };
-    return loadModules(["esri/Graphic"])
-        .then(async ([Graphic]) => {
-            return new Graphic({
-                attributes: item.attributes,
-                geometry: item.geometry,
-                popupTemplate: template,
-            });
-        });
 }

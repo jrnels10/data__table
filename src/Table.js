@@ -208,7 +208,6 @@ export class TableTab extends Component {
         if (window.Cypress) {
             window.__tableTab__ = this.state;
         }
-        console.log('table:', tableData)
         return (
             <div className="table__container">
                 <table className="table" id={`table_${name}`}>
