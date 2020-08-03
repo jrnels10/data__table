@@ -16,7 +16,7 @@
     display: inline-block;
     margin-right: 5px;
     .footer__button {
-      margin: 12px;
+      margin: 9px;
       min-width: 100px;
       max-width: 100px;
       border: 1px solid #a2a2a2;
@@ -80,14 +80,14 @@
 
   .pageinate__container {
     position: absolute;
-    right: 30px;
+    right: 20px;
     width: auto;
     top: 0;
-    padding-top: 7px;
-    .container {
+    padding-top: 3px;
+    .pageinate {
       position: relative;
       width: auto;
-      padding: 5px 30px 5px 90px;
+      padding: 5px 35px 5px 95px;
       background-color: white;
       border: solid 1px $darkBlue;
       border-radius: 3px;
@@ -96,6 +96,7 @@
         height: 24px;
         left: 5px;
         width: 50px;
+        top: 8px;
       }
       .page__arrow {
         position: absolute;
@@ -116,8 +117,9 @@
         }
       }
       .page__container {
-        max-width: 100px;
-        overflow-x: hidden;
+        margin-top: 1px;
+        max-width: 200px;
+        overflow-x: auto;
         white-space: nowrap;
         // padding-bottom: 7px;
         &::-webkit-scrollbar-track {
@@ -136,8 +138,9 @@
         }
         .page {
           display: inline-block;
-          width: 20px;
-          height: 20px;
+          width: auto;
+          min-width: 23px;
+          height: 23px;
           border: solid 1px $darkBlue;
           color: $darkBlue;
           font-weight: 600;

@@ -92,8 +92,10 @@ export class TableTab extends Component {
                 tabCounts[prevProps.tabIndex] = this.TableFunctions2.recordCount;
                 this.props.setTabCount(tabCounts);
             } else if (prevState.numberPerPage !== this.state.numberPerPage) {
-                const pages = await this.TableFunctions2.pageinate(this.state.numberPerPage)
-                this.setState({ pages, tableData: pages[0] });
+                const data = []
+                this.state.tableData.map(page => page.map(item => data.push(item)))
+                const pages = this.TableFunctions2.pageinate(this.state.numberPerPage, data);
+                this.setState({ pages, tableData: pages });
             }
         }
     }

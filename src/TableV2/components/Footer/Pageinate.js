@@ -34,16 +34,16 @@ export default class Pageinate extends Component {
         let current = this.props.currentPage;
         return pages ? (
             <div className='pageinate__container'>
-                <div className='container'>
+                <div className='pageinate'>
                     <select
                         className='page__count'
                         name="filterNumberBy"
                         value={filterNumberBy}
+                        defaultValue={'50'}
                         onChange={e => this.setfilterNumberBy(e.target.value)}
                     >
-                        <option value="50">50</option>
-                        <option value="10">10</option>
                         <option value="25">25</option>
+                        <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
                     <button className={`page__arrow page__arrow__left`} onClick={current === 0 ? null : () => this.props.changePage(--current)}>
