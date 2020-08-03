@@ -9,6 +9,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+p {
+  margin: 5px 0 10px 0;
+}
+
 .data-table {
   height: 100%;
   width: 100%;
@@ -45,7 +53,7 @@ body {
       .count {
         display: inline-block;
         text-align: center;
-        width: 30px;
+        width: auto;
         padding-right: 5px;
         padding-left: 5px;
         border-left: 1px solid $white;
@@ -103,7 +111,7 @@ body {
     height: calc(100% - 88px);
     overflow: auto;
 
-    .table {
+    .table__custom {
       background-color: $gray;
       width: 100%;
     }
@@ -116,21 +124,15 @@ body {
       }
       .custom-cell-width {
         padding: 5px;
-        // min-width: 130px !important;
         position: relative;
-        border: 1px solid rgba(0, 0, 0, 0);
+        border: 1px solid $gray;
         font-size: 0.85rem;
         &:hover {
-          // color: #3d5188;
-          border: 1px solid #ffa500;
+          background-color: #ffa5005c;
         }
       }
     }
     thead {
-      .custom__header__options {
-        // position: absolute;
-        // top: -25px;
-      }
       .column__select--true {
         background-color: #ffa500;
       }
@@ -148,7 +150,7 @@ body {
 
       th {
         &:first-child {
-          max-width: 60px;
+          width: auto;
           padding-right: 5px;
           .custom-cell-sort {
             display: none;
@@ -198,8 +200,8 @@ body {
         min-width: 20px;
       }
       padding: 5px;
-      height: 30px;
-      min-width: 130px;
+      height: 35px;
+      min-width: 130px !important;
       position: relative;
       border: 1px solid rgba(0, 0, 0, 0);
       .cell__edit {

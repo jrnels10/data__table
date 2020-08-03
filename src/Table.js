@@ -210,7 +210,7 @@ export class TableTab extends Component {
         }
         return (
             <div className="table__container">
-                <table className="table" id={`table_${name}`}>
+                <table className="table__custom" id={`table_${name}`}>
                     <Headers
                         sort={this.sort ? this.sortTable : null}
                         dataForHeaders={this.data.tableFields}
@@ -237,7 +237,7 @@ export class TableTab extends Component {
                 </table>
                 <Footer selectedRows={selectedRows} active={add || edit}>
                     {addAction ?
-                        <FooterButton name='Insert' initial={add} set={this.insertRow} disable={true} active={add || edit}>
+                        <FooterButton name='New Record' initial={add} set={this.insertRow} disable={true} active={add || edit}>
                             <Insert color='#253255' />
                         </FooterButton>
                         : null}

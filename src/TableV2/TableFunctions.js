@@ -313,17 +313,20 @@ export class TableFunctions2 {
         if (term.length > 0) {
             const filteredData = this.data.tableData.filter(item => {
                 const dataType = fieldType === 'number';
-                if (dataType & filterParams === 'greaterThan') {
-                    return item[field] > parseInt(term);
-                }
-                else if (dataType & filterParams === 'lessThan') {
-                    return item[field] < parseInt(term);
-                }
-                else if (dataType & filterParams === 'equalTo') {
-                    return item[field] === parseInt(term);
-                }
-                else if (!dataType) {
-                    return item[field].indexOf(term.toUpperCase()) > -1;
+                if (item[field] !== null) {
+                    const upperCaseValue = item[field].toUpperCase();
+                    if (dataType & filterParams === 'greaterThan') {
+                        return item[field] > parseInt(term);
+                    }
+                    else if (dataType & filterParams === 'lessThan') {
+                        return item[field] < parseInt(term);
+                    }
+                    else if (dataType & filterParams === 'equalTo') {
+                        return item[field] === parseInt(term);
+                    }
+                    else if (!dataType) {
+                        return upperCaseValue.indexOf(term.toUpperCase()) > -1;
+                    }
                 }
                 return null;
             });

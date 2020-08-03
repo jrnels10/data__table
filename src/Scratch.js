@@ -6,7 +6,7 @@ import { loadModules } from 'esri-loader';
 import ESRImap from './esri/ESRImap';
 import wellsData from './data/wells55.json'
 import gwsiData from './data/gwsi.json'
-import adwr from './data/adwrData.json'
+import adwr from './data/aisData.json'
 import cws from './data/cwsAR.json'
 
 
@@ -32,13 +32,34 @@ const config = {
     WELL_TYPE: CustomInput,
     RGR_PUMP_DATA: CustomSelect
 }
-
+const aisDatacleaned = JSON.parse(JSON.stringify(adwr));
+aisDatacleaned.filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
+    const excludeFields = [
+        'Coordinates',
+        'HasProposedWaterRightUse',
+        'Latitude',
+        'Longitude',
+        'MapType',
+        'Owner',
+        'PCC',
+        'Cadastral',
+        'Type',
+        'Shared',
+        'ContactName',
+        'ContactPhone',
+        'PolygonJson',
+    ];
+    const foundField = excludeFields.indexOf(fieldItem) > -1
+    if (foundField) {
+        return delete ais[fieldItem]
+    }
+}))
 export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
         const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
         const GWSI = new ESRITableObj_Edit('GWSI', gwsiData, 'OBJECTID');
-        const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
+        const ADWR = new ADWRTableObj_Edit('ADWR', aisDatacleaned);
         const CWS = new ADWRTableObj_Edit('CWS', cws.ReportDetails);
         this.setState({ tableData: [wells55, GWSI, ADWR, CWS] });
     }
@@ -80,7 +101,7 @@ export default class Scratch extends Component {
                     >
                         <TableTab
                             name='GWSI'
-                            config={config}
+                            // config={config}
                             sort={true}
                             multipleSelect={false}
                             addAction={{
@@ -92,6 +113,8 @@ export default class Scratch extends Component {
                             deleteAction={{ deleteCallBack: this.deleteRow }}
                             roundTo={2} />
                         <TableTab
+                            // config={config}
+                            sort={true}
                             multipleSelect={false}
                             selectAction={{
                                 selectCallBack: () => console.log("row was selected from table"),

@@ -51,7 +51,7 @@ export default class Pageinate extends Component {
                     </button>
                     <div className='page__container'>
                         {pages.map((page, idx) => (
-                            <div className={`page page--${idx === currentPage ? 'active' : 'default'}`} key={idx}>{idx + 1}</div>
+                            <div className={`page page--${idx === currentPage ? 'active' : 'default'}`} onClick={() => this.props.changePage(idx)} key={idx}>{idx + 1}</div>
                         ))}
                     </div>
                     <button className={`page__arrow page__arrow__right`} onClick={current === pages.length - 1 ? null : () => this.props.changePage(++current)}>

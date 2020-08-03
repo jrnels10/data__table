@@ -210,7 +210,7 @@ export class TableTab extends Component {
     }
     return (
       <div className="table__container">
-        <table className="table" id={`table_${name}`}>
+        <table className="table_custom" id={`table_${name}`}>
           <Headers
             sort={this.sort ? this.sortTable : null}
             dataForHeaders={this.data.tableFields}

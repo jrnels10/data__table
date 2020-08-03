@@ -8,7 +8,6 @@ export class Body extends Component {
     setSave = (approved, rowIndex) => {
         const { rowAction } = this.props;
         if (approved) {
-            debugger
             const cleanedObj = this.props.tableFunctions.selectRowValues();
             rowAction(cleanedObj, rowIndex);
         }
