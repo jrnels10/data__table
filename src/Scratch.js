@@ -92,9 +92,7 @@ export default class Scratch extends Component {
         const { value, portal } = this.props;
         return this.state.tableData ? (
             <React.Fragment>
-                <div style={{ height: '40vh', width: '100%', position: 'absolute', top: '0' }}>
-                    <ESRImap value={value} portal={portal} setView={this.setView.bind(this)} />
-                </div>
+
                 <div style={{ height: '60vh', width: '100vw', position: 'absolute', bottom: '0' }}>
                     <Table2
                         data={this.state.tableData}

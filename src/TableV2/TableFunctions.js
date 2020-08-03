@@ -137,7 +137,6 @@ export class TableFunctions2 {
                         recordsPerPage.push(data.slice(0, numberPerPage));
                         data = data.filter((item, idx) => idx >= numberPerPage)
                     }
-
                 });
                 ++pageCount
             }
@@ -166,7 +165,7 @@ export class TableFunctions2 {
 
 
 
-    filter(term, field, fieldType, filterParams) {
+    filter(term, field, fieldType, filterParams, pageCount) {
         if (term.length > 0) {
             const filteredData = this.data.tableData.filter(item => {
                 const dataType = fieldType === 'number';
@@ -187,12 +186,12 @@ export class TableFunctions2 {
                 }
                 return null;
             });
-            this.pageinatedData = this.pageinate(this.pageCount, filteredData);
+            this.pageinatedData = this.pageinate(pageCount, filteredData);
             this.countRecords()
             return this.pageinatedData;
         }
         else {
-            this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+            this.pageinatedData = this.pageinate(pageCount, this.data.tableData);
             this.countRecords()
             return this.pageinatedData;
         }

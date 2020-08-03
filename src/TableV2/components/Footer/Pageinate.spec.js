@@ -34,4 +34,25 @@ describe('Pageinate', () => {
         cy.get('.custom__header__options input').type('IN');
         cy.get('.page__container').children().should('have.length', 1);
     });
+
+    it('The amount of pages changes if the amount of records per page is changed', () => {
+        cy.get('.custom__header__options input').clear();
+        cy.get('.page__container').children().should('have.length', 6);
+        cy.get('.page__count').select('25', { force: true });
+        cy.get('.page__container').children().should('have.length', 12);
+    });
+    it('Table should have the same amount of records per page as the page-count selected in the footer', () => {
+        cy.get('tbody').children().should('have.length', 25);
+    });
+
+    it('If filter is applied and then removed, the page-count should remain the same and not default to 50', () => {
+        cy.get('.page__count').should('have.value', '25');
+        cy.get('.custom__header__options input').type('AU');
+        cy.get('.page__container').children().should('have.length', 1);
+        cy.get('tbody').children().should('have.length', 2);
+        cy.get('.custom__header__options input').clear();
+        cy.get('.page__count').should('have.value', '25');
+        cy.get('tbody').children().should('have.length', 25);
+        cy.get('.page__container').children().should('have.length', 12);
+    });
 });

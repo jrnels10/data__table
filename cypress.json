@@ -2,7 +2,5 @@
   "baseUrl": "http://localhost:3000",
   "integrationFolder": "./src",
   "testFiles": "**/*.spec.js",
-  "video": false,
-  "experimentalComponentTesting": true,
-  "componentFolder": "src"
+  "video": false
 }
