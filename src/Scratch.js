@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import Table2, { TableTab } from './Table';
 import { ESRITableObj, ADWRTableObj, ESRITableObj_Edit, ADWRTableObj_Edit } from './TableV2/TableDataBuilder';
 import { loadModules } from 'esri-loader';
-import wellsData from './data/wells55.json'
-import adwr from './data/adwrData.json'
+import wellsData from './data/wells55.json';
+import adwr from './data/adwrData.json';
+import aisData from './data/aisData.json';
 
 
 const CustomInput = ({ customRef, value, handleChange }) => {
@@ -28,15 +29,36 @@ const config = {
         size: 1,
     }
 }
+const aisDatacleaned = JSON.parse(JSON.stringify(aisData));
+aisDatacleaned.filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
+    const excludeFields = [
+        'Coordinates',
+        'HasProposedWaterRightUse',
+        'Latitude',
+        'Longitude',
+        'MapType',
+        'Owner',
+        'PCC',
+        'Cadastral',
+        'Type',
+        'Shared',
+        'ContactName',
+        'ContactPhone',
+        'PolygonJson',
+    ];
+    const foundField = excludeFields.indexOf(fieldItem) > -1
+    if (foundField) {
+        return delete ais[fieldItem]
+    }
+}))
 
 export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
         const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
-        const GWSI = new ESRITableObj_Edit('GWSI', gwsiData, 'OBJECTID');
+        const ais2 = new ADWRTableObj_Edit('AIS', aisDatacleaned)
         const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
-        const CWS = new ADWRTableObj_Edit('CWS', cws.ReportDetails);
-        this.setState({ tableData: [wells55, GWSI, ADWR, CWS] });
+        this.setState({ tableData: [wells55, ADWR, ais2] });
     }
 
     locateOnMap = async (item) => {
@@ -48,7 +70,7 @@ export default class Scratch extends Component {
     setView = (view) => {
         this.setState({ view })
     }
-
+    y
     editedData = (row) => {
         debugger
     };
@@ -64,7 +86,7 @@ export default class Scratch extends Component {
         // debugger
     }
     render() {
-        const { value, portal } = this.props;
+
         return this.state.tableData ? (
             <React.Fragment>
                 <div style={{ height: '40vh', width: '100%', position: 'absolute', top: '0' }}>
@@ -74,7 +96,7 @@ export default class Scratch extends Component {
                     <Table2
                         data={this.state.tableData}
                     >
-                        {/* <TableTab
+                        <TableTab
                             name='Wells55'
                             config={config}
                             selectAction={{ selectCallBack: this.select }}
@@ -85,13 +107,9 @@ export default class Scratch extends Component {
                             docushare={true}
                             report={true}
                         />
-<<<<<<< HEAD
-                        {/* <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} /> */}
-                        <TableTab name='ADWR' sort={true} roundTo={2} />
-                        {/* <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
-=======
-                        <TableTab name='GWSI' sort={true} deleteAction={{ deleteCallBack: this.deleteRow }} locate={this.locateOnMap} roundTo={2} />
-                    <TableTab name='CWS' sort={true} roundTo={2} editAction={{ edit: true, editCallBack: this.editedData }} /> */}
+                         <TableTab
+                            name='AIS'
+                        />
                         <TableTab
                             selectAction={{
                                 selectCallBack: () => console.log("row was selected from table"),
@@ -106,7 +124,6 @@ export default class Scratch extends Component {
                                 deleteCallBack: () => console.log("row was deleted from table"),
                             }}
                             name='ADWR' sort={true} roundTo={2} />
->>>>>>> aaf1d9d10c0b8e0efde2b269f36c8903deef45c7
                     </Table2>
                 </div>
             </React.Fragment>
