@@ -1,11 +1,18 @@
 export async function sortArray(data, name) {
 
     let sortedData = data;
+    let sortedDataNew = [];
     let loopsRun = 0;
     let nullArray = [];
     let cadSort = name === 'CADASTRAL';
     let date = name === 'DRILL_DATE' || name === 'LASTWLDATE';
-    const type = isNaN(Number(data[0][name]));
+    const type = data.find(item => {
+        if (item[name] !== null) {
+            if (item[name].trim() !== '') {
+                return isNaN(Number(item[name]))
+            }
+        }
+    });
     let longestItem = data
         .map(item => item[name])
         .filter(item => {
@@ -59,14 +66,14 @@ export async function sortArray(data, name) {
             } else {
                 nullArray = [];
                 data.filter((item) => {
-                    let value = item[name] || item[name] !== null ? item[name].toLowerCase().trim().replace('/,|-|.|" "/', '') : '';
+                    let value = item[name] || item[name] !== null ? item[name].toLowerCase().trim().replace('/,|-|.|"  *"/', '') : '';
                     let char = value.charCodeAt(loop);
                     return value === '' ? nullArray.push(item) :
                         Number(char) === idx ? bucket.push(item) : null;
                 })
                 bucket.sort(function (a, b) {
-                    var x = a[name].toLowerCase().trim().replace('/,|-|.|" "/', '');
-                    var y = b[name].toLowerCase().trim().replace('/,|-|.|" "/', '');
+                    var x = a[name].toLowerCase().trim().replace('/,|-|.|"  *"/', '');
+                    var y = b[name].toLowerCase().trim().replace('/,|-|.|"  *"/', '');
                     if (x < y) { return -1; }
                     if (x > y) { return 1; }
                     return 0;
@@ -75,12 +82,13 @@ export async function sortArray(data, name) {
             }
             return null;
         })
-        sortedData = nullArray.length > 0 ? [...nullArray] : [];
         buckets.map(type => {
             return type.map(item => {
-                return sortedData.push(item)
+                return sortedDataNew.push(item)
             })
         })
+
+        sortedData = nullArray.length > 0 ? [...sortedDataNew, ...nullArray] : [];
     }
 
     if (type && !cadSort && !date) {
@@ -215,6 +223,7 @@ export class TableFunctions2 {
         this.data.tableData = sorted;
         console.log(`sorted ${sorted.length} records`);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        debugger
         this.countRecords()
         return this.pageinatedData;
     };

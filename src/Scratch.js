@@ -109,24 +109,24 @@ export default class Scratch extends Component {
                                 editCallBack: () => console.log("row was added to table"),
                             }}
                             deleteAction={{ deleteCallBack: this.deleteRow }}
-                            roundTo={2} />
+                        />
                         <TableTab
                             // config={config}
                             sort={true}
-                            multipleSelect={false}
+                            multipleSelect={true}
                             selectAction={{
-                                selectCallBack: () => console.log("row was selected from table"),
+                                selectCallBack: item => console.log(`${item} was selected!`),
                             }}
-                            editAction={{
-                                editCallBack: () => this.updateDataBase(),
-                            }}
-                            addAction={{
-                                addCallBack: () => console.log("row was added to table"),
-                            }}
-                            deleteAction={{
-                                deleteCallBack: () => console.log("row was deleted from table"),
-                            }}
-                            name='ADWR' sort={true} roundTo={2} />
+                            // editAction={{
+                            //     editCallBack: () => this.updateDataBase(),
+                            // }}
+                            // addAction={{
+                            //     addCallBack: () => console.log("row was added to table"),
+                            // }}
+                            // deleteAction={{
+                            //     deleteCallBack: () => console.log("row was deleted from table"),
+                            // }}
+                            name='ADWR' sort={true} />
                     </Table2>
                 </div>
             </React.Fragment>

@@ -7,7 +7,8 @@ tbody tr td {
 }
 
 .body__row--active {
-  background-color: $gray;
+  border: 2px solid $lightYellow;
+  // background-color: $gray;
   td {
     .cell__options__saveordiscard {
       width: 100%;
@@ -23,13 +24,11 @@ tbody tr td {
           width: 25px;
           padding-top: 3px;
         }
-
-        &.cell__options--save {
-        }
       }
     }
   }
   .custom-option-width {
+    padding: 4px 0px;
     input {
       width: 90%;
       margin: 0 5%;
@@ -40,6 +39,8 @@ tbody tr td {
 .body__row--default {
   .custom-option-width {
     max-width: 50px;
+    padding: 4px 0px;
+    border: 1px solid $gray;
     .cell__options__actions {
       &--disable {
         svg {

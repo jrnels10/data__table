@@ -38,31 +38,8 @@ export class FooterButton extends Component {
                 onMouseUp={() => this.setState({ active: false })}
             >
                 {children}
-                <label style={{ fontSize: name.length > 9 ? '.65rem' : '.85rem' }}>{name}</label>
+                <label style={{ fontSize: name.length > 9 ? '.7rem' : '.85rem' }}>{name}</label>
             </button>
         </div>
     }
 }
-
-
-// export class InsertRow extends Component {
-//     state = {
-//         newRecord: false,
-//         newRow: false
-//     }
-//     render() {
-//         const { insertRow, add } = this.props;
-//         return (
-//             <button
-//                 className={`footer__button footer__button--${add ? 'disabled' : 'not-disabled'} footer__button--${this.state.newRecord ? 'active' : 'default'} `}
-//                 onClick={() => add ? null : insertRow()}
-//                 onMouseDown={() => this.setState({ newRecord: true })}
-//                 onMouseUp={() => this.setState({ newRecord: false })}
-//             >
-//                 <Insert color='#253255' />
-//                New row
-//             </button>
-//         )
-//     }
-// }
-

@@ -11,7 +11,7 @@ describe('Table Functions -- filter', () => {
     })
     it('Filter should begin filtering on the first character entered', () => {
         expect(tableFunctions.data.tableData.length).equal(105);
-        tableFunctions.filter('A', 'APPLICATION_NAME', 'string')
+        tableFunctions.filter('A', 'APPLICATION_NAME', 'string', null, 50);
         tableFunctions.pageinatedData.map(page => {
             return filteredCount = filteredCount + page.length
         });
@@ -20,7 +20,7 @@ describe('Table Functions -- filter', () => {
 
     it('Should continue filtering after every character entered', () => {
         expect(tableFunctions.data.tableData.length).equal(105);
-        tableFunctions.filter('B', 'APPLICATION_NAME', 'string');
+        tableFunctions.filter('B', 'APPLICATION_NAME', 'string', null, 50);
         tableFunctions.pageinatedData.map(page => {
             return filteredCount = filteredCount + page.length
         });
@@ -29,25 +29,25 @@ describe('Table Functions -- filter', () => {
 
     it('Should unfilter if character is removed', () => {
         expect(tableFunctions.data.tableData.length).equal(105);
-        tableFunctions.filter('u', 'APPLICATION_NAME', 'string')
+        tableFunctions.filter('u', 'APPLICATION_NAME', 'string', null, 50);
         tableFunctions.pageinatedData.map(page => {
             return filteredCount = filteredCount + page.length
         });
         expect(filteredCount).equal(60);
         filteredCount = 0
-        tableFunctions.filter('ur', 'APPLICATION_NAME', 'string');
+        tableFunctions.filter('ur', 'APPLICATION_NAME', 'string', null, 50);
         tableFunctions.pageinatedData.map(page => {
             return filteredCount = filteredCount + page.length
         });
         expect(filteredCount).equal(47);
         filteredCount = 0
-        tableFunctions.filter('u', 'APPLICATION_NAME', 'string');
+        tableFunctions.filter('u', 'APPLICATION_NAME', 'string', null, 50);
         tableFunctions.pageinatedData.map(page => {
             return filteredCount = filteredCount + page.length
         });
         expect(filteredCount).equal(60);
         filteredCount = 0
-        tableFunctions.filter('', 'APPLICATION_NAME', 'string');
+        tableFunctions.filter('', 'APPLICATION_NAME', 'string', null, 50);
         tableFunctions.pageinatedData.map(page => {
             return filteredCount = filteredCount + page.length
         });

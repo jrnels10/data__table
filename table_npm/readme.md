@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save adwr-data-table
+npm install --save adwr_table_data
 ```
 
 ## Usage

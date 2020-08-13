@@ -100,7 +100,7 @@ export class TableBodyCellOptions extends Component {
         const { multipleSelected, selectedRows, keyItem, config, item } = this.props;
         const disableSelect = multipleSelected === false ? 'disable' : 'active';
         const unCheck = multipleSelected === false && selectedRows.indexOf(keyItem) > -1;
-        const CustomOptComp = config['Options'] ? config['Options'] : null;
+        const CustomOptComp = config && config['Options'] ? config['Options'] : null;
         return <td
             className={`custom-option-width column__select--${false}`}
         >
@@ -147,7 +147,7 @@ export class CellEdit extends Component {
     render() {
         const { config, } = this;
         const columnSelected = this.props.fieldIndex === this.props.columnSelect;
-        const CustomComp = config[this.props.field] ? config[this.props.field] : null;
+        const CustomComp = config && config[this.props.field] ? config[this.props.field] : null;
 
         return <td
             className={`custom-option-width column__select--${columnSelected} cell__edit cell__edit--${this.props.columnSelect}`}

@@ -3,7 +3,7 @@ tbody tr td:first-child {
 }
 
 .body__row--active {
-  background-color: #dadada;
+  border: 2px solid #ffb01f;
 }
 
 .body__row--active td .cell__options__saveordiscard {
@@ -24,6 +24,10 @@ tbody tr td:first-child {
   padding-top: 3px;
 }
 
+.body__row--active .custom-option-width {
+  padding: 4px 0px;
+}
+
 .body__row--active .custom-option-width input {
   width: 90%;
   margin: 0 5%;
@@ -31,6 +35,8 @@ tbody tr td:first-child {
 
 .body__row--default .custom-option-width {
   max-width: 50px;
+  padding: 4px 0px;
+  border: 1px solid #dadada;
 }
 
 .body__row--default .custom-option-width .cell__options__actions--disable svg {

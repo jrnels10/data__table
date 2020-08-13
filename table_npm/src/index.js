@@ -81,7 +81,7 @@ export class TableTab extends Component {
     add: false,
     selectedRows: [],
     currentPage: 0,
-    numberPerPage: 0,
+    numberPerPage: 50,
     pages: []
   }
 
@@ -92,8 +92,10 @@ export class TableTab extends Component {
         tabCounts[prevProps.tabIndex] = this.TableFunctions2.recordCount;
         this.props.setTabCount(tabCounts);
       } else if (prevState.numberPerPage !== this.state.numberPerPage) {
-        const pages = await this.TableFunctions2.pageinate(this.state.numberPerPage)
-        this.setState({ pages, tableData: pages[0] });
+        const data = []
+        this.state.tableData.map(page => page.map(item => data.push(item)));
+        const pages = this.TableFunctions2.pageinate(this.state.numberPerPage, data);
+        this.setState({ pages, tableData: pages });
       }
     }
   }
@@ -164,8 +166,8 @@ export class TableTab extends Component {
   };
 
   filterData = (term, field, fieldType, filterParams) => {
-    const filteredResults = this.TableFunctions2.filter(term, field, fieldType, filterParams);
-    this.setState({ tableData: filteredResults, numberPerPage: 0 });
+    const filteredResults = this.TableFunctions2.filter(term, field, fieldType, filterParams, this.state.numberPerPage);
+    this.setState({ tableData: filteredResults });
   };
 
   columnSelect = (idx) => {
@@ -210,7 +212,7 @@ export class TableTab extends Component {
     }
     return (
       <div className="table__container">
-        <table className="table_custom" id={`table_${name}`}>
+        <table className="table__custom" id={`table_${name}`}>
           <Headers
             sort={this.sort ? this.sortTable : null}
             dataForHeaders={this.data.tableFields}
@@ -237,7 +239,7 @@ export class TableTab extends Component {
         </table>
         <Footer selectedRows={selectedRows} active={add || edit}>
           {addAction ?
-            <FooterButton name='Insert' initial={add} set={this.insertRow} disable={true} active={add || edit}>
+            <FooterButton name='New Record' initial={add} set={this.insertRow} disable={true} active={add || edit}>
               <Insert color='#253255' />
             </FooterButton>
             : null}

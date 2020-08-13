@@ -41,7 +41,7 @@ export class Body extends Component {
                                 config={config}
                                 field={fields[0].title}
                                 tableId={item.TABLE_ID}
-                                multipleSelected={!multipleSelect && selectedRows.length === 0}
+                                multipleSelect={multipleSelect}
                                 fieldIndex={fields.indexOf(fields[0])}
                                 selectRow={selectRow}
                                 selectedRows={selectedRows}

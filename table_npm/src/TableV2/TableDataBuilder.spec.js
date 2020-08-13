@@ -18,8 +18,8 @@ describe('Create class objects based on data origin', () => {
     it('Data received from ADWR API', async () => {
         const esriTableObj = new ADWRTableObj('ADWR', ADWRData);
         expect(esriTableObj.tab).equal('ADWR');
-        expect(esriTableObj.rawData.features).to.have.lengthOf(ADWRData.length);
-        expect(esriTableObj.tableData).to.have.lengthOf(6);
+        expect(esriTableObj.rawData).to.have.lengthOf(ADWRData.length);
+        expect(esriTableObj.tableFields).to.have.lengthOf(6);
         // expect(esriTableObj.tableFields).to.have.lengthOf(WellsJson.fields.length);
     });
 });
