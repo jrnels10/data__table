@@ -22,3 +22,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+./Scratch.js
+./cypress.json
+/src/data
+/src/index.js
+/src/Scratch.js
+/src/context.js
+/src/esri
+/cypress
+/public
