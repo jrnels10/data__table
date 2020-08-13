@@ -10,24 +10,24 @@ import aisData from './data/aisData.json';
 const CustomInput = ({ customRef, value, handleChange }) => {
     return <input ref={customRef} value={value} onChange={handleChange} />
 }
-
+const CustomSelect = ({ customRef, value, handleChange }) => {
+    return <select className="custom-select"
+        ref={customRef}
+        name="value"
+        value={value}
+        onChange={handleChange}>
+        <option value='one'>one</option>
+        <option value='two'>two</option>
+        <option value='three'>three</option>
+    </select>
+}
+const CustomOption = ({ selectRow }) => {
+    return <button onClick={() => console.log(selectRow)}>Manage</button>
+}
 const config = {
-    REGISTRY_ID: {
-        type: 'input',
-        inputType: 'number',
-        maxLength: 6,
-        nullValues: false,
-        validation: e => console.log(e.target.value),
-        custom: CustomInput
-    },
-    RGR_PUMP_DATA: {
-        type: 'select',
-        values: ['YES', 'NO'],
-        id: 'id',
-        multiple: false,
-        required: true,
-        size: 1,
-    }
+    Options: CustomOption,
+    WELL_TYPE: CustomInput,
+    RGR_PUMP_DATA: CustomSelect
 }
 const aisDatacleaned = JSON.parse(JSON.stringify(aisData));
 aisDatacleaned.filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
@@ -51,7 +51,6 @@ aisDatacleaned.filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
         return delete ais[fieldItem]
     }
 }))
-
 export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
@@ -101,8 +100,13 @@ export default class Scratch extends Component {
                             config={config}
                             selectAction={{ selectCallBack: this.select }}
                             sort={true}
-                            editAction={{ edit: true, editCallBack: this.editedData }}
-                            addAction={{ addCallBack: this.addRow }}
+                            multipleSelect={false}
+                            addAction={{
+                                addCallBack: () => console.log("row was added to table"),
+                            }}
+                            editAction={{
+                                editCallBack: () => console.log("row was added to table"),
+                            }}
                             deleteAction={{ deleteCallBack: this.deleteRow }}
                             docushare={true}
                             report={true}
@@ -111,11 +115,14 @@ export default class Scratch extends Component {
                             name='AIS'
                         />
                         <TableTab
+                            // config={config}
+                            sort={true}
+                            multipleSelect={false}
                             selectAction={{
                                 selectCallBack: () => console.log("row was selected from table"),
                             }}
                             editAction={{
-                                editCallBack: () => console.log("row was edited in table"),
+                                editCallBack: () => this.updateDataBase(),
                             }}
                             addAction={{
                                 addCallBack: () => console.log("row was added to table"),
@@ -129,29 +136,4 @@ export default class Scratch extends Component {
             </React.Fragment>
         ) : null
     }
-}
-
-async function feature(item) {
-    var template = {
-        title: "{OBJECTID}",
-        content: [
-            {
-                type: "fields",
-                fieldInfos: [
-                    {
-                        fieldName: "OBJECTID",
-                        label: "OBJECTID"
-                    }
-                ]
-            }
-        ]
-    };
-    return loadModules(["esri/Graphic"])
-        .then(async ([Graphic]) => {
-            return new Graphic({
-                attributes: item.attributes,
-                geometry: item.geometry,
-                popupTemplate: template,
-            });
-        });
 }

@@ -19,7 +19,7 @@
 }
 
 .table__footer__container .footer__button__container .footer__button {
-  margin: 12px;
+  margin: 9px;
   min-width: 100px;
   max-width: 100px;
   border: 1px solid #a2a2a2;
@@ -68,7 +68,7 @@
 .table__footer__container .footer__button__container .footer__button svg {
   position: absolute;
   left: 2px;
-  top: 1px;
+  top: 6px;
   width: 18px;
   height: 18px;
 }
@@ -88,29 +88,30 @@
 
 .table__footer__container .pageinate__container {
   position: absolute;
-  right: 30px;
+  right: 20px;
   width: auto;
   top: 0;
-  padding-top: 7px;
+  padding-top: 3px;
 }
 
-.table__footer__container .pageinate__container .container {
+.table__footer__container .pageinate__container .pageinate {
   position: relative;
   width: auto;
-  padding: 5px 30px 5px 90px;
+  padding: 5px 35px 5px 95px;
   background-color: white;
   border: solid 1px #253255;
   border-radius: 3px;
 }
 
-.table__footer__container .pageinate__container .container .page__count {
+.table__footer__container .pageinate__container .pageinate .page__count {
   position: absolute;
   height: 24px;
   left: 5px;
   width: 50px;
+  top: 8px;
 }
 
-.table__footer__container .pageinate__container .container .page__arrow {
+.table__footer__container .pageinate__container .pageinate .page__arrow {
   position: absolute;
   top: 5px;
   padding: 0;
@@ -119,44 +120,46 @@
   border: none;
 }
 
-.table__footer__container .pageinate__container .container .page__arrow svg {
+.table__footer__container .pageinate__container .pageinate .page__arrow svg {
   width: 23px;
   height: 23px;
 }
 
-.table__footer__container .pageinate__container .container .page__arrow__right {
+.table__footer__container .pageinate__container .pageinate .page__arrow__right {
   right: 5px;
 }
 
-.table__footer__container .pageinate__container .container .page__arrow__left {
+.table__footer__container .pageinate__container .pageinate .page__arrow__left {
   left: 65px;
 }
 
-.table__footer__container .pageinate__container .container .page__container {
-  max-width: 100px;
-  overflow-x: hidden;
+.table__footer__container .pageinate__container .pageinate .page__container {
+  margin-top: 1px;
+  max-width: 200px;
+  overflow-x: auto;
   white-space: nowrap;
 }
 
-.table__footer__container .pageinate__container .container .page__container::-webkit-scrollbar-track {
+.table__footer__container .pageinate__container .pageinate .page__container::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #f5f5f5;
 }
 
-.table__footer__container .pageinate__container .container .page__container::-webkit-scrollbar {
+.table__footer__container .pageinate__container .pageinate .page__container::-webkit-scrollbar {
   height: 5px;
   background-color: #f5f5f5;
 }
 
-.table__footer__container .pageinate__container .container .page__container::-webkit-scrollbar-thumb {
+.table__footer__container .pageinate__container .pageinate .page__container::-webkit-scrollbar-thumb {
   background-color: #253255;
   border-radius: 10px;
 }
 
-.table__footer__container .pageinate__container .container .page__container .page {
+.table__footer__container .pageinate__container .pageinate .page__container .page {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: auto;
+  min-width: 23px;
+  height: 23px;
   border: solid 1px #253255;
   color: #253255;
   font-weight: 600;
@@ -165,11 +168,11 @@
   line-height: 18px;
 }
 
-.table__footer__container .pageinate__container .container .page__container .page:hover {
+.table__footer__container .pageinate__container .pageinate .page__container .page:hover {
   background-color: #afd7e7;
 }
 
-.table__footer__container .pageinate__container .container .page__container .page--active {
+.table__footer__container .pageinate__container .pageinate .page__container .page--active {
   background-color: #fda401;
 }
 /*# sourceMappingURL=Footer.css.map */

@@ -7,14 +7,15 @@ tbody tr td {
 }
 
 .body__row--active {
-  background-color: $gray;
+  border: 2px solid $lightYellow;
+  // background-color: $gray;
   td {
     .cell__options__saveordiscard {
       width: 100%;
+      height: 100%;
       position: relative;
-      background-color: green;
       .cell__options {
-        width: 45%;
+        width: 33%;
         text-align: center;
         float: left;
 
@@ -23,16 +24,14 @@ tbody tr td {
           width: 25px;
           padding-top: 3px;
         }
-
-        &.cell__options--save {
-        }
       }
     }
   }
-
-  .custom-cell-width {
+  .custom-option-width {
+    padding: 4px 0px;
     input {
-      width: 100%;
+      width: 90%;
+      margin: 0 5%;
     }
   }
 }
@@ -40,9 +39,14 @@ tbody tr td {
 .body__row--default {
   .custom-option-width {
     max-width: 50px;
-    .cell__options__actions div {
-      width: auto;
-      float: left;
+    padding: 4px 0px;
+    border: 1px solid $gray;
+    .cell__options__actions {
+      &--disable {
+        svg {
+          fill: lightgray !important;
+        }
+      }
     }
   }
 }
