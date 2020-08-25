@@ -97,16 +97,16 @@ export class TableBodyCellOptions extends Component {
     }
     render() {
         const { active } = this.state;
-        const { multipleSelected, selectedRows, keyItem, config, item } = this.props;
-        const disableSelect = multipleSelected === false ? 'disable' : 'active';
-        const unCheck = multipleSelected === false && selectedRows.indexOf(keyItem) > -1;
+        const { multipleSelect, selectedRows, keyItem, config, item } = this.props;
+        const disableSelect = multipleSelect === false && selectedRows.length > 0 ? 'disable' : 'active';
+        const unCheck = multipleSelect === false && selectedRows.indexOf(keyItem) > -1;
         const CustomOptComp = config && config['Options'] ? config['Options'] : null;
         return <td
             className={`custom-option-width column__select--${false}`}
         >
             <div
                 className={`cell__options__actions cell__options__actions--${disableSelect}`}
-                onClick={multipleSelected === false && unCheck === false ? null : this.options}>
+                onClick={multipleSelect === false && selectedRows.length > 0 && unCheck === false ? null : this.options}>
                 {CustomOptComp ?
                     <CustomOptComp selectRow={item} /> :
                     !active ? <Square color={'#3d5188'} /> : <Check color={'#28a745'} />}

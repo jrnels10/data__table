@@ -103,7 +103,7 @@ export class TableTab extends Component {
   selectRow = (item, rowIndex) => {
     const foundRow = this.state.selectedRows.find(row => row === rowIndex);
     const { selectAction } = this.props;
-    if (foundRow) { // deletes row from selected rows
+    if (foundRow || foundRow === 0) { // deletes row from selected rows
       this.setState({ selectedRows: [...this.state.selectedRows.filter(row => row !== rowIndex)] })
       return selectAction ? selectAction.selectCallBack([...this.state.selectedRows.filter(row => row !== rowIndex)]) : null;
     } else { // adds row to selected rows
@@ -162,7 +162,7 @@ export class TableTab extends Component {
     } else {
       sortedData = await this.TableFunctions2.sortData(columnName);
     }
-    this.setState({ tableData: sortedData, sorted: columnName, numberPerPage: 0 });
+    this.setState({ tableData: sortedData, sorted: columnName });
   };
 
   filterData = (term, field, fieldType, filterParams) => {
