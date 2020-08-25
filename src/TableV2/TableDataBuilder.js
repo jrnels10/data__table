@@ -27,7 +27,7 @@ export class ADWRTableObj {
 
 export class ADWRTableObj_Edit extends ADWRTableObj {
     editField = { title: 'Options', dataIndex: 'Options', key: 0 }
-    constructor(tab, data) {
+    constructor(tab, data, config) {
         super(tab, data)
         this.tab = tab;
         this.rawData = data;
