@@ -1,3 +1,5 @@
+import { NewSort } from "./components/Newsort";
+
 export async function sortArray(data, name) {
 
     let sortedData = data;
@@ -8,7 +10,10 @@ export async function sortArray(data, name) {
     let date = name === 'DRILL_DATE' || name === 'LASTWLDATE';
     const type = data.find(item => {
         if (item[name] !== null) {
-            if (item[name].trim() !== '') {
+            if (Number(item[name])) {
+                return isNaN(Number(item[name]))
+            }
+            else if (item[name].trim() !== '') {
                 return isNaN(Number(item[name]))
             }
         }
@@ -88,7 +93,7 @@ export async function sortArray(data, name) {
             })
         })
 
-        sortedData = nullArray.length > 0 ? [...sortedDataNew, ...nullArray] : [];
+        sortedData = nullArray.length > 0 ? [...sortedDataNew, ...nullArray] : [...sortedDataNew];
     }
 
     if (type && !cadSort && !date) {
@@ -219,11 +224,11 @@ export class TableFunctions2 {
     };
 
     async sortData(columnName) {
-        const sorted = await sortArray(this.data.tableData, columnName);
+        const sorted = await NewSort(this.data.tableData, columnName);
+
         this.data.tableData = sorted;
         console.log(`sorted ${sorted.length} records`);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
-        debugger
         this.countRecords()
         return this.pageinatedData;
     };

@@ -57,9 +57,6 @@ export default class Table extends Component {
                     </React.Fragment>
                     : null}
                 {children ? children[this.state.tableActive] : null}
-                <div className='toggle__container'>
-                    <ToggleButton toggleState={null} toggling={() => null} />
-                </div>
             </div >
         )
     }

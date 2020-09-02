@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Table2, { TableTab } from './Table';
 import { ESRITableObj, ADWRTableObj, ESRITableObj_Edit, ADWRTableObj_Edit } from './TableV2/TableDataBuilder';
 import { loadModules } from 'esri-loader';
-import wellsData from './data/wells55.json';
-import adwr from './data/adwrData.json';
+// import wellsData from './data/wells55.json';
+// import adwr from './data/adwrData.json';
 import aisData from './data/aisData.json';
 
 
@@ -51,13 +51,36 @@ aisDatacleaned.filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
         return delete ais[fieldItem]
     }
 }))
+
+
+const simpleData = [
+    {
+        name: 'Mouse'
+    },
+    {
+        name: 'Dog'
+    },
+    {
+        name: 'Cat'
+    },
+    {
+        name: 'Pig'
+    },
+    {
+        name: 'Bear'
+    }, {
+        name: 'Bunny'
+    }
+]
+
+
 export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
-        const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
+        // const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
         const ais2 = new ADWRTableObj_Edit('AIS', aisDatacleaned)
-        const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
-        this.setState({ tableData: [wells55, ADWR, ais2] });
+        // const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
+        this.setState({ tableData: [ais2] });
     }
 
     locateOnMap = async (item) => {
@@ -95,20 +118,7 @@ export default class Scratch extends Component {
                     <Table2
                         data={this.state.tableData}
                     >
-                        <TableTab
-                            name='Wells55'
-                            config={config}
-                            selectAction={{ selectCallBack: this.select }}
-                            sort={true}
-                            multipleSelect={false}
-                            addAction={{
-                                addCallBack: () => console.log("row was added to table"),
-                            }}
-                            editAction={{
-                                editCallBack: () => console.log("row was added to table"),
-                            }}
-                            deleteAction={{ deleteCallBack: this.deleteRow }}
-                        />
+
                         <TableTab
                             // config={config}
                             sort={true}
@@ -125,7 +135,7 @@ export default class Scratch extends Component {
                             // deleteAction={{
                             //     deleteCallBack: () => console.log("row was deleted from table"),
                             // }}
-                            name='ADWR' sort={true} />
+                            name='AIS' sort={true} />
                     </Table2>
                 </div>
             </React.Fragment>
