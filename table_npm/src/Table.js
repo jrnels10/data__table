@@ -57,9 +57,6 @@ export default class Table extends Component {
                     </React.Fragment>
                     : null}
                 {children ? children[this.state.tableActive] : null}
-                <div className='toggle__container'>
-                    <ToggleButton toggleState={null} toggling={() => null} />
-                </div>
             </div >
         )
     }
@@ -97,6 +94,16 @@ export class TableTab extends Component {
                 const pages = this.TableFunctions2.pageinate(this.state.numberPerPage, data);
                 this.setState({ pages, tableData: pages });
             }
+            if (this.props.data[0].rawData.length !== prevProps.data[0].rawData.length) {
+                this.TableFunctions2.updateData(this.props.data[0]);
+                this.setState({
+                    tableData: this.TableFunctions2.pageinatedData,
+                    pages: this.TableFunctions2.pageinatedData
+                });
+                const tabCounts = this.props.tabCount;
+                tabCounts[prevProps.tabIndex] = this.TableFunctions2.recordCount;
+                this.props.setTabCount(tabCounts);
+            }
         }
     }
 
@@ -105,10 +112,10 @@ export class TableTab extends Component {
         const { selectAction } = this.props;
         if (foundRow || foundRow === 0) { // deletes row from selected rows
             this.setState({ selectedRows: [...this.state.selectedRows.filter(row => row !== rowIndex)] })
-            return selectAction ? selectAction.selectCallBack([...this.state.selectedRows.filter(row => row !== rowIndex)]) : null;
+            return selectAction ? selectAction.selectCallBack(item) : null;
         } else { // adds row to selected rows
             this.setState({ selectedRows: [...this.state.selectedRows, rowIndex] });
-            return selectAction ? selectAction.selectCallBack([...this.state.selectedRows, rowIndex]) : null;
+            return selectAction ? selectAction.selectCallBack(item) : null;
         }
     }
 
@@ -194,16 +201,7 @@ export class TableTab extends Component {
         this.setState({ selectedRows: [0], add: true, tableData: newTableRow });
     }
 
-    findOnMap() {
-        let tableItems = [];
-        this.state.tableData.filter((item, idx) => {
-            if (this.state.selectedRows.indexOf(idx) > -1) {
-                return tableItems.push(item.TABLE_ID);
-            }
-        });
-        const geoData = this.tableFunctions.data.tableGeometry.filter(item => tableItems.indexOf(item.TABLE_ID) > -1);
-        this.props.locate(geoData)
-    }
+
     render() {
         const { name, config, editAction, addAction, deleteAction, locate, docushare, report, multipleSelect } = this.props;
         const { tableData, columnSelect, selectedRows, edit, add, currentPage } = this.state;

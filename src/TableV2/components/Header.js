@@ -1,12 +1,14 @@
 import React, { Component, useEffect, useState, useRef } from 'react';
 import { ArrowDown, ArrowUp } from './Images/IconsSVG';
 
-export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSelect, setColumnSelect }) => {
+export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSelect, setColumnSelect, config }) => {
     const [headerOptions, setheaderOptions] = useState(null)
     const openHeader = (e) => {
         const index = parseInt(e.target.id.split('-')[1]);
         setheaderOptions(headerOptions === index ? null : index);
     }
+    console.log(config)
+
     return <thead>
         <tr>
             {dataForHeaders.map((item, idx) => {
@@ -15,12 +17,14 @@ export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSel
                     fieldType = Number(tableData[0][item.title]) ? 'number' :
                         typeof tableData[0][item.title] === "boolean" ? "boolean" : 'string';
                 }
+                const CustomName = config && config[item.title] && config[item.title].header ? config[item.title].header : item.title.replace(/_/g, " ");
+                const CustomWidth = config && config[item.title] ? config[item.title].width : null;
                 return dataForHeaders.length === idx ? null : <th
                     className={`column__select--${columnSelect === idx}`}
                     onClick={() => setColumnSelect(idx)}
                     key={idx}
                 >
-                    <div className='custom-cell-width-header custom-cell-width'>
+                    <div className='custom-cell-width-header custom-cell-width' style={CustomWidth ? { width: CustomWidth } : null}>
                         {headerOptions === idx ? <HeaderOptions
                             filterData={filterData}
                             field={item.title}
@@ -32,7 +36,7 @@ export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSel
                             title={`header-${item.title}`}
                             id={`header-${idx}`}
                         >
-                            {item.title.replace(/_/g, " ")}
+                            {CustomName}
                         </label>
                         {sort ? <Sort sort={sort} item={item} /> : null}
                     </div>

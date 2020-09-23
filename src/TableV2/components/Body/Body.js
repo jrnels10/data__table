@@ -18,6 +18,7 @@ export class Body extends Component {
 
     render() {
         const { dataForBody, columnSelect, selectRow, fields, selectedRows, tableFunctions, rowAction, config, deleteCallBack, multipleSelect } = this.props;
+        // console.log(config)
         return <tbody>
             {dataForBody.length > 0 ? dataForBody.map((item, idx) => {
                 const actionRow = rowAction ? selectedRows.filter(selected => selected === idx) : false;

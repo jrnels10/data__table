@@ -22,15 +22,31 @@ const CustomSelect = ({ customRef, value, handleChange }) => {
     </select>
 }
 const CustomOption = ({ selectRow }) => {
-    return <button onClick={() => console.log(selectRow)}>Manage</button>
+    return <button onClick={() => console.log(selectRow)}>Open</button>
 }
 const config = {
-    Options: CustomOption,
-    WELL_TYPE: CustomInput,
-    RGR_PUMP_DATA: CustomSelect
+    Options: {
+        header: '',
+        body: CustomOption
+    },
+    OBJECTID: {
+        header: 'test',
+        width: '250px'
+    },
+    WELL_TYPE: {
+        header: 'test',
+        body: CustomInput
+    },
+    RGR_PUMP_DATA: {
+        header: 'test',
+        body: CustomSelect
+    },
+    BASIN_NAME: {
+        width: '250px'
+    },
 }
 const aisDatacleaned = JSON.parse(JSON.stringify(aisData));
-aisDatacleaned.filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
+aisDatacleaned.filter(item => item).filter(ais => Object.keys(ais).filter((fieldItem, idx) => {
     const excludeFields = [
         'Coordinates',
         'HasProposedWaterRightUse',
@@ -78,7 +94,7 @@ export default class Scratch extends Component {
     state = { tableData: null }
     async componentDidMount() {
         // const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
-        const ais2 = new ADWRTableObj_Edit('AIS', aisDatacleaned)
+        const ais2 = new ADWRTableObj_Edit('AIS test', aisDatacleaned)
         // const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
         this.setState({ tableData: [ais2] });
     }
@@ -107,11 +123,19 @@ export default class Scratch extends Component {
     select = () => {
         // debugger
     }
-    render() {
+    updateData = () => {
+        debugger
+        const newData = aisDatacleaned.filter((item, idx) => idx < aisDatacleaned.length - 3);
+        const ais2 = new ADWRTableObj_Edit('AIS test', newData);
+        this.setState({ tableData: [ais2] });
 
+    }
+    render() {
+        console.log(this.state.tableData)
         return this.state.tableData ? (
             <React.Fragment>
                 <div style={{ height: '40vh', width: '100%', position: 'absolute', top: '0' }}>
+                    <button onClick={() => this.updateData()}>deleteOne</button>
                     {/* <ESRImap value={value} portal={portal} setView={this.setView.bind(this)} /> */}
                 </div>
                 <div style={{ height: '60vh', width: '100vw', position: 'absolute', bottom: '0' }}>
@@ -120,22 +144,13 @@ export default class Scratch extends Component {
                     >
 
                         <TableTab
-                            // config={config}
+                            config={config}
                             sort={true}
                             multipleSelect={true}
                             selectAction={{
                                 selectCallBack: item => console.log(`${item} was selected!`),
                             }}
-                            // editAction={{
-                            //     editCallBack: () => this.updateDataBase(),
-                            // }}
-                            // addAction={{
-                            //     addCallBack: () => console.log("row was added to table"),
-                            // }}
-                            // deleteAction={{
-                            //     deleteCallBack: () => console.log("row was deleted from table"),
-                            // }}
-                            name='AIS' sort={true} />
+                            name='AIS test' sort={true} />
                     </Table2>
                 </div>
             </React.Fragment>

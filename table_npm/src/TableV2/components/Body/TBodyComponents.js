@@ -35,20 +35,24 @@ export class TableBodyRow extends Component {
 
 export class TableBodyCell extends Component {
     config = this.props.config ? this.props.config : null;
+    EditCell = createRef();
     constructor(props) {
         super(props);
         this.state = {
             columnSelect: null
         }
     }
-
+    handleChange = (e) => {
+        this.setState({ value: e.target.value });
+    };
     render() {
         const { item, field } = this.props;
         const columnSelected = this.props.fieldIndex === this.props.columnSelect;
+        const CustomComp = this.config && this.config[this.props.field] ? this.config[this.props.field] : null;
 
-        return <td
-            className={`custom-cell-width column__select--${columnSelected}`}
-        >{item[field]}</td>
+        return <td  className={`custom-cell-width column__select--${columnSelected}`} >
+            {CustomComp ? <CustomComp value={item[field]} handleChange={this.handleChange} /> :
+                item[field]}</td>
     }
 }
 
@@ -116,8 +120,6 @@ export class TableBodyCellOptions extends Component {
 }
 
 
-
-
 // ==============================================
 //  =======   Cell Edit   ============
 // ==============================================
@@ -148,7 +150,7 @@ export class CellEdit extends Component {
         const { config, } = this;
         const columnSelected = this.props.fieldIndex === this.props.columnSelect;
         const CustomComp = config && config[this.props.field] ? config[this.props.field] : null;
-
+        debugger
         return <td
             className={`custom-option-width column__select--${columnSelected} cell__edit cell__edit--${this.props.columnSelect}`}
         >

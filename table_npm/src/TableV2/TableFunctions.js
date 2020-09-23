@@ -1,3 +1,5 @@
+import { NewSort } from "./components/Newsort";
+
 export async function sortArray(data, name) {
 
     let sortedData = data;
@@ -8,7 +10,10 @@ export async function sortArray(data, name) {
     let date = name === 'DRILL_DATE' || name === 'LASTWLDATE';
     const type = data.find(item => {
         if (item[name] !== null) {
-            if (item[name].trim() !== '') {
+            if (Number(item[name])) {
+                return isNaN(Number(item[name]))
+            }
+            else if (item[name].trim() !== '') {
                 return isNaN(Number(item[name]))
             }
         }
@@ -88,7 +93,7 @@ export async function sortArray(data, name) {
             })
         })
 
-        sortedData = nullArray.length > 0 ? [...sortedDataNew, ...nullArray] : [];
+        sortedData = nullArray.length > 0 ? [...sortedDataNew, ...nullArray] : [...sortedDataNew];
     }
 
     if (type && !cadSort && !date) {
@@ -123,6 +128,12 @@ export class TableFunctions2 {
         this.unfiltered = data;
         this.pageCount = 50
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        this.recordCount = this.countRecords();
+    }
+    updateData(data) {
+        this.data = data;
+        this.unfiltered = data;
+        this.pageinatedData = this.pageinate(this.pageCount, data.tableData);
         this.recordCount = this.countRecords();
     }
     countRecords() {
@@ -177,7 +188,7 @@ export class TableFunctions2 {
         if (term.length > 0) {
             const filteredData = this.data.tableData.filter(item => {
                 const dataType = fieldType === 'number';
-                if (item[field] !== null) {
+                if (item[field]) {
                     const upperCaseValue = item[field].toUpperCase();
                     if (dataType & filterParams === 'greaterThan') {
                         return item[field] > parseInt(term);
@@ -219,11 +230,11 @@ export class TableFunctions2 {
     };
 
     async sortData(columnName) {
-        const sorted = await sortArray(this.data.tableData, columnName);
+        const sorted = await NewSort(this.data.tableData, columnName);
+
         this.data.tableData = sorted;
         console.log(`sorted ${sorted.length} records`);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
-        debugger
         this.countRecords()
         return this.pageinatedData;
     };
@@ -232,7 +243,7 @@ export class TableFunctions2 {
         const newItem = this.newObject()
         this.data.tableData.unshift(newItem);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
-        debugger
+
         this.countRecords()
         return this.pageinatedData;
     };
@@ -250,7 +261,6 @@ export class TableFunctions2 {
         this.data.tableData[row] = item;
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
         this.countRecords()
-        debugger
         return this.pageinatedData;
     };
 

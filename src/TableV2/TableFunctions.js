@@ -130,6 +130,12 @@ export class TableFunctions2 {
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
         this.recordCount = this.countRecords();
     }
+    updateData(data) {
+        this.data = data;
+        this.unfiltered = data;
+        this.pageinatedData = this.pageinate(this.pageCount, data.tableData);
+        this.recordCount = this.countRecords();
+    }
     countRecords() {
         let count = 0;
         this.pageinatedData.map(page => {
@@ -182,7 +188,7 @@ export class TableFunctions2 {
         if (term.length > 0) {
             const filteredData = this.data.tableData.filter(item => {
                 const dataType = fieldType === 'number';
-                if (item[field] !== null) {
+                if (item[field]) {
                     const upperCaseValue = item[field].toUpperCase();
                     if (dataType & filterParams === 'greaterThan') {
                         return item[field] > parseInt(term);
@@ -237,7 +243,7 @@ export class TableFunctions2 {
         const newItem = this.newObject()
         this.data.tableData.unshift(newItem);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
-        debugger
+
         this.countRecords()
         return this.pageinatedData;
     };
@@ -255,7 +261,6 @@ export class TableFunctions2 {
         this.data.tableData[row] = item;
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
         this.countRecords()
-        debugger
         return this.pageinatedData;
     };
 

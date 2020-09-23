@@ -7,7 +7,7 @@
     "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.3",
     "react-table": "^7.3.3"
   },
   "scripts": {
@@ -36,7 +36,7 @@
   "devDependencies": {
     "axios": "^0.19.2",
     "cypress": "^4.11.0",
-    "cypress-react-unit-test": "^4.11.1",
+    "cypress-react-unit-test": "^4.12.0",
     "esri-loader": "^2.15.0"
   }
 }
