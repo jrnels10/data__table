@@ -25,13 +25,13 @@ const CustomOption = ({ selectRow }) => {
     return <button onClick={() => console.log(selectRow)}>Open</button>
 }
 const config = {
-    Options: {
-        header: '',
-        body: CustomOption
-    },
+    // Options: {
+    //     header: '',
+    //     body: CustomOption
+    // },
     OBJECTID: {
         header: 'test',
-        width: '250px'
+        width: '350px'
     },
     WELL_TYPE: {
         header: 'test',
@@ -120,8 +120,8 @@ export default class Scratch extends Component {
     addRow = (row) => {
         debugger
     };
-    select = () => {
-        // debugger
+    select = (item) => {
+        debugger
     }
     updateData = () => {
         debugger
@@ -148,7 +148,7 @@ export default class Scratch extends Component {
                             sort={true}
                             multipleSelect={true}
                             selectAction={{
-                                selectCallBack: item => console.log(`${item} was selected!`),
+                                selectCallBack: item => console.log(item),
                             }}
                             name='AIS test' sort={true} />
                     </Table2>

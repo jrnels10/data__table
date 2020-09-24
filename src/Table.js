@@ -79,7 +79,8 @@ export class TableTab extends Component {
         selectedRows: [],
         currentPage: 0,
         numberPerPage: 50,
-        pages: []
+        pages: [],
+        filteredFields: []
     }
 
     async componentDidUpdate(prevProps, prevState) {
@@ -172,9 +173,26 @@ export class TableTab extends Component {
         this.setState({ tableData: sortedData, sorted: columnName });
     };
 
-    filterData = (term, field, fieldType, filterParams) => {
-        const filteredResults = this.TableFunctions2.filter(term, field, fieldType, filterParams, this.state.numberPerPage);
-        this.setState({ tableData: filteredResults });
+    filterData = async (term, field) => {
+        const filteredFieldIndex = this.state.filteredFields.findIndex(item => item.field === field);
+        let filteredFields = this.state.filteredFields;
+        debugger
+        if (filteredFieldIndex > -1 && term === "") {
+            filteredFields = filteredFields.filter(item => item.field !== field);
+        } else if (filteredFieldIndex > -1) {
+            filteredFields.splice(filteredFieldIndex, 1, { field, term });
+        } else {
+            filteredFields.push({ field, term });
+        }
+        const filteredResults = await this.TableFunctions2.filter(this.state.numberPerPage, [...filteredFields]);
+        this.setState({ tableData: filteredResults, filteredFields: [...filteredFields] });
+    };
+
+    clearFilteredField = async (field) => {
+        let filteredFields = this.state.filteredFields;
+        filteredFields = filteredFields.filter(item => item.field !== field.field);
+        const filteredResults = await this.TableFunctions2.filter(this.state.numberPerPage, [...filteredFields]);
+        this.setState({ tableData: filteredResults, filteredFields: [...filteredFields] });
     };
 
     columnSelect = (idx) => {
@@ -204,13 +222,13 @@ export class TableTab extends Component {
 
     render() {
         const { name, config, editAction, addAction, deleteAction, locate, docushare, report, multipleSelect } = this.props;
-        const { tableData, columnSelect, selectedRows, edit, add, currentPage } = this.state;
+        const { tableData, columnSelect, selectedRows, edit, add, currentPage, filteredFields } = this.state;
         if (window.Cypress) {
             window.__tableTab__ = this.state;
         }
         return (
             <div className="table__container">
-                <table className="table__custom" id={`table_${name.replace(' ','_')}`}>
+                <table className="table__custom" id={`table_${name.replace(' ', '_')}`}>
                     <Headers
                         config={config}
                         sort={this.sort ? this.sortTable : null}
@@ -221,6 +239,8 @@ export class TableTab extends Component {
                         setColumnSelect={this.columnSelect.bind(this)}
                         editAction={this.editAction}
                         tableFunctions={this.TableFunctions2}
+                        filteredFields={filteredFields}
+                        clearFilteredField={this.clearFilteredField}
                     />
 
                     <Body

@@ -1,14 +1,12 @@
-import React, { Component, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ArrowDown, ArrowUp } from './Images/IconsSVG';
 
-export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSelect, setColumnSelect, config }) => {
+export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSelect, setColumnSelect, config, filteredFields, clearFilteredField }) => {
     const [headerOptions, setheaderOptions] = useState(null)
     const openHeader = (e) => {
         const index = parseInt(e.target.id.split('-')[1]);
         setheaderOptions(headerOptions === index ? null : index);
     }
-    console.log(config)
-
     return <thead>
         <tr>
             {dataForHeaders.map((item, idx) => {
@@ -19,19 +17,26 @@ export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSel
                 }
                 const CustomName = config && config[item.title] && config[item.title].header ? config[item.title].header : item.title.replace(/_/g, " ");
                 const CustomWidth = config && config[item.title] ? config[item.title].width : null;
+                const filteredFieldIndex = filteredFields.findIndex(fieldItem => fieldItem.field === item.title);
+                const filteredField = filteredFields[filteredFieldIndex] ?
+                    <label className='filtered-header' onClick={() => clearFilteredField(filteredFields[filteredFieldIndex])}> {filteredFields[filteredFieldIndex].term}</label> : null
                 return dataForHeaders.length === idx ? null : <th
                     className={`column__select--${columnSelect === idx}`}
                     onClick={() => setColumnSelect(idx)}
                     key={idx}
                 >
-                    <div className='custom-cell-width-header custom-cell-width' style={CustomWidth ? { width: CustomWidth } : null}>
+                    <div className={`custom-cell-width-header custom-cell-width  ${filteredField && headerOptions !== idx ? 'custom-cell-width-filtered' : null} `} style={CustomWidth ? { width: CustomWidth } : null}>
                         {headerOptions === idx ? <HeaderOptions
                             filterData={filterData}
                             field={item.title}
                             fieldType={fieldType}
+                            term={filteredFields[filteredFieldIndex]}
                         /> : null}
+                        {
+                            filteredField && headerOptions !== idx ? filteredField : null
+                        }
                         <label
-                            className={`custom-cell-header-${headerOptions === idx ? 'small' : 'normal'}`}
+                            className={`custom-cell-header-${headerOptions === idx ? 'small' : 'normal'} ${filteredField && headerOptions !== idx ? 'label-filtered' : 'label-unfiltered'}`}
                             onClick={e => openHeader(e)}
                             title={`header-${item.title}`}
                             id={`header-${idx}`}
@@ -42,8 +47,8 @@ export const Headers = ({ dataForHeaders, sort, filterData, tableData, columnSel
                     </div>
                 </th>
             })}
-        </tr>
-    </thead>
+        </tr >
+    </thead >
 };
 
 
@@ -62,15 +67,20 @@ const Sort = ({ sort, item }) => {
 
 
 
-const HeaderOptions = ({ filterData, field, fieldType }) => {
+const HeaderOptions = ({ filterData, field, fieldType, term }) => {
     const filterRef = useRef('');
+    const [inputValue, setinputValue] = useState(term ? term.term : '');
     const [filterParams, setfilterParams] = useState('equalTo')
     useEffect(() => {
         filterRef.current.focus();
     }, []);
+    const setValues = (e) => {
+        setinputValue(e.target.value)
+        filterData(e.target.value, field, fieldType, filterParams)
+    }
     return <div className='custom__header__options'>
         <HeaderNumbers fieldType={fieldType} setfilterParams={setfilterParams} />
-        <input ref={filterRef} type={fieldType === 'number' ? 'number' : "text"} onChange={e => filterData(e.target.value, field, fieldType, filterParams)} />
+        <input ref={filterRef} type={fieldType === 'number' ? 'number' : "text"} value={inputValue} onChange={e => setValues(e)} />
     </div>
 };
 

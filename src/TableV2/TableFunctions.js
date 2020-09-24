@@ -184,27 +184,24 @@ export class TableFunctions2 {
 
 
 
-    filter(term, field, fieldType, filterParams, pageCount) {
-        if (term.length > 0) {
-            const filteredData = this.data.tableData.filter(item => {
-                const dataType = fieldType === 'number';
-                if (item[field]) {
-                    const upperCaseValue = item[field].toUpperCase();
-                    if (dataType & filterParams === 'greaterThan') {
-                        return item[field] > parseInt(term);
+    async filter(pageCount, filteredFields) {
+        if (filteredFields[0] && filteredFields[0].term.length > 0) {
+            let data = this.data.tableData;
+            let filteredData = [];
+            filteredFields.map(field => {
+                let newdata = [];
+                debugger
+                data.filter(async item => {
+                    if (item[field.field] && item[field.field] !== "") {
+                        return item[field.field].toString().toUpperCase().indexOf(field.term.toString().toUpperCase()) > -1 ? newdata.push(item) : null
                     }
-                    else if (dataType & filterParams === 'lessThan') {
-                        return item[field] < parseInt(term);
-                    }
-                    else if (dataType & filterParams === 'equalTo') {
-                        return item[field] === parseInt(term);
-                    }
-                    else if (!dataType) {
-                        return upperCaseValue.indexOf(term.toUpperCase()) > -1;
-                    }
-                }
-                return null;
-            });
+                })
+                console.log(newdata.length)
+                data = newdata;
+                filteredData = newdata;
+            })
+
+            // console.log(filteredData);
             this.pageinatedData = this.pageinate(pageCount, filteredData);
             this.countRecords()
             return this.pageinatedData;
