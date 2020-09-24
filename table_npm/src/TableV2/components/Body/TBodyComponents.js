@@ -48,9 +48,9 @@ export class TableBodyCell extends Component {
     render() {
         const { item, field } = this.props;
         const columnSelected = this.props.fieldIndex === this.props.columnSelect;
-        const CustomComp = this.config && this.config[this.props.field] ? this.config[this.props.field] : null;
+        const CustomComp = this.config && this.config[this.props.field] ? this.config[this.props.field].body : null;
 
-        return <td  className={`custom-cell-width column__select--${columnSelected}`} >
+        return <td className={`custom-cell-width column__select--${columnSelected}`} >
             {CustomComp ? <CustomComp value={item[field]} handleChange={this.handleChange} /> :
                 item[field]}</td>
     }
@@ -104,7 +104,7 @@ export class TableBodyCellOptions extends Component {
         const { multipleSelect, selectedRows, keyItem, config, item } = this.props;
         const disableSelect = multipleSelect === false && selectedRows.length > 0 ? 'disable' : 'active';
         const unCheck = multipleSelect === false && selectedRows.indexOf(keyItem) > -1;
-        const CustomOptComp = config && config['Options'] ? config['Options'] : null;
+        const CustomOptComp = config && config['Options'] ? config['Options'].body : null;
         return <td
             className={`custom-option-width column__select--${false}`}
         >
@@ -149,7 +149,7 @@ export class CellEdit extends Component {
     render() {
         const { config, } = this;
         const columnSelected = this.props.fieldIndex === this.props.columnSelect;
-        const CustomComp = config && config[this.props.field] ? config[this.props.field] : null;
+        const CustomComp = config && config[this.props.field] ? config[this.props.field].body : null;
         debugger
         return <td
             className={`custom-option-width column__select--${columnSelected} cell__edit cell__edit--${this.props.columnSelect}`}

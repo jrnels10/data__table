@@ -1,6 +1,6 @@
 {
   "name": "adwr_table_data",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Formats data from ESRI or ADWR and displays them in custom table",
   "main": "./build/index.js",
   "scripts": {

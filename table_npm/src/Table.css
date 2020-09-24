@@ -202,6 +202,13 @@ p {
   position: relative;
 }
 
+.data-table .table__container thead .custom-cell-width-header .filtered-header {
+  font-size: .6rem;
+  color: #a2a2a2;
+  background-color: #3a3633;
+  border: 1px solid #3a3633;
+}
+
 .data-table .table__container thead .custom-cell-width-header .custom-cell-header-small {
   font-size: 0.7rem;
 }
@@ -212,6 +219,10 @@ p {
   min-width: 130px !important;
   position: relative;
   border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.data-table .table__container .custom-cell-width-filtered {
+  padding-top: 1px;
 }
 
 .data-table .table__container .custom-cell-width:first-child {
