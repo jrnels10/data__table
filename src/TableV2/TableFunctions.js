@@ -125,14 +125,15 @@ export async function sortArray(data, name) {
 export class TableFunctions2 {
     constructor(data) {
         this.data = data;
-        this.unfiltered = data;
+        this.unfiltered = JSON.stringify(Object.assign({}, data));
+        this.filteredFields = []
         this.pageCount = 50
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
         this.recordCount = this.countRecords();
     }
     updateData(data) {
         this.data = data;
-        this.unfiltered = data;
+        this.unfiltered = JSON.stringify(Object.assign({}, data));
         this.pageinatedData = this.pageinate(this.pageCount, data.tableData);
         this.recordCount = this.countRecords();
     }
@@ -187,26 +188,30 @@ export class TableFunctions2 {
     async filter(pageCount, filteredFields) {
         if (filteredFields[0] && filteredFields[0].term.length > 0) {
             let data = this.data.tableData;
+            console.log(filteredFields, this.filteredFields)
+            if (filteredFields.length < this.filteredFields.length) {
+                const unfilteredData = JSON.parse(this.unfiltered);
+                data = unfilteredData.tableData;
+            }
+            this.filteredFields = filteredFields;
             let filteredData = [];
             filteredFields.map(field => {
                 let newdata = [];
-                debugger
                 data.filter(async item => {
                     if (item[field.field] && item[field.field] !== "") {
                         return item[field.field].toString().toUpperCase().indexOf(field.term.toString().toUpperCase()) > -1 ? newdata.push(item) : null
                     }
-                })
-                console.log(newdata.length)
+                });
                 data = newdata;
                 filteredData = newdata;
-            })
-
-            // console.log(filteredData);
+            });
+            this.data.tableData = filteredData;
             this.pageinatedData = this.pageinate(pageCount, filteredData);
             this.countRecords()
             return this.pageinatedData;
         }
         else {
+            this.data = JSON.parse(this.unfiltered);
             this.pageinatedData = this.pageinate(pageCount, this.data.tableData);
             this.countRecords()
             return this.pageinatedData;
@@ -228,7 +233,6 @@ export class TableFunctions2 {
 
     async sortData(columnName) {
         const sorted = await NewSort(this.data.tableData, columnName);
-
         this.data.tableData = sorted;
         console.log(`sorted ${sorted.length} records`);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
