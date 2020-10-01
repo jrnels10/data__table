@@ -67,8 +67,7 @@ export class TableTab extends Component {
     sort = this.props.sort;
     locate = this.props.locate;
     editAction = this.props.editAction ? this.props.editAction : false;
-    // tableFunctions = new TableFunctions(this.data);
-    TableFunctions2 = new TableFunctions2(this.data)
+    TableFunctions2 = new TableFunctions2(this.data);
 
     state = {
         tableData: this.TableFunctions2.pageinatedData,
@@ -176,7 +175,6 @@ export class TableTab extends Component {
     filterData = async (term, field) => {
         const filteredFieldIndex = this.state.filteredFields.findIndex(item => item.field === field);
         let filteredFields = this.state.filteredFields;
-        debugger
         if (filteredFieldIndex > -1 && term === "") {
             filteredFields = filteredFields.filter(item => item.field !== field);
         } else if (filteredFieldIndex > -1) {
@@ -262,34 +260,6 @@ export class TableTab extends Component {
                             <Insert color='#253255' />
                         </FooterButton>
                         : null}
-                    {/* {editAction ?
-                        <FooterButton name='Edit' initial={edit} set={selectedRows.length > 0 ? () => this.setState({ edit: !this.state.edit }) : null} disable={false} active={add || edit}>
-                            <PencilSquare color='#253255' />
-                        </FooterButton>
-                        : null}
-                    {deleteAction ?
-                        <FooterButton name='Delete' initial={false} set={selectedRows.length > 0 ? this.deleteRow : null} disable={false} active={add || edit}>
-                            <TrashCan color='#253255' />
-                        </FooterButton>
-                        : null}
-                    {locate ?
-                        <FooterButton name='Locate' initial={false} set={() => this.findOnMap()} disable={false} active={add || edit}>
-                            <GeoLocate color='#253255' />
-                        </FooterButton>
-                        : null}
-                    <FooterButton name='Download' initial={false} set={() => null} disable={false} active={add || edit}>
-                        <Download color='#253255' />
-                    </FooterButton>
-                    {docushare ?
-                        <FooterButton name='Docushare' initial={false} set={() => null} disable={false} active={add || edit}>
-                            <ImagedRecords color='#253255' />
-                        </FooterButton>
-                        : null}
-                    {report ?
-                        <FooterButton name='Report' initial={false} set={() => null} disable={false} active={add || edit}>
-                            <Report color='#253255' />
-                        </FooterButton>
-                        : null} */}
                     <Pageinate currentPage={currentPage} changePage={pageNum => this.setState({ currentPage: pageNum })} pages={tableData} numberPerPage={this.state.numberPerPage} setNumberPerPage={number => this.setState({ numberPerPage: number })} />
                 </Footer>
             </div>

@@ -22,7 +22,7 @@ export default class Table extends Component {
         let tabCount = [];
         React.Children.map(this.props.children, (child) => {
             const individualData = this.props.data.filter(item => item.tab === child.props.name)
-            tabCount.push(individualData[0].tableData.length);
+            tabCount.push(individualData.length ? individualData[0].tableData.length : 0);
         });
 
         this.setState({ tabCount: [...tabCount] })
@@ -42,6 +42,7 @@ export default class Table extends Component {
                 tabIndex: idx
             })
         });
+
         return (
             <div className='data-table'>
                 {showTabs ?
@@ -56,7 +57,7 @@ export default class Table extends Component {
                         </div>
                     </React.Fragment>
                     : null}
-                {children ? children[this.state.tableActive] : null}
+                {children && children[0].props.data.length ? children[this.state.tableActive] : <div className='bg-light w-100'><h3 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>No data</h3></div>}
             </div >
         )
     }
@@ -83,6 +84,8 @@ export class TableTab extends Component {
     }
 
     async componentDidUpdate(prevProps, prevState) {
+        console.log(this.props.data[0])
+
         if (prevProps.tabCount.length > 0) {
             if (prevProps.tabCount[prevProps.tabIndex] !== this.TableFunctions2.recordCount) {
                 const tabCounts = this.props.tabCount;

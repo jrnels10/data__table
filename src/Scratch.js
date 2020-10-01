@@ -96,7 +96,7 @@ export default class Scratch extends Component {
         // const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
         const ais2 = new ADWRTableObj_Edit('AIS test', aisDatacleaned)
         // const ADWR = new ADWRTableObj_Edit('ADWR', adwr);
-        this.setState({ tableData: [ais2] });
+        this.setState({ tableData: [] });
     }
 
     locateOnMap = async (item) => {
