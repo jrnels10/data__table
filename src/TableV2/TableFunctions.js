@@ -32,7 +32,7 @@ export async function sortArray(data, name) {
                 return a < b ? b : a
             }
         }).toString().length;
-    console.log(longestItem)
+    // //console.log(longestItem)
     function Looping(loop) {
         let buckets = []
 
@@ -101,21 +101,21 @@ export async function sortArray(data, name) {
             Looping(loopsRun)
             ++loopsRun
         }
-        //console.log(sortedData.length)
+        ////console.log(sortedData.length)
         return sortedData;
         // } else if (date) {
         //     while (loopsRun < 5) {
         //         Looping(loopsRun)
         //         ++loopsRun
         //     }
-        //     //console.log(sortedData.length)
+        //     ////console.log(sortedData.length)
         //     return sortedData;
     } else {
         while (loopsRun < longestItem + 1) {
             Looping(loopsRun)
             ++loopsRun
         }
-        //console.log(sortedData.length)
+        ////console.log(sortedData.length)
         return sortedData;
     }
 }
@@ -144,7 +144,11 @@ export class TableFunctions2 {
         });
         return this.recordCount = count;
     }
-
+    unMount() {
+        this.data = JSON.parse(this.unfiltered);
+        this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
+        this.recordCount = this.countRecords();
+    }
     pageinate(number, data) {
         const numberPerPage = parseInt(number);
         let pageCount = 0;
@@ -187,8 +191,7 @@ export class TableFunctions2 {
 
     async filter(pageCount, filteredFields) {
         if (filteredFields[0] && filteredFields[0].term.length > 0) {
-            let data = this.data.tableData;
-            console.log(filteredFields, this.filteredFields)
+            let data = JSON.parse(this.unfiltered).tableData;
             if (filteredFields.length < this.filteredFields.length) {
                 const unfilteredData = JSON.parse(this.unfiltered);
                 data = unfilteredData.tableData;
@@ -205,6 +208,7 @@ export class TableFunctions2 {
                 data = newdata;
                 filteredData = newdata;
             });
+            console.log(filteredData.length)
             this.data.tableData = filteredData;
             this.pageinatedData = this.pageinate(pageCount, filteredData);
             this.countRecords()
@@ -234,7 +238,7 @@ export class TableFunctions2 {
     async sortData(columnName) {
         const sorted = await NewSort(this.data.tableData, columnName);
         this.data.tableData = sorted;
-        console.log(`sorted ${sorted.length} records`);
+        //console.log(`sorted ${sorted.length} records`);
         this.pageinatedData = this.pageinate(this.pageCount, this.data.tableData);
         this.countRecords()
         return this.pageinatedData;

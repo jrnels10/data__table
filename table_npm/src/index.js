@@ -8,6 +8,8 @@ import { PencilSquare, TrashCan, GeoLocate, Download, Insert, ImagedRecords, Rep
 import Pageinate from './TableV2/components/Footer/Pageinate';
 import { ToggleButton } from './TableV2/components/Buttons/Toggle';
 
+
+
 export default class Table extends Component {
     state = {
         tableActive: 0,
@@ -18,27 +20,26 @@ export default class Table extends Component {
     setTabCount = (tabCounts) => {
         this.setState({ tabCount: [...tabCounts] })
     }
-    componentDidMount() {
-        let tabCount = [];
-        React.Children.map(this.props.children, (child) => {
-            const individualData = this.props.data.filter(item => item.tab === child.props.name)
-            tabCount.push(individualData[0].tableData.length);
-        });
 
-        this.setState({ tabCount: [...tabCount] })
-    };
+    componentDidUpdate(prevProps, prevState) {
+        const { newTabSelected } = this.props;
+        if (prevState.tableActive !== this.state.tableActive && newTabSelected) {
+            newTabSelected(this.state.tableActive);
+        }
+    }
 
     render() {
         if (window.Cypress) {
             window.__store__ = this.state;
         }
-        const { tabCount, showTabs } = this.state;
+        const { showTabs } = this.state;
+        const tabCounts = this.props.data.map(item => item.rawData? item.rawData.length:'');
         const children = React.Children.map(this.props.children, (child, idx) => {
             const individualData = this.props.data.filter(item => item.tab === child.props.name);
             return React.cloneElement(child, {
                 data: individualData,
                 setTabCount: this.setTabCount.bind(this),
-                tabCount: tabCount,
+                tabCount: tabCounts,
                 tabIndex: idx
             })
         });
@@ -51,12 +52,16 @@ export default class Table extends Component {
                             {children ? children.map((tab, idx) =>
                                 <div className={`tab tab--${idx === this.state.tableActive ? 'active' : 'default'}`} key={idx} onClick={() => this.setState({ tableActive: idx })}>
                                     <button className={`tab__button tab__button--${idx === this.state.tableActive ? 'active' : 'default'}`}>{tab.props.name}</button>
-                                    <div className='count'>{tabCount[idx]}</div>
+                                    <div className='count'>{tabCounts[idx]}</div>
                                 </div>) : null}
                         </div>
                     </React.Fragment>
                     : null}
-                {children ? children[this.state.tableActive] : null}
+                {children && children[this.state.tableActive].props.data.length && children[this.state.tableActive].props.tabCount[this.state.tableActive] ? children[this.state.tableActive] :
+                    <div className='bg-light w-100' style={{ height: 'calc(100% - 38px)' }}>
+                        {children && !children[this.state.tableActive].props.data.length > 0 && children[this.state.tableActive].props.tabCount.length - 1 !== this.state.tableActive ? this.props.loader ? this.props.loader : '' :
+                            <h3 style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>No data</h3>}
+                    </div>}
             </div >
         )
     }
@@ -67,8 +72,7 @@ export class TableTab extends Component {
     sort = this.props.sort;
     locate = this.props.locate;
     editAction = this.props.editAction ? this.props.editAction : false;
-    // tableFunctions = new TableFunctions(this.data);
-    TableFunctions2 = new TableFunctions2(this.data)
+    TableFunctions2 = new TableFunctions2(this.data);
 
     state = {
         tableData: this.TableFunctions2.pageinatedData,
@@ -83,7 +87,17 @@ export class TableTab extends Component {
         filteredFields: []
     }
 
+    componentWillUnmount() {
+        this.props.data[0].tableData = this.props.data[0].initialData;
+        this.TableFunctions2.unMount();
+        const tabCounts = this.props.tabCount;
+        tabCounts[this.props.tabIndex] = this.TableFunctions2.recordCount;
+        this.props.setTabCount(tabCounts);
+    }
+
     async componentDidUpdate(prevProps, prevState) {
+        //console.log(this.props.data[0])
+
         if (prevProps.tabCount.length > 0) {
             if (prevProps.tabCount[prevProps.tabIndex] !== this.TableFunctions2.recordCount) {
                 const tabCounts = this.props.tabCount;
@@ -176,7 +190,6 @@ export class TableTab extends Component {
     filterData = async (term, field) => {
         const filteredFieldIndex = this.state.filteredFields.findIndex(item => item.field === field);
         let filteredFields = this.state.filteredFields;
-        debugger
         if (filteredFieldIndex > -1 && term === "") {
             filteredFields = filteredFields.filter(item => item.field !== field);
         } else if (filteredFieldIndex > -1) {
@@ -262,34 +275,6 @@ export class TableTab extends Component {
                             <Insert color='#253255' />
                         </FooterButton>
                         : null}
-                    {/* {editAction ?
-                        <FooterButton name='Edit' initial={edit} set={selectedRows.length > 0 ? () => this.setState({ edit: !this.state.edit }) : null} disable={false} active={add || edit}>
-                            <PencilSquare color='#253255' />
-                        </FooterButton>
-                        : null}
-                    {deleteAction ?
-                        <FooterButton name='Delete' initial={false} set={selectedRows.length > 0 ? this.deleteRow : null} disable={false} active={add || edit}>
-                            <TrashCan color='#253255' />
-                        </FooterButton>
-                        : null}
-                    {locate ?
-                        <FooterButton name='Locate' initial={false} set={() => this.findOnMap()} disable={false} active={add || edit}>
-                            <GeoLocate color='#253255' />
-                        </FooterButton>
-                        : null}
-                    <FooterButton name='Download' initial={false} set={() => null} disable={false} active={add || edit}>
-                        <Download color='#253255' />
-                    </FooterButton>
-                    {docushare ?
-                        <FooterButton name='Docushare' initial={false} set={() => null} disable={false} active={add || edit}>
-                            <ImagedRecords color='#253255' />
-                        </FooterButton>
-                        : null}
-                    {report ?
-                        <FooterButton name='Report' initial={false} set={() => null} disable={false} active={add || edit}>
-                            <Report color='#253255' />
-                        </FooterButton>
-                        : null} */}
                     <Pageinate currentPage={currentPage} changePage={pageNum => this.setState({ currentPage: pageNum })} pages={tableData} numberPerPage={this.state.numberPerPage} setNumberPerPage={number => this.setState({ numberPerPage: number })} />
                 </Footer>
             </div>
@@ -306,6 +291,7 @@ export class ESRITableObj {
         this.options = false;
         this.tab = tab;
         this.rawData = data;
+        this.initialData = data.features.map(gis => Object.assign(gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
         this.tableGeometry = data.features.map(item => Object.assign(item, { TABLE_ID: item.attributes[uniqueId] }));
         this.tableFields = data.fields.map((field, idx) => {
             return { title: field.name, dataIndex: field.name, key: idx }
@@ -319,6 +305,7 @@ export class ADWRTableObj {
     constructor(tab, data) {
         this.tab = tab;
         this.rawData = data;
+        this.initialData = data
         this.tableGeometry = null;
         this.tableFields = Object.keys(data[0]).map((fieldItem, idx) => {
             return { title: fieldItem, dataIndex: fieldItem, key: idx }
@@ -333,6 +320,7 @@ export class ADWRTableObj_Edit extends ADWRTableObj {
         super(tab, data)
         this.tab = tab;
         this.rawData = data;
+        this.initialData = data.map(item => Object.assign({ Options: 'Edit' }, item))
         this.tableGeometry = null;
         this.tableFields = [this.editField, ...Object.keys(data[0]).map((fieldItem, idx) => {
             return { title: fieldItem, dataIndex: fieldItem, key: idx }
@@ -346,6 +334,7 @@ export class ESRITableObj_Edit extends ESRITableObj {
     constructor(tab, data, uniqueId) {
         super(tab, data, uniqueId)
         this.options = true;
+        this.initialData = data.features.map(gis => Object.assign({ Options: 'Edit' }, gis.attributes, { TABLE_ID: gis.attributes[uniqueId] }));
         this.tableFields = [this.editField, ...data.fields.map((field, idx) => {
             return { title: field.name, dataIndex: field.name, key: idx }
         })];
