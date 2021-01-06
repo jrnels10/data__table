@@ -33,7 +33,7 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cypress": "^4.11.0",
     "cypress-react-unit-test": "^4.11.1",
     "esri-loader": "^2.15.0"
