@@ -102,8 +102,8 @@ export default class Scratch extends Component {
         // const wells55 = new ESRITableObj_Edit('Wells55', wellsData, 'OBJECTID');
         const pou = await getPlaceofUse();
         const ais = new ADWRTableObj_Edit('AIS test', pou.data)
-        const ais2 = new ADWRTableObj_Edit('AIS test2', aisDatacleaned)
-        this.setState({ tableData: [ais2, [], []] });
+        const ais2 = new ADWRTableObj_Edit('AIS test2', aisDatacleaned.filter(i => i))
+        this.setState({ tableData: [ais2, [], []], aisDatacleaned });
     }
 
     locateOnMap = async (item) => {
@@ -130,11 +130,10 @@ export default class Scratch extends Component {
     select = (item) => {
         this.setState({ selectedRows: [...this.state.selectedRows, item] })
     }
-    updateData = () => {
-        debugger
-        const newData = aisDatacleaned.filter((item, idx) => idx < aisDatacleaned.length - 3);
-        const ais2 = new ADWRTableObj_Edit('AIS test', newData);
-        this.setState({ tableData: [ais2] });
+    updateData = (i) => {
+        const newData = this.state.aisDatacleaned.filter((item, idx) => item && item.OBJECTID !== this.state.test.OBJECTID);
+        const ais2 = new ADWRTableObj_Edit('AIS test2', newData);
+        this.setState({ tableData: [ais2, [], []], aisDatacleaned: newData });
 
     }
     queryData = async (tableIndex) => {
@@ -166,7 +165,7 @@ export default class Scratch extends Component {
                             multipleSelect={true}
                             // selectedRows={this.state.selectedRows}
                             selectAction={{
-                                selectCallBack: item => console.log(item),
+                                selectCallBack: item => this.setState({ test: item }),
                             }}
                             name='AIS test2' sort={true} />
                         <TableTab

@@ -89,13 +89,17 @@ export class TableBodyCellOptions extends Component {
         this.state = { active: false }
     }
     options = () => {
-        const { keyItem, item } = this.props;
+        const { keyItem, item } = this.props;   
         this.setState({ active: !this.state.active });
         this.props.selectRow(item, keyItem);
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.tableId !== this.props.tableId) {
+            this.setState({ active: false })
+        }
+        console.log(this.props.selectedRows.length)
+        if (this.props.selectedRows.length !== prevProps.selectedRows.length && this.props.selectedRows.length === 0) {
             this.setState({ active: false })
         }
     }

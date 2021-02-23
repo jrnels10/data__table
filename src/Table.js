@@ -13,7 +13,7 @@ import { ToggleButton } from './TableV2/components/Buttons/Toggle';
 export default class Table extends Component {
     state = {
         tableActive: 0,
-        tabCount: [],
+        tabCount: this.props.data.map(item => item.rawData ? item.rawData.length : ''),
         toggle: true,
         showTabs: !this.props.showTabs && this.props.showTabs !== undefined ? this.props.showTabs : true
     }
@@ -33,7 +33,7 @@ export default class Table extends Component {
             window.__store__ = this.state;
         }
         const { showTabs } = this.state;
-        const tabCounts = this.props.data.map(item => item.rawData? item.rawData.length:'');
+        const tabCounts = this.props.data.map(item => item.rawData ? item.rawData.length : '');
         const children = React.Children.map(this.props.children, (child, idx) => {
             const individualData = this.props.data.filter(item => item.tab === child.props.name);
             return React.cloneElement(child, {
@@ -52,7 +52,7 @@ export default class Table extends Component {
                             {children ? children.map((tab, idx) =>
                                 <div className={`tab tab--${idx === this.state.tableActive ? 'active' : 'default'}`} key={idx} onClick={() => this.setState({ tableActive: idx })}>
                                     <button className={`tab__button tab__button--${idx === this.state.tableActive ? 'active' : 'default'}`}>{tab.props.name}</button>
-                                    <div className='count'>{tabCounts[idx]}</div>
+                                    <div className='count'>{this.state.tabCount[idx]}</div>
                                 </div>) : null}
                         </div>
                     </React.Fragment>
@@ -113,12 +113,14 @@ export class TableTab extends Component {
                 this.TableFunctions2.updateData(this.props.data[0]);
                 this.setState({
                     tableData: this.TableFunctions2.pageinatedData,
-                    pages: this.TableFunctions2.pageinatedData
+                    pages: this.TableFunctions2.pageinatedData,
+                    selectedRows: []
                 });
-                const tabCounts = this.props.tabCount;
-                tabCounts[prevProps.tabIndex] = this.TableFunctions2.recordCount;
-                this.props.setTabCount(tabCounts);
             }
+            // if()
+            // const tabCounts = this.props.tabCount;
+            // tabCounts[prevProps.tabIndex] = this.TableFunctions2.recordCount;
+            // this.props.setTabCount(tabCounts);
         }
     }
 
@@ -263,7 +265,7 @@ export class TableTab extends Component {
                         fields={this.data.tableFields}
                         deleteCallBack={this.deleteRow.bind(this)}
                         columnSelect={columnSelect}
-                        rowAction={add && addAction ? this.addCallBack.bind(this) : editAction ? this.editCallBack.bind(this) : null}
+                        // rowAction={add && addAction ? this.addCallBack.bind(this) : editAction ? this.editCallBack.bind(this) : null}
                         tableFunctions={this.TableFunctions2}
                         selectRow={this.selectRow}
                         selectedRows={selectedRows}

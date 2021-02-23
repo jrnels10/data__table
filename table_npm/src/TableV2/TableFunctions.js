@@ -191,8 +191,7 @@ export class TableFunctions2 {
 
     async filter(pageCount, filteredFields) {
         if (filteredFields[0] && filteredFields[0].term.length > 0) {
-            let data = this.data.tableData;
-            //console.log(filteredFields, this.filteredFields)
+            let data = JSON.parse(this.unfiltered).tableData;
             if (filteredFields.length < this.filteredFields.length) {
                 const unfilteredData = JSON.parse(this.unfiltered);
                 data = unfilteredData.tableData;
@@ -209,6 +208,7 @@ export class TableFunctions2 {
                 data = newdata;
                 filteredData = newdata;
             });
+            console.log(filteredData.length)
             this.data.tableData = filteredData;
             this.pageinatedData = this.pageinate(pageCount, filteredData);
             this.countRecords()
